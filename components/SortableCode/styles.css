@@ -1,0 +1,187 @@
+#code-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+    width: 100%;
+    height: inherit;
+}
+
+.order-title {
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+#shuffled-code,
+#original-code {
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.code-list-container {
+    overflow: hidden;
+    position: relative;
+    padding: 0 .6em;
+    padding-bottom: 1.2em;
+    border: 1px solid #ccc;
+}
+
+/* Fixed gradient overlay at the top */
+.scroll-indicator-top {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), transparent);
+    pointer-events: none; /* Ensure clicks pass through */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Fixed gradient overlay at the bottom */
+.scroll-indicator-bottom {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+    pointer-events: none;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.2s ease-in-out;
+}
+
+#original-code h3,
+#shuffled-code h3 {
+    text-transform: uppercase;
+    font-size: 18px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.reveal-button,
+.compare-button {
+    color: white !important;
+    padding: 10px 20px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+}
+
+.compare-button {
+    background-color: #1d5d6f !important;
+}
+
+.reveal-button {
+    background-color: #ce9506 !important;
+}
+
+.reveal-button:hover,
+.compare-button:hover {
+    filter: brightness(.8);
+}
+
+.sortable-placeholder {
+    border: none !important;
+}
+
+/* The scrollable area (list) */
+.code-list {
+    list-style: none;
+    height: 100%;
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    padding: .6em 0;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.code-list li+li {
+    margin-top: .5rem;
+}
+
+/* Base style for list items */
+.code-list li {
+    padding: 0 30px; /* Padding ensures space for visual effect */
+    font: 1em 'Courier New', Courier, monospace !important;
+    overflow: auto;
+    min-height: fit-content;
+    font-size: 24px !important;
+    font-weight: lighter !important;
+    letter-spacing: .1em !important;
+    text-wrap: nowrap;
+    user-select: none;
+    white-space: nowrap; /* Prevent wrapping */
+    padding: .5em;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Apply the gradient mask to the text for overflow START */
+.overflow-start {
+    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%);
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%);
+}
+
+/* Apply the gradient mask to the text for overflow END */
+.overflow-end {
+    -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, black 20%);
+    mask-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, black 20%);
+}
+
+/* Apply the gradient mask to the text for overflow BOTH */
+.overflow-both {
+    -webkit-mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0) 0%,
+        black 20%,
+        black 80%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0) 0%,
+        black 20%,
+        black 80%,
+        rgba(0, 0, 0, 0) 100%
+    );
+}
+
+/* Correct and incorrect highlights */
+.correct {
+    background-color: #d4edda;
+}
+
+.incorrect {
+    background-color: #f8d7da;
+}
+
+.result-popup {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    padding: 1em;
+    border: 1px solid black;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-popup.success {
+    background-color: #d4edda;
+}
+
+.result-popup.error {
+    background-color: #f8d7da;
+}

@@ -1,0 +1,72 @@
+/* Main container */
+#completable-container {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 40px 0;
+}
+
+/* Code block container */
+.completable-code-block {
+    display: flex;
+    flex-direction: column; /* Stack lines vertically */
+    gap: 8px;
+}
+
+/* Code line */
+.completable-code-line {
+    white-space: pre; /* Preserve spaces, tabs, and line breaks */
+}
+
+/* Input wrapper for input + icon */
+.completable-input-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Input field */
+.completable-code-input {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 80px;
+}
+
+/* Eye icon button */
+.completable-eye-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+}
+
+/* Tab spacing */
+tab {
+    display: inline-block;
+    margin-left: 2em; /* Adds indentation */
+}
+
+/* Correct and incorrect feedback */
+.completable-correct {
+    background-color: #d4edda; /* Green */
+    border-color: #28a745;
+}
+
+.completable-incorrect {
+    background-color: #f8d7da; /* Red */
+    border-color: #dc3545;
+}
+
+.completable-input-line {
+    color: #007bff; /* Blue */
+}
+
+.completable-input-line,
+.completable-output-line {
+    margin-left: 2em;
+}
