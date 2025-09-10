@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>p0_raylib.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="pr%C3%A1ctica-0-desarrollo-de-flappy-bird-con-raylib">Práctica 0: Desarrollo de Flappy Bird con raylib</h1>
+<p>En esta práctica vamos a desarrollar una versión básica del clásico Flappy Bird utilizando <a href="https://www.raylib.com/">raylib</a>, una librería gráfica sencilla y muy didáctica para el desarrollo de videojuegos con C/C++.</p>
+<p>El objetivo es comprender los componentes básicos del desarrollo de videojuegos, como son el bucle de juego, el manejo de entradas de teclado, el dibujo de <em>sprites</em>, el manejo de colisiones y las transiciones de estados.</p>
+<h2 id="entrega">Entrega</h2>
+<p>Deberás entregar el proyecto como ejercicio en las entregas de UACloud. Para ello, comprime en <code>p0_&lt;tu_DNI&gt;.tar.gz</code> y súbelo a la práctica creada en el campus virtual. <strong>La fecha límite de entrega de esta práctica es el próximo 1 de octubre de 2025</strong>.</p>
+<h2 id="preparaci%C3%B3n-del-proyecto">Preparación del proyecto</h2>
+<p>En primer lugar, debes utilizar la <strong>plantilla</strong> de videojuegos proporcionada en la <a href="https://github.com/antoniorv6/DCAGII-Game-Template">asignatura</a>. Para ello, crea tu repositorio a través de la opción de <em>Use this template</em> en GitHub y clona tu repositorio en local.</p>
+<p>Esta plantilla contiene la máquina de estados para manejar las distintas pantallas del luego, la cual habremos visto en clase. A este proyecto le deberas incluir las carpetas <code>assets</code>, <code>vendor/include</code>, <code>vendor/lib</code>. El proyecto se te debe quedar de la siguiente forma:</p>
+<pre class="hljs"><code><div>flappy_bird/
+├─ assets/
+├─ src/
+│  └─ ...
+└─ vendor/
+   ├─ include/
+   └─ lib/
+</div></code></pre>
+<h3 id="a%C3%B1adir-raylib-al-proyecto">Añadir <code>raylib</code> al proyecto</h3>
+<p>La librería de <code>raylib</code> utiliza tanto dependecias de include como librerías estáticas. Por lo tanto, debemos compilar el programa y guardar estas dependencias para desarrollar nuestro <em>software</em>. En primer lugar, clonaremos el repositorio y lo compilaremos.</p>
+<pre class="hljs"><code><div>git <span class="hljs-built_in">clone</span> https://github.com/raysan5/raylib.git
+<span class="hljs-built_in">cd</span> raylib/src
+make PLATFORM=PLATFORM_DESKTOP
+</div></code></pre>
+<p>Copia <code>libraylib.a</code> a <code>flappy/vendor/lib/</code> y los ficheros <code>raylib.h</code>, <code>raymath.h</code>, <code>rlgl.h</code> a <code>flappy/vendor/include/</code>.</p>
+<blockquote>
+<p>No es necesario que conserves la carpeta que has clonado de raylib, ya que solo nos interesan los ficheros de cabecera y las librerías que hemos generado.</p>
+</blockquote>
+<h2 id="recomendaci%C3%B3n">Recomendación</h2>
+<p>Es recomendable que busques y analices bien la documentación y los ejemplos de <code>raylib</code>, ya que te ayudarán bastante para comprender y desarrollar bien esta práctica. Los enlaces son los siguientes:</p>
+<ul>
+<li><a href="https://www.raylib.com/cheatsheet/cheatsheet.html">Cheatsheet</a></li>
+<li><a href="https://www.raylib.com/examples.html">Ejemplos</a></li>
+</ul>
+<h2 id="ejercicio-0-creaci%C3%B3n-de-ventana">Ejercicio 0: creación de ventana</h2>
+<p>El primer paso a dar en la creación de un videojuego es la inicialización de la ventana. En este caso, deberás seguir los siguientes pasos:</p>
+<ul>
+<li>En <code>main.cpp</code> debes llamar, antes del bucle, a la función <code>InitWindow()</code>, la cual te permitirá crear la ventana por la que se visualizará tu juego. Crea una ventana de tamaño 288 x 512.</li>
+<li>En <code>MainGameState</code> deberás actualizar la función de <code>render</code> y poner algo. En este caso, vamos a introducir un texto que diga <em>Bienvenido a Flappy Bird DCA</em>.
+<ul>
+<li>Primero, debes invocar a la función <code>BeginDrawing</code> de <em>raylib</em>.</li>
+<li>Después, llama a <code>DrawText</code> para poner tu texto en la pantalla.</li>
+<li>Finalmente, llama a <code>EndDrawing</code> para finalizar el render.</li>
+</ul>
+</li>
+</ul>
+<p>Para usar estas funciones, deberás incluir la librería de <em>raylib</em> en tu proyecto. Debido a que ésta está hecha en C (aunque es compatible con C++), deberemos importarlo de una forma especial en nuestro código. En concreto, usa el siguiente <em>snippet</em>:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">extern</span> <span class="hljs-string">"C"</span> {
+    <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;raylib.h&gt;</span></span>
+}
+</div></code></pre>
+<blockquote>
+<p>¿Por qué usamos esta estructura en especial para importar el código de <em>raylib</em>? Te recomiendo que veas <a href="https://www.youtube.com/watch?v=7YBzHJJYpZo">este vídeo</a> para que tengas más información.</p>
+</blockquote>
+<p>Ahora toca compilar. Para ello, utiliza el siguiente comando:</p>
+<pre class="hljs"><code><div>g++ -o game src/*.cpp -I vendor/include/ -L vendor/lib -lraylib -lGL -lm -lpthread -lrt -lX11
+</div></code></pre>
+<p>Si ejecutas game y sale una ventana con el texto... ¡Enhorabuena! Ya tienes tu primera ventana para desarrollar tu juego.</p>
+<blockquote>
+<p>Si la compilación falla porque el <em>linker</em> no encuentra alguna librería, es posible que necesites instalar en tu sistema algunas de las dependencias de <em>raylib</em>. Ejecuta <code>sudo apt install xorg-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev</code>.</p>
+</blockquote>
+<h2 id="ejercicio-1-mec%C3%A1nica-principal-y-render-b%C3%A1sico">Ejercicio 1: mecánica principal y <em>render</em> básico</h2>
+<p>Ahora implementaremos al pájaro y su gravedad en el juego, el cual será controlado por el jugador. Para ello, sigue los siguientes pasos.</p>
+<ul>
+<li>
+<p>En primer lugar, debemos definir bien el <em>Delta Time</em> en nuestro juego. Para ello, dentro del bucle, debes asignarle a la variable <code>delta_time</code> el valor que produce la función <code>GetFrameTime</code> de <em>raylib</em>.</p>
+</li>
+<li>
+<p>Declara un <code>struct</code> llamado <code>Bird</code> que contiene los siguientes parámetros:</p>
+<ul>
+<li><code>x</code> e <code>y</code> para su posición.</li>
+<li><code>vy</code> para su velocidad vertical.</li>
+</ul>
+</li>
+<li>
+<p>Crea una variable privada en el estado que sea el jugador con esa estructura.</p>
+</li>
+<li>
+<p>Inicializa al jugador con una posición fija de <code>(200, 200)</code>.</p>
+</li>
+<li>
+<p>En el método <code>handleInput</code>:</p>
+<ul>
+<li>Si se presiona la tecla del espacio (busca la función <code>IsKeyPressed</code>), hay que impulsar al pájaro hacia arriba. Es decir, añadir un valor a <code>vy</code>. En este caso, ponle un valor de <code>-300</code>.</li>
+</ul>
+</li>
+<li>
+<p>En el método <code>update</code>:</p>
+<ul>
+<li>Aumenta la velocidad con la gravedad: <code>vy += gravedad * deltaTime</code></li>
+</ul>
+<blockquote>
+<p>El Delta Time se pasa como parámetro al método <code>update</code> y se calcula automáticamente por <code>raylib</code>.</p>
+</blockquote>
+<ul>
+<li>Actualiza la posición del pájaro: <code>y += vy * deltaTime</code></li>
+<li>Reinstaura el valor de la velocidad a 0.</li>
+</ul>
+</li>
+<li>
+<p>En el método <code>render</code>:</p>
+<ul>
+<li>Dibuja al pájaro como un círuclo rojo. Para ello, usa la función <code>DrawCircle</code> de <code>raylib</code>. Usa un radio de 17 píxeles.</li>
+</ul>
+</li>
+</ul>
+<h2 id="ejercicio-2-%C2%A1los-tubos">Ejercicio 2: ¡los tubos!</h2>
+<p>Nuestro <em>flappy bird</em> se debe chocar contra algo... ¡vamos a implementar los tubos que debe esquivar! Para ello, debemos de renderizar unas tuberías.</p>
+<p>Unas tuberías en realidad son un par de rectángulos que tienen la misma coordenada <code>x</code> y una separación en <code>y</code> configurable. Éstas se mueven a la misma velocidad y deben aparecer con cierta frecuencia para ser un obstáculo para el jugador.</p>
+<p>Para implementar esto sigue los siguientes pasos:</p>
+<ul>
+<li>Define <code>struct PipePair { Rectangle top, bot; bool scored=false; };</code>.</li>
+</ul>
+<blockquote>
+<p><em>raylib</em> tiene una estructura de datos específica para los rectángulos, la cual nos va a venir muy bien para gestionar las físicas y las colisiones del juego.</p>
+</blockquote>
+<ul>
+<li>
+<p>Crea en el estado una cola <code>deque</code> de objetos tipo <code>PipePair</code>.</p>
+</li>
+<li>
+<p>Define unas constantes para el espacio entre las tuberias, su anchura y su velocidad.</p>
+</li>
+<li>
+<p>Define una variable que sea el temporizador de tuberías <code>spawnTimer</code>y la frecuencia con la que aparecen <code>spawnEvery</code>.</p>
+</li>
+<li>
+<p>Define dos variables: <code>PIPE_W = 32</code> y <code>PIPE_H = 320</code></p>
+</li>
+</ul>
+<p>Una vez definido esto, en <code>update</code> debes hacer lo siguiente:</p>
+<ol>
+<li>
+<p>Cada <code>spawnEvery</code> ciclos (medido con <code>deltaTime</code>):</p>
+<ul>
+<li>Calcula un valor aleatorio para sacar el <em>offset</em> de la tubería superior: <code>pipe_y_offset_top</code>. Para ello utiliza la función <code>GetRandomValue</code> de raylib. Te recomendamos que el valor máximo sea la mitad del tamaño de la pantalla (utiliza <code>GetScreenWidth</code>) y el mínimo sea la mitad de la altura de la tubería.</li>
+<li>Las dos tuberías empiezan en la misma posición <code>x = &lt;anchura_de_pantalla&gt;</code>.</li>
+<li>La tubería superior empieza en una coordenada y de <code>-pipe_y_offset_top</code></li>
+<li>La tubería inferior tiene una posición <code>y</code> de <code>(PIPE_H - pipe_y_offset_top) + valor_aleatorio(PIPE_H/2, &lt;ancho_pantalla&gt;/2)</code>.</li>
+<li>Inserta tu nuevo objeto en la cola.</li>
+</ul>
+</li>
+<li>
+<p>Mueve las tuberías que haya en la cola. Actualiza su posición en x de tal forma que <code>x -= PIPE_SPEED * deltaTime</code>.</p>
+</li>
+<li>
+<p>Comprueba que, si las tuberías al frente de la cola se encuentran fuera de los límites de la pantalla, se borren. Para eso, usa la función <code>front()</code>de la cola y llama a <code>pop_front()</code> si la condición se cumple.</p>
+</li>
+</ol>
+<p>Finalmente, en la función <code>render</code>, itera sobre todas las tuberías de la cola. Usa la función <code>DrawRectangle</code> de <em>raylib</em>. Recuerda que renderizas <strong>dos</strong> tuberías, por lo que debes llamar dos veces a la función con los datos de cada tubería en la estructura de datos.</p>
+<p>Deberías observar, ahora, que aparecen con frecuencia dos rectángulos verdes que se mueven progresivamente a la izquierda.</p>
+<h2 id="ejercicio-3-colisiones-y-game-over">Ejercicio 3: Colisiones y <em>Game Over</em></h2>
+<p>Necesitamos ahora que, si el jugador choca contra una tubería o se sale de la pantalla, pierde la partida. Para ello, vamos a gestionar las colisiones con las funciones nativas de <em>raylib</em> y actualizaremos la máquina de estados para que nos aparezca una pantalla de <em>Game Over</em>.</p>
+<p>Para calcular las colisiones, deberemos utilizar la función <code>CheckColisionRecs</code> de <em>raylib</em>. Esta función require de dos estructuras <code>Rectangle</code> para comprobar si hay un solapamiento entre los dos. Por lo tanto, necesitamos, para todas las tuberías, verificar si el jugador ha chocado con alguna de ellas. Esto se conoce formalmente como una <strong>colisión AABB</strong> entre dos <strong>bounding boxes</strong>. ¡Para las tuberías ya tenemos el <em>bounding box</em>! Ya que las hemos definido como rectángulos. Sin embargo, necesitamos definir el del jugador.</p>
+<ul>
+<li>En la función <em>update</em>:
+<ul>
+<li>Calcula un <code>Rectangle</code> que será el bounding box del jugador. Para ello, deberás tomar como origen el centro del círculo (que es la posición en x e y menos el radio). De altura y anchura deben de ser el mismo radio.</li>
+</ul>
+<blockquote>
+<p>Puedes <em>debuggear</em> la colocación de esta caja renderizándola en el método <em>render</em> a través de la función <code>DrawRectanglePro</code></p>
+</blockquote>
+<ul>
+<li>Crea una nueva clase <code>GameOverState</code>. En ésta, pon el fondo del mismo color que en tu pantalla principal y un texto que ponga: <em>Game Over</em> en el centro de la pantalla. (Recuerda cómo hiciste esto en el ejercicio 0).</li>
+</ul>
+<blockquote>
+<p>Recuerda que debe heredar de <code>GameState</code> y, por lo tanto, sobreescribir todos los métodos virtuales (aunque estén vacíos).</p>
+</blockquote>
+<ul>
+<li>
+<p>Para todas las tuberías:</p>
+<ul>
+<li>Comprueba si el <em>bounding box</em> del jugador colisiona con las tuberías (debes enviar los dos <code>Rectangle</code> que ya tienes tanto precalculado como en la propia estructura de datos).</li>
+<li>Si esto sucede, debes crear un nuevo estado de <em>GameOverState</em> y mandárselo a la máquina de estados. Para ello, pon la siguiente línea:</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-keyword">this</span>-&gt;state_machine-&gt;add_state(<span class="hljs-built_in">std</span>::make_unique&lt;GameOverState&gt;(), <span class="hljs-literal">true</span>);
+
+</div></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<p>Con eso, ¡ya gestionamos que nuestro jugador pierda si choca contra las tuberías!</p>
+<p>Ahora te toca, con lo que ya sabes, implementar en <code>GameOverState</code> que, si el jugador pulsa el <strong>Espacio</strong>, se inicie una nueva partida (¿qué deberemos hacer para cambiar de pantalla?).</p>
+<h2 id="ejercicio-4-puntuaci%C3%B3n">Ejercicio 4: Puntuación</h2>
+<p>Lo penúltimo que nos queda es que el jugador consiga puntos por pasar entre las tuberías. Para ello, implementaremos unas modificaciones sencillas a nuestro juego.</p>
+<ol>
+<li>
+<p>Crea una variable en el estado que sean los puntos que tiene le jugador.</p>
+</li>
+<li>
+<p>En la función <code>update</code>, si la posición en <code>x</code> de las tuberías es menor a la del jugador (ten en cuenta la anchura de éstas), entonces debes sumar un punto.</p>
+</li>
+<li>
+<p>En la función <code>render</code> debes de mostrar la puntuación del jugador.</p>
+<blockquote>
+<p>La función <code>DrawText</code> acepta un <code>const char*</code> como entrada. Para poder convertir de un número entero a un <code>const char*</code> puedes convertirlo con std::to_string() y llamar a la función c_str() para castearlo a este tipo.</p>
+</blockquote>
+</li>
+<li>
+<p>Envía la puntuación al estado de <em>Game Over</em> para que lo guarde en una variable y la muestre en la pantalla.</p>
+</li>
+</ol>
+<p>Con todo esto... ¡ya tienes tu primer <em>Flappy Bird</em> básico.</p>
+<h2 id="ejercicio-5-d%C3%A1ndole-brillo-al-juego">Ejercicio 5: Dándole brillo al juego</h2>
+<p>Ahora que ya tienes el juego implementado, vamos a mejorar cómo se ve. Para ello, vamos a sustituir estas figuras básicas por imágenes (o también conocido en la jerga como <em>sprites</em>).</p>
+<h3 id="a%C3%B1adir-los-assets-al-proyecto">Añadir los <em>assets</em> al proyecto</h3>
+<p>En esta práctica, utilizaremos los <em>assets</em> que se encuentran en el repositorio de <a href="https://github.com/samuelcust/flappy-bird-assets">samuelcust</a>. Para ello, clona dicho repositorio y copia el contenido de la carpeta <code>sprites</code> en <code>assets</code>.</p>
+<h3 id="modificar-el-proyecto-para-incluir-los-assets">Modificar el proyecto para incluir los <em>assets</em></h3>
+<p>En primer lugar, debemos cargar los <em>sprites</em> en nuestro programa. Para ello, utilizaremos el módulo de texturas que contiene <em>raylib</em>.</p>
+<ol>
+<li>
+<p>Añade dos propiedades más a la clase <code>Bird</code>: <code>height</code> y <code>width</code>, ya que el <em>bounding box</em> es variable según el tamaño del <em>sprite</em>.</p>
+</li>
+<li>
+<p>Define dos variables privadas en el estado: <code>birdSprite</code> y <code>pipeSprite</code>. Aquí será donde cargaremos nuestras texturas.</p>
+</li>
+<li>
+<p>Las constantes definidas para las tuberías ahora deben de ser variables, asegúrate de que ningún parámetro es constante en tu implementación. Añádete también una variable <code>PIPE_H</code> para guardar la altura del <em>sprite</em>.</p>
+</li>
+<li>
+<p>En el método <code>init</code>:</p>
+<ol>
+<li>Carga las texturas en las variables definidas anteriormente. Para ello, utiliza la función <code>LoadTexture</code> de <em>raylib</em>.</li>
+<li>Define el ancho y el alto del jugador a través de las propiedades <code>width</code> y <code>height</code> del <em>sprite</em> que habéis cargado.</li>
+<li>Haz lo mismo para las variables <code>PIPE_W</code> y <code>PIPE_H</code>.</li>
+<li>Define el <em>gap</em> de la altura de las tuberias como la altura de tu jugador más una constante. Te recomendamos poner 4.5.</li>
+</ol>
+</li>
+<li>
+<p>En el método <code>update</code>:</p>
+<ol>
+<li>El <em>bounding box</em> del jugador ahora será dependiente de la anchura y la altura del propio jugador, no de un radio. Actualiza esta variable con los parámetros adecuados.</li>
+</ol>
+</li>
+<li>
+<p>En el método <code>render</code>:</p>
+<ol>
+<li>Dibuja el <em>sprite</em> del jugador. Para eso, utiliza la función <code>DrawTexture</code> de <em>raylib</em>.</li>
+<li>Ahora vamos a dibujar los <em>sprites</em> de las tuberías. En este caso, vamos a usar una función más compleja de la librería, ya que solamente tenemos un <em>sprite</em> para ello. Vamos a utilizar la función <code>DrawTextureEx</code> para permitir rotar el <em>sprite</em>.</li>
+</ol>
+<pre class="hljs"><code><div>DrawTextureEx(<span class="hljs-keyword">this</span>-&gt;pipeSprite, {p.top.x + PIPE_W, p.top.y + PIPE_H}, <span class="hljs-number">180.f</span>, <span class="hljs-number">1.0f</span>, WHITE);
+DrawTextureEx(<span class="hljs-keyword">this</span>-&gt;pipeSprite, {p.bot.x , p.bot.y}, <span class="hljs-number">0.f</span>, <span class="hljs-number">1.0f</span>, WHITE);
+</div></code></pre>
+</li>
+</ol>
+<h2 id="extras">Extras</h2>
+<p>Con todo esto, ya deberías tener un conocimiento básico para desenvolverte en las prácticas de la asignatura. De todas formas, aquí tienes unos cuantos ejercicios extra que puedes intentar para mejorar la implementación de este juego y ampliar tus conocimientos sobre la librería de <em>raylib</em>.</p>
+<p>1 - Añade sonidos al juego. Puedes encontrar los efectos en el mismo <a href="https://github.com/samuelcust/flappy-bird-assets/tree/master/audio">repositorio</a> donde has descargado los <em>sprites</em>. Revisa los <a href="https://www.raylib.com/examples.html">los ejemplos</a> de <em>raylib</em> para ello.</p>
+<p>2 - Añade la dificultad progresiva. ¿Qué deberías actualizar del estado principal para que los huecos entre las tuberias sean más pequeños y éstas vayan más rápido?</p>
+<p>3 - Renderiza la puntuación a través de <em>sprites</em>. Tienes los recursos en la carpeta <em>assets</em>.</p>
+<p>4 - ¡Atrévete con las animaciones! Deberás controlar el renderizado de varios <em>sprites</em> con un cronómetro. Te recomendamos que analices <a href="https://www.raylib.com/examples.html">los ejemplos</a> de <em>raylib</em>. Hay uno específico para animaciones.</p>
+<p>5 - Prueba a refactorizar el código (aunque en clase veremos el patrón de diseño clave para desarrollar juegos).</p>
+
+</body>
+</html>
