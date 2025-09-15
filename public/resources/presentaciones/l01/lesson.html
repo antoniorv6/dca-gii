@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>Tema 1: Organización de la memoria.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Tema 1: Organización de la memoria.</h1><p class="subtitle">Tipos Abstractos de Datos.</p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-01-28 mar 23:20</p>
+</section>
+
+<section>
+<section id="slide-orga203416">
+<h2 id="orga203416">Breve repaso de C</h2>
+<ul>
+<li class="fragment appear">Punteros.</li>
+<li class="fragment appear">Recursividad.</li>
+
+<li class="fragment appear">Modificadores <code>extern</code>, <code>static</code>, <code>volatile</code>.</li>
+<li class="fragment appear"><p>
+Guarda de ficheros <code>.h</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold;">#if</span><span style="font-weight: bold;">n</span><span style="font-weight: bold;">def</span> XXX_H
+<span style="font-weight: bold;">#define</span> <span style="font-weight: bold; font-style: italic;">XXX_H</span>
+  <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">C&#243;digo C</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold;">#endif</span>
+</code></pre>
+</div>
+
+<p>
+Puedes ver en este <a href="https://nibblestew.blogspot.com/2022/02/compiling-libreoffice-with-meson-even.html">enlace</a> un ejemplo de lo que tarda en compilar
+un proyecto real (<a href="https://www.libreoffice.org/">LibreOffice</a>) escrito en su mayoría en
+<code>C++</code>. Imagina si estuviera <i>plagado</i> de <code>includes</code> gratuitos!
+</p></li>
+
+</ul>
+
+</section>
+<section id="slide-orga203416-split">
+
+<h2>Breve repaso de C</h2>
+<ul>
+<li>No tienen que ver con <b>C</b> pero te será muy útil saber usar
+herramientas como <a href="https://www.gnu.org/software/make/">make</a>, <a href="https://www.gnu.org/software/gdb/">gdb</a> o <a href="http://valgrind.org/">valgrind</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc599b78">
+<h2 id="orgc599b78">El lenguaje de programación C++</h2>
+<div class="outline-text-2" id="text-orgc599b78">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1e3f1d8">
+<h3 id="org1e3f1d8">Historia</h3>
+<ul>
+<li class="fragment appear">Comienza su desarrollo en 1979.</li>
+<li class="fragment appear">Inicialmente se llamaba <b>C con clases</b>.</li>
+<li class="fragment appear">El 14 de octubre de 1985 se publica <a href="https://en.wikipedia.org/wiki/Cfront">cfront</a> <code>1.0</code>, <a href="http://www.softwarepreservation.org/projects/c_plus_plus/">aquí</a> puedes ver
+su código fuente y <a href="http://www.stroustrup.com/hopl2.pdf">aquí</a> puedes leer un artículo donde su creador
+(<a href="http://www.stroustrup.com/">Bjarne Stroustrup)</a> habla de los orígenes del lenguaje.</li>
+<li class="fragment appear">Curiosamente <code>cfront</code> era un <b>traductor</b> de <code>C++</code> a <code>C</code>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org1e3f1d8-split">
+
+<h3>Historia</h3>
+<ul>
+<li>El compilador <a href="http://gcc.gnu.org">g++</a> de <a href="http://www.gnu.org">GNU</a> fue el primero en generar código nativo
+y no traducir a <code>C</code>. Aunque no todo el mundo está de acuerdo y
+otras fuentes citan al compilador Zortech C++ como el primero en
+hacerlo.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4366c80">
+<h3 id="org4366c80">Importante</h3>
+<ul>
+<li class="fragment appear">Es una extensión (más) <i>orientada a objetos</i> de <code>C</code>.</li>
+<li class="fragment appear">Trata de ser compatible con <code>C</code> (pero no todo programa en <code>C</code> es
+un programa correcto en <code>C++</code>).</li>
+<li class="fragment appear">Toma ideas del lenguaje <a href="https://es.wikipedia.org/wiki/Simula">Simula</a>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org4366c80-split">
+
+<h3>Importante</h3>
+<ul>
+<li>Los principios en los que se basa son los de <b>eficiencia</b> y
+<b>flexibilidad</b>.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Además de la POO añade más paradigmas como el de la <a href="https://en.wikipedia.org/wiki/Generic_programming">programación
+genérica</a>.</li>
+<li class="fragment appear">Para conocer mejor la historia del origen de <code>C++</code> es
+recomendable que leas <a href="http://www.stroustrup.com/hopl2.pdf">estos</a> dos <a href="http://www.stroustrup.com/hopl-almost-final.pdf">artículos</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org91c5f57">
+<h3 id="org91c5f57">Características añadidas a <i>C</i></h3>
+<ul>
+<li class="fragment appear"><a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus07.html">Clases</a> y objetos.</li>
+<li class="fragment appear"><a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus04.html">Espacios de nombres</a>.</li>
+<li class="fragment appear">Constructores, destructores y funciones <i>amigas</i>.</li>
+<li class="fragment appear">Zonas de visibilidad (<code>public</code>, <code>private</code> y <code>protected</code>).</li>
+<li class="fragment appear">Operador de resolución de ámbito ( <b>::</b> ).</li>
+<li class="fragment appear">Funciones <a href="https://en.wikipedia.org/wiki/Inline_function">inline</a>.</li>
+<li class="fragment appear">Referencias (<i>&amp;</i>).</li>
+<li class="fragment appear"><a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus06.html">Entrada/Salida</a> mejorada.</li>
+
+</ul>
+
+</section>
+<section id="slide-org91c5f57-split">
+
+<h3>Características añadidas a <i>C</i></h3>
+<ul>
+<li>Sobrecarga de funciones (<a href="https://en.wikipedia.org/wiki/Name_mangling">mangling</a>) y de <a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus11.html">operadores</a>.</li>
+<li class="fragment appear">Genericidad de <a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus21.html">funciones</a> y de <a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus22.html">clases</a>.</li>
+<li class="fragment appear"><a href="https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)">Herencia</a> (<i>simple</i> y <i>múltiple</i>), <a href="https://en.wikipedia.org/wiki/Virtual_function">funciones virtuales</a>.</li>
+<li class="fragment appear"><a href="https://en.cppreference.com/w/cpp/language/operator_alternative">Nombres de operadores</a> lógicos: <code>and</code>, <code>or</code>, <code>not</code>, <code>xor</code>, etc&#x2026;,
+además de los que ya conoces de <b>C</b> (<code>&amp;&amp;</code> , <code>||</code> , <code>!</code>, <code>^</code>&#x2026;).</li>
+<li class="fragment appear">Literal <i>puntero nulo</i> : <code>nullptr</code></li>
+<li class="fragment appear">Evaluación de expresiones en tiempo de compilación: <a href="http://en.cppreference.com/w/cpp/language/constexpr">constexpr</a>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org91c5f57-split">
+
+<h3>Características añadidas a <i>C</i></h3>
+<ul>
+<li>Antes de usar (<i>llamar</i>) una función el compilador debe conocer su
+prototipo o su definición.</li>
+<li>Valores por defecto en parámetros de funciones.</li>
+<li>No necesitaremos <code>typedef</code> de <i>struct</i> o <i>class</i>.</li>
+<li>Tipo <a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus05.html">cadena</a>. Es una clase de la biblioteca estándar de C++, no es
+un tipo base del lenguaje.</li>
+<li><a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/cplusplus10.html">Excepciones</a> para el tratamiento de errores.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5217928">
+<h3 id="org5217928">Ejemplo de-todo-un-poco</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TDerived</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">TBase1</span>, <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">TBase2</span>, <span style="font-weight: bold;">protected</span> <span style="font-weight: bold; text-decoration: underline;">TBase3</span> {
+<span style="font-weight: bold;">public</span>:  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Parte publica ---------------------------------------------</span>
+ <span style="font-weight: bold;">TDerived</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">s</span> = <span style="font-style: italic;">""</span>) : TBase1 (a) , _s(s) { <span style="font-weight: bold;">this</span>-&gt;_a = a; _n++; } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">constructor</span>
+ ~<span style="font-weight: bold;">TDerived</span> () { _s = <span style="font-style: italic;">""</span>; }     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">destructor</span>
+
+ <span style="font-weight: bold;">inline</span> <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">isOk</span> () { <span style="font-weight: bold;">return</span> (_s != <span style="font-style: italic;">""</span>); } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">inline expl&#237;cito</span>
+
+ <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">isOk</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span>&amp; <span style="font-weight: bold; font-style: italic;">s</span>) {    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">inline impl&#237;cito</span>
+   <span style="font-weight: bold;">if</span> (<span style="font-weight: bold;">not</span> checkMe ()) <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">false</span>;   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">acceso a la parte privada, nombres de op.</span>
+   <span style="font-weight: bold;">return</span> (_s != s);                   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">acceso a la parte privada</span>
+ }
+
+ <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">howMany</span> () { <span style="font-weight: bold;">return</span> _n; } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">m&#233;todo de clase</span>
+
+ <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&lt;&lt;</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold; font-style: italic;">out</span>, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">TDerived</span>&amp; <span style="font-weight: bold; font-style: italic;">d</span>) { <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">funci&#243;n amiga</span>
+   <span style="font-weight: bold;">return</span> out &lt;&lt; d._a &lt;&lt; <span style="font-style: italic;">'/'</span> &lt;&lt; d._s ; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">necesita acceso a parte privada</span>
+ }
+
+ <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Redefinici&#243;n operador suma entre dos objetos de clase TDerived</span>
+ <span style="font-weight: bold; text-decoration: underline;">TDerived</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">+</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">TDerived</span>&amp; <span style="font-weight: bold; font-style: italic;">rhs</span>) { <span style="font-weight: bold;">return</span> TDerived (_a + rhs._a, _s + rhs._s); }
+
+<span style="font-weight: bold;">private</span>:  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Parte privada --------------------------------------------</span>
+ <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">checkMe</span> () { <span style="font-weight: bold;">return</span> (_a &gt; 0); } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">m&#233;todo de instancia privado</span>
+
+ <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">_a</span>;                       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">datos de instancia</span>
+ <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">_s</span>;               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">datos de instancia</span>
+ <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">_n</span>;                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">datos de clase</span>
+}
+
+<span style="font-weight: bold; text-decoration: underline;">TDerived</span> <span style="font-weight: bold; font-style: italic;">d1</span>(1, <span style="font-style: italic;">"example"</span>), <span style="font-weight: bold; font-style: italic;">d2</span>(2);
+d1 = d1 + d2;
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb0b4a05">
+<h3 id="orgb0b4a05">Iso C++</h3>
+<ul>
+<li class="fragment appear"><code>C++</code> no es un lenguaje creado por una compañía particular que de
+alguna manera controla como evoluciona.</li>
+<li class="fragment appear">Su desarrollo está gestionado por un <a href="https://isocpp.org/">comité</a> dentro del estándar
+ISO.</li>
+<li class="fragment appear">A este estándar se han adherido diversos fabricantes de
+compiladores de C++ entre otros.</li>
+<li class="fragment appear">Hay varias versiones publicadas del mismo, nos referimos a ellas por
+el año de publicación: <code>C++98</code>, <code>C++11</code>, <code>C++14</code>, <code>C++17</code>, <code>C++20</code> y <code>C++23</code>. Además
+está en desarrollo <code>C++26</code>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgb0b4a05-split">
+
+<h3>Iso C++</h3>
+<ul>
+<li>El comité se ha propuesto publicar una nueva versión cada tres
+años del estándar del lenguaje.</li>
+<li>Debemos comprobar la documentación del compilador usado para
+saber qué versión o versiones implementa y en este último caso
+elegir con cual trabajar.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgb0b4a05-split">
+
+<h3>Iso C++</h3>
+<ul>
+<li>Algunos compiladores implementan por defecto una versión y ofrecen
+una '<i>preview</i>' de otra versión posterior mediante el uso de una
+opción, p.e., en el caso de '<code>g++</code>' versiones recientes implementan ya
+<a href="https://www.wikiwand.com/en/C%2B%2B17">C++17</a> y lo usan por defecto pero si no lo hacen podemos forzarlo
+mediante el uso de la opción de compilación <br />
+"<code>--std=c++17</code>", a <code>C++20</code>: "<code>--std=c++20</code>", o a <code>C++23</code>:
+"<code>--std=c++23</code>".</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgde6e9a7">
+<h3 id="orgde6e9a7">Enlaces interesantes sobre <b>C++</b></h3>
+<ul>
+<li><a href="https://isocpp.org/">Estándar ISO</a></li>
+<li><a href="http://es.cppreference.com/w/">Cpp Reference</a></li>
+<li><a href="https://fbb-git.gitlab.io/cppannotations/cppannotations/html/index.html">The C++ Annotations</a></li>
+<li>Adaptación de <code>g++</code> a los distintos <a href="https://gcc.gnu.org/projects/cxx-status.html">estándares</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org6b9566c">
+<h2 id="org6b9566c">Gestión y uso de la memoria</h2>
+<div class="outline-text-2" id="text-org6b9566c">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9894dd6">
+<h3 id="org9894dd6">Pila &#x2013; <i>Stack</i> &#x2013;  (I)</h3>
+<ul>
+<li class="fragment appear">Es la memoria en la que se guardan variables locales y parámetros
+de funciones.</li>
+
+<li class="fragment appear"><p>
+Crea un ámbito automático. Es útil pero requiere tener cuidado:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span>* <span style="font-weight: bold;">suma_elementos</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>[5]) {
+  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold; font-style: italic;">b</span> = <span style="font-weight: bold; text-decoration: underline;">true</span>;
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">s</span> = 0;
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 5; i++) s += n[i];
+  b = <span style="font-weight: bold; text-decoration: underline;">false</span>;
+  <span style="font-weight: bold;">return</span> &amp;s;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9894dd6-split">
+
+<h3>Pila &#x2013; <i>Stack</i> &#x2013;  (I)</h3>
+<ul>
+<li><p>
+Por defecto los parámetros se pasan por valor:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span> = 0;                   |   <span style="font-weight: bold; text-decoration: underline;">int</span> a = 0;
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">inc</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">p</span>) { p++; }    |   <span style="font-weight: bold; text-decoration: underline;">void</span> inc (<span style="font-weight: bold; text-decoration: underline;">int</span>&amp; <span style="font-weight: bold; font-style: italic;">p</span>) { p++; }
+inc (a);                     |   inc (a);
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">BOOM!                     |   // OK ahora!</span>
+assert (a == 1);             |   assert (a == 1);
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0a7087d">
+<h3 id="org0a7087d">Pila &#x2013; <i>Stack</i> &#x2013;  (II)</h3>
+<ul>
+<li class="fragment appear"><p>
+Al igual que en <code>C</code> podemos crear ámbitos anidados:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim>{                     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Ambito I</span>
+ <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span> = 2;
+ {                    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Ambito II</span>
+   <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">b</span> = 4
+   <span style="font-weight: bold; text-decoration: underline;">int</span> a = b;         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">No es un error</span>
+ }
+ assert ( a == 2 );   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Ok</span>
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org0a7087d-split">
+
+<h3>Pila &#x2013; <i>Stack</i> &#x2013;  (II)</h3>
+
+<ul>
+<li><p>
+<code>C++</code> permite distinguir una variable global de una local que se
+llame igual con el operador de resolución de ámbito ( <b>::</b> ):
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span> = 7;
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">f</span> () {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span> = 3;
+  <span style="font-weight: bold;">return</span> a + ::a;     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">10 = 3 + 7</span>
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org39564ef">
+<h3 id="org39564ef">Pila &#x2013; <i>Stack</i> &#x2013;  (III)</h3>
+<ul>
+<li class="fragment appear">La llave de apertura '<code>{</code>' marca el inicio de un ámbito y la de
+cierre '<code>}</code>' el final.</li>
+<li class="fragment appear">Cualquier variable local a un ámbito, al terminar el mismo, se
+destruye.</li>
+<li class="fragment appear">&#x2026;pero esto es algo que ya conoceis de <b>Programación-I</b>. <code>C++</code>
+se comporta igual que <code>C</code> en este aspecto.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdd882ed">
+<h3 id="orgdd882ed">Pila &#x2013; <i>Stack</i> &#x2013;  (IV)</h3>
+<ul>
+<li class="fragment appear"><p>
+Hay que llevar especial cuidado con los punteros:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {
+  <span style="font-weight: bold; text-decoration: underline;">char</span>* <span style="font-weight: bold; font-style: italic;">c</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">char</span>[20];
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div></li>
+
+<li class="fragment appear">Probado con <a href="http://valgrind.org/">valgrind</a>:</li>
+
+</ul>
+
+<pre class="example" id="org45dec34">
+==7177== Memcheck, a memory error detector
+==7177== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==7177== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==7177== Command: ./a.out
+==7177==
+</pre>
+
+</section>
+<section id="slide-orgdd882ed-split">
+
+<h3>Pila &#x2013; <i>Stack</i> &#x2013;  (IV)</h3>
+
+<ul>
+<li>Continúa la salida de valgrind:</li>
+
+</ul>
+<pre class="example" id="org234e432">
+==7177== HEAP SUMMARY:
+==7177==     in use at exit: 72,724 bytes in 2 blocks
+==7177==   total heap usage: 2 allocs, 0 frees, 72,724 bytes allocated
+==7177==
+==7177== LEAK SUMMARY:
+==7177==    definitely lost: 20 bytes in 1 blocks
+==7177==    indirectly lost: 0 bytes in 0 blocks
+==7177==      possibly lost: 0 bytes in 0 blocks
+==7177==    still reachable: 72,704 bytes in 1 blocks
+==7177==         suppressed: 0 bytes in 0 blocks
+==7177== Rerun with --leak-check=full to see details of leaked memory
+==7177==
+==7177== For counts of detected and suppressed errors, rerun with: -v
+==7177== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-org692a6ca">
+<h3 id="org692a6ca">Almacenamiento global.</h3>
+<ul>
+<li class="fragment appear">Sigue las mismas reglas que en <code>C</code>.</li>
+<li class="fragment appear">Una variable declarada fuera de cualquier función se considera
+que está en el almacenamiento global.</li>
+<li class="fragment appear">La biblioteca estándar de <b>C++</b> usa el <i>espacio de nombres</i>
+<b>std</b>.</li>
+<li class="fragment appear">El ámbito de vida de estas variables es el del programa.</li>
+<li class="fragment appear">En  el  modelo  multi-hilo  de  C++  las  variables  globales  se
+comparten por todos los <a href="https://en.wikipedia.org/wiki/Thread_(computing)">hilos</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf06a86f">
+<h3 id="orgf06a86f">Almacenamiento dinámico (<i>Heap</i> ).</h3>
+<ul>
+<li class="fragment appear">Gestionado por el lenguaje con nuevos operadores:<br />
+<code>new</code> , <code>new[]</code> , <code>delete</code>, <code>delete[]</code>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf06a86f-split">
+
+<h3>Almacenamiento dinámico (<i>Heap</i> ).</h3>
+<ul>
+<li><p>
+Se pueden usar tanto con tipos básicos como con tipos creados por
+nosotros:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span>* <span style="font-weight: bold; font-style: italic;">pe</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">int</span>(10);  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Reserva memoria y la inicializa a 10.</span>
+<span style="font-weight: bold;">delete</span> pe;
+...
+<span style="font-weight: bold;">class</span> TArbol {...};
+<span style="font-weight: bold; text-decoration: underline;">TArbol</span>* <span style="font-weight: bold; font-style: italic;">a1</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">TArbol</span>;
+<span style="font-weight: bold; text-decoration: underline;">TArbol</span>* <span style="font-weight: bold; font-style: italic;">a2</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">TArbol</span> (a1);
+<span style="font-weight: bold;">delete</span> a1; <span style="font-weight: bold;">delete</span> a2;
+...
+TArbol* va = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">TArbol</span>[10];
+<span style="font-weight: bold;">delete</span>[] va;
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf06a86f-split">
+
+<h3>Almacenamiento dinámico (<i>Heap</i> ).</h3>
+<ul>
+<li>Se pueden sobrecargar a nivel global y por clases. En <a href="https://youtu.be/p-sprvJX07E">este vídeo</a> del
+<a href="https://www.youtube.com/@DavesGarage">canal de Dave Plummer</a> puedes obtener más información al
+respecto. También te recomiendo que veas su <a href="https://youtu.be/B9DouAlkZlc">vídeo donde explica</a> los
+problemas con la gestión de memoria que pueden ocurrir con las
+funciones de <code>C</code> para el tratamiento de cadenas.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgae6b039">
+<h3 id="orgae6b039">¿Sabías que&#x2026;?</h3>
+<ul>
+<li><p>
+El operador <code>new</code> se puede <i>simular</i> en <code>C</code> con ayuda del
+preprocesador:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#define</span> <span style="font-weight: bold;">NEW</span>(<span style="font-weight: bold; font-style: italic;">tipo</span>,<span style="font-weight: bold; font-style: italic;">cantidad</span>)  ((<span style="font-weight: bold; text-decoration: underline;">tipo</span>*) malloc((cantidad) * (<span style="font-weight: bold; text-decoration: underline;">size_t</span>) <span style="font-weight: bold;">sizeof</span>(tipo)))
+
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">1: array de 20 caracteres</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold; text-decoration: underline;">char</span>* <span style="font-weight: bold; font-style: italic;">c</span> = NEW(<span style="font-weight: bold; text-decoration: underline;">char</span>, 20);  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Equivale a:</span>
+                          <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">char* c = (char*) malloc (20 * sizeof(char))</span>
+
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">2: Matriz de 20*10 enteros</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold; text-decoration: underline;">int</span>** <span style="font-weight: bold; font-style: italic;">m</span>;
+m = NEW(<span style="font-weight: bold; text-decoration: underline;">int</span>*, 20);
+<span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">r</span> = 0; r &lt; 20; r++) {
+  m[r] = NEW(<span style="font-weight: bold; text-decoration: underline;">int</span>, 10);
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">c</span> = 0; c &lt; 10; c++)
+    m[r][c] = 2*c;
+}
+</code></pre>
+</div></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgff28930">
+<h3 id="orgff28930">¿Y sabías que también podemos&#x2026;?</h3>
+<ul>
+<li><p>
+Declarar punteros a funciones, fíjate en este ejemplo:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">hola</span>(<span style="font-weight: bold; text-decoration: underline;">void</span>) {
+  cout &lt;&lt; <span style="font-style: italic;">"Hola\n"</span>;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">adios</span>(<span style="font-weight: bold; text-decoration: underline;">void</span>) {
+  cout &lt;&lt; <span style="font-style: italic;">"Adios\n"</span>;
+}
+
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">fpvv_t</span> = <span style="font-weight: bold; text-decoration: underline;">void</span>(*)(<span style="font-weight: bold; text-decoration: underline;">void</span>);
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>()
+{
+  <span style="font-weight: bold; text-decoration: underline;">fpvv_t</span> <span style="font-weight: bold; font-style: italic;">f</span>;
+
+  f = hola;
+  f();
+
+  f = adios;
+  f();
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgac8ee96">
+<h2 id="orgac8ee96">Introducción a los TADs</h2>
+<div class="outline-text-2" id="text-orgac8ee96">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org6aa80b5">
+<h3 id="org6aa80b5">Definición</h3>
+<ul>
+<li class="fragment appear">Un TAD Es un modelo matemático&#x2026;</li>
+<li class="fragment appear">&#x2026;de los objetos constituyentes de un tipo de datos, junto con&#x2026;</li>
+<li class="fragment appear">&#x2026;las funciones que operan sobre estos objetos.</li>
+<li class="fragment appear"><b>IMPORTANTE</b>: estas funciones deben formar parte de la
+especificación del TAD.</li>
+<li class="fragment appear"><span class="underline">Un ejemplo</span>: el TAD <code>Conjunto</code> puede ser definido como la
+colección de datos que son accedidos por operaciones como la
+<code>union</code>, <code>interseccion</code> y <code>diferencia</code>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5504690">
+<h3 id="org5504690">Características de los TADs</h3>
+<ul>
+<li class="fragment appear">Un TAD no es un <i>Tipo de Datos</i>. Este último es una
+implementación del modelo matemático especificado por un TAD.</li>
+<li class="fragment appear">Un TAD no es una <i>Estructura de Datos</i>. Esta última no es más que
+una colección de variables en un programa que están conectadas de
+una manera específica.</li>
+
+</ul>
+
+</section>
+<section id="slide-org5504690-split">
+
+<h3>Características de los TADs</h3>
+<ul>
+<li>En el diseño y especificación de un TAD nunca se habla de su
+representación interna. Esto permite usar eficientemente los
+principos de <i>ocultación de información</i> y de <i>reusabilidad</i>.</li>
+<li>Conseguir una especificación completa y rigurosa de un TAD
+implica obtener un conjunto de axiomas que lo describen completa
+e inequivocamente. Esto pude llegar a ser difícil con TADs
+complejos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7394850">
+<h3 id="org7394850">TADs estudiados</h3>
+<ul>
+<li class="fragment appear">Listas simple y doblemente enlazadas.</li>
+<li class="fragment appear">Pilas</li>
+<li class="fragment appear">Colas</li>
+<li class="fragment appear">Árboles</li>
+<li class="fragment appear">Grafos</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org4938dd4">
+<h2 id="org4938dd4">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

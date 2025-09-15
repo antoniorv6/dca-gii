@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Compilación de grandes proyectos</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="05-tdd_files/libs/clipboard/clipboard.min.js"></script>
+<script src="05-tdd_files/libs/quarto-html/quarto.js"></script>
+<script src="05-tdd_files/libs/quarto-html/popper.min.js"></script>
+<script src="05-tdd_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="05-tdd_files/libs/quarto-html/anchor.min.js"></script>
+<link href="05-tdd_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="05-tdd_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="05-tdd_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="05-tdd_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="05-tdd_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="05-tdd_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="05-tdd_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="05-tdd_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#creación-de-un-proyecto" id="toc-creación-de-un-proyecto" class="nav-link active" data-scroll-target="#creación-de-un-proyecto">Creación de un proyecto</a>
+  <ul class="collapse">
+  <li><a href="#estructura-del-proyecto" id="toc-estructura-del-proyecto" class="nav-link" data-scroll-target="#estructura-del-proyecto">Estructura del proyecto</a></li>
+  <li><a href="#archivos-iniciales" id="toc-archivos-iniciales" class="nav-link" data-scroll-target="#archivos-iniciales">Archivos iniciales</a></li>
+  </ul></li>
+  <li><a href="#creación-de-un-entorno-virtual" id="toc-creación-de-un-entorno-virtual" class="nav-link" data-scroll-target="#creación-de-un-entorno-virtual">Creación de un entorno virtual</a></li>
+  <li><a href="#función-add" id="toc-función-add" class="nav-link" data-scroll-target="#función-add">Función <code>add</code></a></li>
+  <li><a href="#probando-la-función-add" id="toc-probando-la-función-add" class="nav-link" data-scroll-target="#probando-la-función-add">Probando la función <code>add</code></a></li>
+  <li><a href="#cobertura-de-código" id="toc-cobertura-de-código" class="nav-link" data-scroll-target="#cobertura-de-código">Cobertura de código</a></li>
+  <li><a href="#función-substract" id="toc-función-substract" class="nav-link" data-scroll-target="#función-substract">Función substract</a></li>
+  <li><a href="#probando-la-función-substract" id="toc-probando-la-función-substract" class="nav-link" data-scroll-target="#probando-la-función-substract">Probando la función <code>substract</code></a>
+  <ul class="collapse">
+  <li><a href="#comprobar-que-substract-llama-a-add" id="toc-comprobar-que-substract-llama-a-add" class="nav-link" data-scroll-target="#comprobar-que-substract-llama-a-add">Comprobar que <code>substract</code> llama a <code>add</code></a></li>
+  <li><a href="#simular-el-comportamiento-de-add" id="toc-simular-el-comportamiento-de-add" class="nav-link" data-scroll-target="#simular-el-comportamiento-de-add">Simular el comportamiento de <code>add</code></a></li>
+  </ul></li>
+  <li><a href="#función-divide" id="toc-función-divide" class="nav-link" data-scroll-target="#función-divide">Función <code>divide</code></a></li>
+  <li><a href="#probando-la-función-divide" id="toc-probando-la-función-divide" class="nav-link" data-scroll-target="#probando-la-función-divide">Probando la función <code>divide</code></a></li>
+  <li><a href="#pruebas-para-logging" id="toc-pruebas-para-logging" class="nav-link" data-scroll-target="#pruebas-para-logging">Pruebas para logging</a></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios">Ejercicios</a></li>
+  <li><a href="#anexo.-uso-de-la-terminal" id="toc-anexo.-uso-de-la-terminal" class="nav-link" data-scroll-target="#anexo.-uso-de-la-terminal">Anexo. Uso de la terminal</a></li>
+  <li><a href="#Introducción" id="toc-Introducción" class="nav-link" data-scroll-target="#Introducción">Introducción</a>
+  <ul class="collapse">
+  <li><a href="#cómo-compilamos-software" id="toc-cómo-compilamos-software" class="nav-link" data-scroll-target="#cómo-compilamos-software">Cómo compilamos <em>software</em></a></li>
+  <li><a href="#cómo-compilamos-software-1" id="toc-cómo-compilamos-software-1" class="nav-link" data-scroll-target="#cómo-compilamos-software-1">Cómo compilamos <em>software</em></a></li>
+  <li><a href="#cómo-compilamos-software-2" id="toc-cómo-compilamos-software-2" class="nav-link" data-scroll-target="#cómo-compilamos-software-2">Cómo compilamos <em>software</em></a></li>
+  <li><a href="#cómo-compilamos-software-3" id="toc-cómo-compilamos-software-3" class="nav-link" data-scroll-target="#cómo-compilamos-software-3">Cómo compilamos <em>software</em></a></li>
+  <li><a href="#cómo-compilamos-software-4" id="toc-cómo-compilamos-software-4" class="nav-link" data-scroll-target="#cómo-compilamos-software-4">Cómo compilamos <em>software</em></a></li>
+  <li><a href="#una-vía-de-escape" id="toc-una-vía-de-escape" class="nav-link" data-scroll-target="#una-vía-de-escape">Una vía de escape…</a></li>
+  <li><a href="#un-problema-de-escalado" id="toc-un-problema-de-escalado" class="nav-link" data-scroll-target="#un-problema-de-escalado">Un problema de escalado</a></li>
+  <li><a href="#un-problema-de-escalado-1" id="toc-un-problema-de-escalado-1" class="nav-link" data-scroll-target="#un-problema-de-escalado-1">Un problema de escalado</a></li>
+  <li><a href="#un-problema-de-escalado-2" id="toc-un-problema-de-escalado-2" class="nav-link" data-scroll-target="#un-problema-de-escalado-2">Un problema de escalado</a></li>
+  <li><a href="#un-problema-de-escalado-3" id="toc-un-problema-de-escalado-3" class="nav-link" data-scroll-target="#un-problema-de-escalado-3">Un problema de escalado</a></li>
+  <li><a href="#un-problema-de-escalado-4" id="toc-un-problema-de-escalado-4" class="nav-link" data-scroll-target="#un-problema-de-escalado-4">Un problema de escalado</a></li>
+  <li><a href="#capas-y-ecosistema-de-compilación" id="toc-capas-y-ecosistema-de-compilación" class="nav-link" data-scroll-target="#capas-y-ecosistema-de-compilación">Capas y ecosistema de compilación</a></li>
+  <li><a href="#capas-y-ecosistema-de-compilación-1" id="toc-capas-y-ecosistema-de-compilación-1" class="nav-link" data-scroll-target="#capas-y-ecosistema-de-compilación-1">Capas y ecosistema de compilación</a></li>
+  <li><a href="#capas-y-ecosistema-de-compilación-2" id="toc-capas-y-ecosistema-de-compilación-2" class="nav-link" data-scroll-target="#capas-y-ecosistema-de-compilación-2">Capas y ecosistema de compilación</a></li>
+  <li><a href="#capas-y-ecosistema-de-compilación-3" id="toc-capas-y-ecosistema-de-compilación-3" class="nav-link" data-scroll-target="#capas-y-ecosistema-de-compilación-3">Capas y ecosistema de compilación</a></li>
+  <li><a href="#capas-y-ecosistema-de-compilación-4" id="toc-capas-y-ecosistema-de-compilación-4" class="nav-link" data-scroll-target="#capas-y-ecosistema-de-compilación-4">Capas y ecosistema de compilación</a></li>
+  </ul></li>
+  <li><a href="#Make" id="toc-Make" class="nav-link" data-scroll-target="#Make">Make</a>
+  <ul class="collapse">
+  <li><a href="#conceptos-fundamentales-de-make" id="toc-conceptos-fundamentales-de-make" class="nav-link" data-scroll-target="#conceptos-fundamentales-de-make">Conceptos fundamentales de <code>make</code></a></li>
+  <li><a href="#conceptos-fundamentales-de-make-1" id="toc-conceptos-fundamentales-de-make-1" class="nav-link" data-scroll-target="#conceptos-fundamentales-de-make-1">Conceptos fundamentales de <code>make</code></a></li>
+  <li><a href="#conceptos-fundamentales-de-make-2" id="toc-conceptos-fundamentales-de-make-2" class="nav-link" data-scroll-target="#conceptos-fundamentales-de-make-2">Conceptos fundamentales de <code>make</code></a></li>
+  <li><a href="#conceptos-fundamentales-de-make-3" id="toc-conceptos-fundamentales-de-make-3" class="nav-link" data-scroll-target="#conceptos-fundamentales-de-make-3">Conceptos fundamentales de <code>make</code></a></li>
+  <li><a href="#makefiles-básicos" id="toc-makefiles-básicos" class="nav-link" data-scroll-target="#makefiles-básicos">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-1" id="toc-makefiles-básicos-1" class="nav-link" data-scroll-target="#makefiles-básicos-1">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-2" id="toc-makefiles-básicos-2" class="nav-link" data-scroll-target="#makefiles-básicos-2">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-3" id="toc-makefiles-básicos-3" class="nav-link" data-scroll-target="#makefiles-básicos-3">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-4" id="toc-makefiles-básicos-4" class="nav-link" data-scroll-target="#makefiles-básicos-4">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-5" id="toc-makefiles-básicos-5" class="nav-link" data-scroll-target="#makefiles-básicos-5">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-6" id="toc-makefiles-básicos-6" class="nav-link" data-scroll-target="#makefiles-básicos-6">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-7" id="toc-makefiles-básicos-7" class="nav-link" data-scroll-target="#makefiles-básicos-7">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-8" id="toc-makefiles-básicos-8" class="nav-link" data-scroll-target="#makefiles-básicos-8">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-9" id="toc-makefiles-básicos-9" class="nav-link" data-scroll-target="#makefiles-básicos-9">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-10" id="toc-makefiles-básicos-10" class="nav-link" data-scroll-target="#makefiles-básicos-10">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-11" id="toc-makefiles-básicos-11" class="nav-link" data-scroll-target="#makefiles-básicos-11">Makefiles básicos</a></li>
+  <li><a href="#makefiles-básicos-12" id="toc-makefiles-básicos-12" class="nav-link" data-scroll-target="#makefiles-básicos-12">Makefiles básicos</a></li>
+  <li><a href="#generalizando-los-makefiles" id="toc-generalizando-los-makefiles" class="nav-link" data-scroll-target="#generalizando-los-makefiles">Generalizando los makefiles</a></li>
+  <li><a href="#generalizando-los-makefiles-1" id="toc-generalizando-los-makefiles-1" class="nav-link" data-scroll-target="#generalizando-los-makefiles-1">Generalizando los makefiles</a></li>
+  <li><a href="#generalizando-los-makefiles-2" id="toc-generalizando-los-makefiles-2" class="nav-link" data-scroll-target="#generalizando-los-makefiles-2">Generalizando los makefiles</a></li>
+  <li><a href="#generalizando-los-makefiles-3" id="toc-generalizando-los-makefiles-3" class="nav-link" data-scroll-target="#generalizando-los-makefiles-3">Generalizando los makefiles</a></li>
+  <li><a href="#generalizando-los-makefiles-4" id="toc-generalizando-los-makefiles-4" class="nav-link" data-scroll-target="#generalizando-los-makefiles-4">Generalizando los makefiles</a></li>
+  <li><a href="#generalizando-los-makefiles-5" id="toc-generalizando-los-makefiles-5" class="nav-link" data-scroll-target="#generalizando-los-makefiles-5">Generalizando los makefiles</a></li>
+  <li><a href="#múltiples-objetivos" id="toc-múltiples-objetivos" class="nav-link" data-scroll-target="#múltiples-objetivos">Múltiples objetivos</a></li>
+  <li><a href="#múltiples-objetivos-1" id="toc-múltiples-objetivos-1" class="nav-link" data-scroll-target="#múltiples-objetivos-1">Múltiples objetivos</a></li>
+  <li><a href="#múltiples-objetivos-2" id="toc-múltiples-objetivos-2" class="nav-link" data-scroll-target="#múltiples-objetivos-2">Múltiples objetivos</a></li>
+  <li><a href="#objetivos-especiales" id="toc-objetivos-especiales" class="nav-link" data-scroll-target="#objetivos-especiales">Objetivos especiales</a></li>
+  <li><a href="#dependencias-de-orden" id="toc-dependencias-de-orden" class="nav-link" data-scroll-target="#dependencias-de-orden">Dependencias de orden</a></li>
+  <li><a href="#dependencias-de-orden-1" id="toc-dependencias-de-orden-1" class="nav-link" data-scroll-target="#dependencias-de-orden-1">Dependencias de orden</a></li>
+  <li><a href="#dependencias-de-orden-2" id="toc-dependencias-de-orden-2" class="nav-link" data-scroll-target="#dependencias-de-orden-2">Dependencias de orden</a></li>
+  <li><a href="#dependencias-de-orden-3" id="toc-dependencias-de-orden-3" class="nav-link" data-scroll-target="#dependencias-de-orden-3">Dependencias de orden</a></li>
+  <li><a href="#dependencias-de-orden-4" id="toc-dependencias-de-orden-4" class="nav-link" data-scroll-target="#dependencias-de-orden-4">Dependencias de orden</a></li>
+  <li><a href="#dependencias-de-orden-5" id="toc-dependencias-de-orden-5" class="nav-link" data-scroll-target="#dependencias-de-orden-5">Dependencias de orden</a></li>
+  <li><a href="#makfiles-multinivel" id="toc-makfiles-multinivel" class="nav-link" data-scroll-target="#makfiles-multinivel">Makfiles multinivel</a></li>
+  <li><a href="#makfiles-multinivel-1" id="toc-makfiles-multinivel-1" class="nav-link" data-scroll-target="#makfiles-multinivel-1">Makfiles multinivel</a></li>
+  <li><a href="#makfiles-multinivel-2" id="toc-makfiles-multinivel-2" class="nav-link" data-scroll-target="#makfiles-multinivel-2">Makfiles multinivel</a></li>
+  <li><a href="#makfiles-multinivel-3" id="toc-makfiles-multinivel-3" class="nav-link" data-scroll-target="#makfiles-multinivel-3">Makfiles multinivel</a></li>
+  <li><a href="#estrategia-monolítica" id="toc-estrategia-monolítica" class="nav-link" data-scroll-target="#estrategia-monolítica">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-monolítica-1" id="toc-estrategia-monolítica-1" class="nav-link" data-scroll-target="#estrategia-monolítica-1">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-monolítica-2" id="toc-estrategia-monolítica-2" class="nav-link" data-scroll-target="#estrategia-monolítica-2">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-monolítica-3" id="toc-estrategia-monolítica-3" class="nav-link" data-scroll-target="#estrategia-monolítica-3">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-monolítica-4" id="toc-estrategia-monolítica-4" class="nav-link" data-scroll-target="#estrategia-monolítica-4">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-monolítica-5" id="toc-estrategia-monolítica-5" class="nav-link" data-scroll-target="#estrategia-monolítica-5">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-monolítica-6" id="toc-estrategia-monolítica-6" class="nav-link" data-scroll-target="#estrategia-monolítica-6">Estrategia monolítica</a></li>
+  <li><a href="#estrategia-recursiva" id="toc-estrategia-recursiva" class="nav-link" data-scroll-target="#estrategia-recursiva">Estrategia recursiva</a></li>
+  <li><a href="#estrategia-recursiva-1" id="toc-estrategia-recursiva-1" class="nav-link" data-scroll-target="#estrategia-recursiva-1">Estrategia recursiva</a></li>
+  <li><a href="#estrategia-recursiva-2" id="toc-estrategia-recursiva-2" class="nav-link" data-scroll-target="#estrategia-recursiva-2">Estrategia recursiva</a></li>
+  <li><a href="#estrategia-recursiva-3" id="toc-estrategia-recursiva-3" class="nav-link" data-scroll-target="#estrategia-recursiva-3">Estrategia recursiva</a></li>
+  <li><a href="#estrategia-recursiva-4" id="toc-estrategia-recursiva-4" class="nav-link" data-scroll-target="#estrategia-recursiva-4">Estrategia recursiva</a></li>
+  <li><a href="#estrategia-recursiva-5" id="toc-estrategia-recursiva-5" class="nav-link" data-scroll-target="#estrategia-recursiva-5">Estrategia recursiva</a></li>
+  <li><a href="#estrategia-monolítica-7" id="toc-estrategia-monolítica-7" class="nav-link" data-scroll-target="#estrategia-monolítica-7">Estrategia monolítica</a></li>
+  <li><a href="#la-recursividad-es-buena" id="toc-la-recursividad-es-buena" class="nav-link" data-scroll-target="#la-recursividad-es-buena">¿La recursividad es buena?</a></li>
+  <li><a href="#la-recursividad-es-buena-1" id="toc-la-recursividad-es-buena-1" class="nav-link" data-scroll-target="#la-recursividad-es-buena-1">¿La recursividad es buena?</a></li>
+  <li><a href="#la-recursividad-es-buena-2" id="toc-la-recursividad-es-buena-2" class="nav-link" data-scroll-target="#la-recursividad-es-buena-2">¿La recursividad es buena?</a></li>
+  <li><a href="#la-recursividad-es-buena-3" id="toc-la-recursividad-es-buena-3" class="nav-link" data-scroll-target="#la-recursividad-es-buena-3">¿La recursividad es buena?</a></li>
+  <li><a href="#ejecución-paralela" id="toc-ejecución-paralela" class="nav-link" data-scroll-target="#ejecución-paralela">Ejecución paralela</a></li>
+  </ul></li>
+  <li><a href="#Ccache" id="toc-Ccache" class="nav-link" data-scroll-target="#Ccache">Caché de compilación</a>
+  <ul class="collapse">
+  <li><a href="#un-gran-límite-de-make" id="toc-un-gran-límite-de-make" class="nav-link" data-scroll-target="#un-gran-límite-de-make">Un gran límite de <code>make</code></a></li>
+  <li><a href="#un-gran-límite-de-make-1" id="toc-un-gran-límite-de-make-1" class="nav-link" data-scroll-target="#un-gran-límite-de-make-1">Un gran límite de <code>make</code></a></li>
+  <li><a href="#un-gran-límite-de-make-2" id="toc-un-gran-límite-de-make-2" class="nav-link" data-scroll-target="#un-gran-límite-de-make-2">Un gran límite de <code>make</code></a></li>
+  <li><a href="#cachear-compilaciones" id="toc-cachear-compilaciones" class="nav-link" data-scroll-target="#cachear-compilaciones">Cachear compilaciones</a></li>
+  <li><a href="#cachear-compilaciones-1" id="toc-cachear-compilaciones-1" class="nav-link" data-scroll-target="#cachear-compilaciones-1">Cachear compilaciones</a></li>
+  <li><a href="#ccache" id="toc-ccache" class="nav-link" data-scroll-target="#ccache">Ccache</a></li>
+  <li><a href="#ccache-1" id="toc-ccache-1" class="nav-link" data-scroll-target="#ccache-1">Ccache</a></li>
+  <li><a href="#características" id="toc-características" class="nav-link" data-scroll-target="#características">Características</a></li>
+  <li><a href="#uso-de-ccache" id="toc-uso-de-ccache" class="nav-link" data-scroll-target="#uso-de-ccache">Uso de <code>ccache</code></a></li>
+  <li><a href="#uso-de-ccache-1" id="toc-uso-de-ccache-1" class="nav-link" data-scroll-target="#uso-de-ccache-1">Uso de <code>ccache</code></a></li>
+  <li><a href="#cómo-funciona-ccache" id="toc-cómo-funciona-ccache" class="nav-link" data-scroll-target="#cómo-funciona-ccache">Cómo funciona <code>ccache</code></a></li>
+  <li><a href="#cómo-funciona-ccache-1" id="toc-cómo-funciona-ccache-1" class="nav-link" data-scroll-target="#cómo-funciona-ccache-1">Cómo funciona <code>ccache</code></a></li>
+  <li><a href="#cómo-funciona-ccache-2" id="toc-cómo-funciona-ccache-2" class="nav-link" data-scroll-target="#cómo-funciona-ccache-2">Cómo funciona <code>ccache</code></a></li>
+  <li><a href="#cómo-funciona-ccache-3" id="toc-cómo-funciona-ccache-3" class="nav-link" data-scroll-target="#cómo-funciona-ccache-3">Cómo funciona <code>ccache</code></a></li>
+  </ul></li>
+  <li><a href="#Ninja" id="toc-Ninja" class="nav-link" data-scroll-target="#Ninja">Ninja</a>
+  <ul class="collapse">
+  <li><a href="#los-makefiles-están-bien-pero" id="toc-los-makefiles-están-bien-pero" class="nav-link" data-scroll-target="#los-makefiles-están-bien-pero">Los makefiles están bien pero…</a></li>
+  <li><a href="#qué-es-ninja" id="toc-qué-es-ninja" class="nav-link" data-scroll-target="#qué-es-ninja">¿Qué es Ninja?</a></li>
+  <li><a href="#qué-es-ninja-1" id="toc-qué-es-ninja-1" class="nav-link" data-scroll-target="#qué-es-ninja-1">¿Qué es Ninja?</a></li>
+  <li><a href="#ninja-básico" id="toc-ninja-básico" class="nav-link" data-scroll-target="#ninja-básico">Ninja básico</a></li>
+  <li><a href="#ninja-básico-1" id="toc-ninja-básico-1" class="nav-link" data-scroll-target="#ninja-básico-1">Ninja básico</a></li>
+  <li><a href="#ninja-básico-2" id="toc-ninja-básico-2" class="nav-link" data-scroll-target="#ninja-básico-2">Ninja básico</a></li>
+  <li><a href="#de-make-a-ninja" id="toc-de-make-a-ninja" class="nav-link" data-scroll-target="#de-make-a-ninja">De <code>make</code> a <code>ninja</code></a></li>
+  <li><a href="#de-make-a-ninja-1" id="toc-de-make-a-ninja-1" class="nav-link" data-scroll-target="#de-make-a-ninja-1">De <code>make</code> a <code>ninja</code></a></li>
+  <li><a href="#de-make-a-ninja-2" id="toc-de-make-a-ninja-2" class="nav-link" data-scroll-target="#de-make-a-ninja-2">De <code>make</code> a <code>ninja</code></a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Compilación de grandes proyectos</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Las instrucciones de este documento asumen que estás utilizando Visual Studio Code. En la última sección se incluyen instrucciones para ejecutar los tests desde la terminal.</p>
+</div>
+</div>
+<section id="creación-de-un-proyecto" class="level2">
+<h2 class="anchored" data-anchor-id="creación-de-un-proyecto">Creación de un proyecto</h2>
+<p>Para esta práctica, vas a trabajar en el proyecto <code>pymath</code>, estructurándolo de forma modular. Esto te permitirá organizar el código y los tests de manera profesional, y además facilitará la ejecución de pruebas y otras herramientas de análisis.</p>
+<section id="estructura-del-proyecto" class="level3">
+<h3 class="anchored" data-anchor-id="estructura-del-proyecto">Estructura del proyecto</h3>
+<p>Crea la carpeta <code>pymath</code> para el proyecto con la siguiente estructura:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pymath/</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>├── src/</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>|   └── pymath/</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>|        └── functions.py   # Aquí irá el código fuente</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>├── tests/                  # Aquí irán los tests con unittest</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>├── .env                    # Variable de entorno para PYTHONPATH</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>└── .vscode/</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    └── settings.json       # Configuración para que VS Code encuentre los módulos</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="archivos-iniciales" class="level3">
+<h3 class="anchored" data-anchor-id="archivos-iniciales">Archivos iniciales</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>.env</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename=".env"><pre class="sourceCode dot code-with-copy"><code class="sourceCode dot"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">PYTHONPATH</span><span class="ot">=</span><span class="va">src</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Este archivo permitirá que los tests funcionen correctamente al ejecutarlos desde la raíz del proyecto.</p>
+<hr>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>.vscode/settings.json</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename=".vscode/settings.json"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"python.analysis.extraPaths"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"src"</span><span class="ot">]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Si estás usando Visual Studio Code, añade este archivo para que el editor pueda resolver correctamente las importaciones de tus módulos.</p>
+<p>Este paso evita errores como ModuleNotFoundError cuando importas pymath en los tests.</p>
+<hr>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/functions.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="src/pymath/functions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aquí irá el código fuente</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/__init__.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="src/pymath/__init__.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aquí exportaremos las funciones que queramos que sean accesibles al importar el módulo pymath</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="creación-de-un-entorno-virtual" class="level2">
+<h2 class="anchored" data-anchor-id="creación-de-un-entorno-virtual">Creación de un entorno virtual</h2>
+<p>Crea y activa un entorno virtual para el proyecto. Esto te permitirá gestionar las dependencias de manera aislada y evitar conflictos con otras aplicaciones.</p>
+</section>
+<section id="función-add" class="level2">
+<h2 class="anchored" data-anchor-id="función-add">Función <code>add</code></h2>
+<p>Añade la función <code>add</code> al archivo <code>src/pymath/functions.py</code>. Esta función suma dos números (de forma muy enrevesada) y devuelve el resultado. Nos servirá para realizar pruebas.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/functions.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="src/pymath/functions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Adds two integers.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :param a: First integer</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :param b: Second integer</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Sum of a and b</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    increment <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> a <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> <span class="op">-</span>a</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        increment <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(a)):</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> increment</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    increment <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> b <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> <span class="op">-</span>b</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        increment <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(b)):</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> increment</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> total</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Añade la función <code>add</code> al archivo <code>src/pymath/__init__.py</code> para que sea accesible al importar el módulo <code>pymath</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/__init__.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb7" data-filename="src/pymath/__init__.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> .functions <span class="im">import</span> add</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="probando-la-función-add" class="level2">
+<h2 class="anchored" data-anchor-id="probando-la-función-add">Probando la función <code>add</code></h2>
+<p>Ahora que tenemos la función <code>add</code>, vamos a crear pruebas para asegurarnos de que funciona correctamente.</p>
+<p>Crea un archivo <code>test_add.py</code> en la carpeta <code>tests</code> y añade la siguiente prueba unitaria para la función <code>add</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/test_add.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb8" data-filename="tests/test_add.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> unittest</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymath <span class="im">import</span> add</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestAddFunction(unittest.TestCase):</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_add_positive_numbers(<span class="va">self</span>):</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(add(<span class="dv">2</span>, <span class="dv">3</span>), <span class="dv">5</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ejecuta las pruebas para asegurarte de que todo funciona correctamente. Si todo está bien la ejecución de la prueba debería mostrarse en verde.</p>
+</section>
+<section id="cobertura-de-código" class="level2">
+<h2 class="anchored" data-anchor-id="cobertura-de-código">Cobertura de código</h2>
+<p>Para asegurarte de que tus pruebas cubren adecuadamente el código puedes utilizar la herramienta <code>coverage</code>. Para instalarla ejecuta el siguiente comando:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install coverage</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Luego, ejecuta las pruebas con cobertura pulsando el botón <code>Run Tests with Coverage</code> en la parte superior derecha de la ventana de pruebas de Visual Studio Code.</p>
+<p><a href="../images/p05/run_tests_with_coverage.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/p05/run_tests_with_coverage.png" class="img-fluid"></a></p>
+<p>Esto generará un informe de cobertura que te mostrará qué líneas de código han sido ejecutadas durante las pruebas y cuáles no.</p>
+<p><a href="../images/p05/coverage_results_all.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="../images/p05/coverage_results_all.png" class="img-fluid"></a></p>
+<p>Como podrás observar, además del código fuente de la aplicación, el informe también incluye el código de los tests y todos los ficheros del entorno virtual (si está en la misma carpeta).</p>
+<p>Para filtrar el informe y mostrar solo la cobertura del código fuente de la aplicación puedes añadir un archivo <code>.coveragerc</code> en la raíz del proyecto con el siguiente contenido:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>.coveragerc</strong></pre>
+</div>
+<div class="sourceCode" id="cb10" data-filename=".coveragerc"><pre class="sourceCode ini code-with-copy"><code class="sourceCode ini"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[run]</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">omit </span><span class="ot">=</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="dt">    __init__.py</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="dt">    ./tests/*</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="dt">    .conda/*</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="dt">    .venv/*</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vuelve a ejecutar las pruebas con cobertura y verás que el informe ahora solo muestra la cobertura del código fuente de la aplicación.</p>
+<p><a href="../images/p05/coverage_results.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="../images/p05/coverage_results.png" class="img-fluid"></a></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Añade más pruebas para la función <code>add</code> en el archivo <code>test_add.py</code> con el objetivo de cubrir todos los casos posibles y obtener una cobertura en las pruebas del 100%. Asegúrate de cubrir diferentes casos, como:</p>
+<ul>
+<li>Sumar números negativos.</li>
+<li>Sumar cero.</li>
+<li>Sumar un número positivo y uno negativo.</li>
+<li>Sumar dos números negativos.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="función-substract" class="level2">
+<h2 class="anchored" data-anchor-id="función-substract">Función substract</h2>
+<p>Añade la función <code>substract</code> al archivo <code>src/pymath/functions.py</code>. Esta función resta dos números haciendo uso de <code>add</code> y devuelve el resultado.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/functions.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb11" data-filename="src/pymath/functions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> substract(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Subtracts two integers.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :param a: First integer</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :param b: Second integer</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Difference of a and b</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> <span class="op">-</span>b</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> add(a, b)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> total</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recuerda añadir la función <code>substract</code> al archivo <code>src/pymath/__init__.py</code> para que sea accesible al importar el módulo <code>pymath</code>.</p>
+</div>
+</div>
+</section>
+<section id="probando-la-función-substract" class="level2">
+<h2 class="anchored" data-anchor-id="probando-la-función-substract">Probando la función <code>substract</code></h2>
+<p>Ahora que tenemos la función <code>substract</code>, vamos a crear pruebas para asegurarnos de que funciona correctamente.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/test_substract.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb12" data-filename="tests/test_substract.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> unittest</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymath <span class="im">import</span> substract</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestSubstractFunction(unittest.TestCase):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_subtract_positive_numbers(<span class="va">self</span>):</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(substract(<span class="dv">5</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aunque la prueba anterior es correcta, no tiene en cuenta que la función <code>substract</code> hace uso de la función <code>add</code>. Por lo tanto, si la función <code>add</code> no funciona correctamente, la función <code>substract</code> tampoco lo hará.</p>
+<p>Hay varias alternativas para comprobar el funcionamiento de <code>substract</code>.</p>
+<section id="comprobar-que-substract-llama-a-add" class="level3">
+<h3 class="anchored" data-anchor-id="comprobar-que-substract-llama-a-add">Comprobar que <code>substract</code> llama a <code>add</code></h3>
+<p>Una forma de comprobar que <code>substract</code> llama a <code>add</code> es utilizando <code>unittest.mock</code> para simular el comportamiento de la función <code>add</code>. Esto te permitirá verificar que <code>substract</code> llama a <code>add</code> con los argumentos correctos.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/test_substract.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb13" data-filename="tests/test_substract.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> unittest</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> unittest.mock <span class="im">import</span> patch</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymath <span class="im">import</span> substract</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestSubstractFunction(unittest.TestCase):</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_subtract_positive_numbers(<span class="va">self</span>):</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(substract(<span class="dv">5</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">@patch</span>(<span class="st">'pymath.functions.add'</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_subtract_without_add(<span class="va">self</span>, mock_add):</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        mock_add.return_value <span class="op">=</span> <span class="dv">2</span> <span class="co"># add siempre devuelve 2</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(substract(<span class="dv">5</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        mock_add.assert_called_once_with(<span class="dv">5</span>, <span class="op">-</span><span class="dv">3</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="simular-el-comportamiento-de-add" class="level3">
+<h3 class="anchored" data-anchor-id="simular-el-comportamiento-de-add">Simular el comportamiento de <code>add</code></h3>
+<p>Simulando el comportamiento de <code>add</code> puedes verificar que <code>substract</code> hace su trabajo correctamente sin depender de la implementación de <code>add</code>. Esto es útil para asegurarte de que <code>substract</code> funciona correctamente incluso si <code>add</code> tiene errores.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/test_substract.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb14" data-filename="tests/test_substract.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> unittest</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> unittest.mock <span class="im">import</span> patch</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymath <span class="im">import</span> substract</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestSubstractFunction(unittest.TestCase):</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_subtract_positive_numbers(<span class="va">self</span>):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(substract(<span class="dv">5</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">@patch</span>(<span class="st">'pymath.functions.add'</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_subtract_without_add(<span class="va">self</span>, mock_add):</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        mock_add.return_value <span class="op">=</span> <span class="dv">2</span> <span class="co"># add siempre devuelve 2</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(substract(<span class="dv">5</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        mock_add.assert_called_once_with(<span class="dv">5</span>, <span class="op">-</span><span class="dv">3</span>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">@patch</span>(<span class="st">'pymath.functions.add'</span>)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_substract_with_sum(<span class="va">self</span>, mock_add):</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        mock_add.side_effect <span class="op">=</span> <span class="kw">lambda</span> a, b: a <span class="op">+</span> b <span class="co"># Reemplaza el comportamiento de add</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(substract(<span class="dv">5</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="función-divide" class="level2">
+<h2 class="anchored" data-anchor-id="función-divide">Función <code>divide</code></h2>
+<p>Añade la función <code>divide</code> al archivo <code>src/pymath/functions.py</code>. Esta función divide dos números y devuelve el resultado. Si el divisor es cero, lanza una excepción <code>ValueError</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/functions.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb15" data-filename="src/pymath/functions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> divide(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Divides two integers.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">    :param a: Dividend</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">    :param b: Divisor</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">    :return: Quotient of a and b</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> b <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Cannot divide by zero"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">/</span> b</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recuerda añadir la función <code>divide</code> al archivo <code>src/pymath/__init__.py</code> para que sea accesible al importar el módulo <code>pymath</code>.</p>
+</div>
+</div>
+</section>
+<section id="probando-la-función-divide" class="level2">
+<h2 class="anchored" data-anchor-id="probando-la-función-divide">Probando la función <code>divide</code></h2>
+<p>Ahora que tenemos la función <code>divide</code>, vamos a crear pruebas para asegurarnos de que funciona correctamente.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/test_divide.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb16" data-filename="tests/test_divide.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> unittest</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymath <span class="im">import</span> divide</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestDivideFunction(unittest.TestCase):</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_divide_positive_numbers(<span class="va">self</span>):</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.assertEqual(divide(<span class="dv">6</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_divide_by_zero(<span class="va">self</span>):</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="va">self</span>.assertRaises(<span class="pp">ValueError</span>):</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>            divide(<span class="dv">6</span>, <span class="dv">0</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>En este caso, la prueba <code>test_divide_by_zero</code> verifica que se lanza una excepción <code>ValueError</code> cuando se intenta dividir por cero.</p>
+</section>
+<section id="pruebas-para-logging" class="level2">
+<h2 class="anchored" data-anchor-id="pruebas-para-logging">Pruebas para logging</h2>
+<p>Al usar <code>logging</code> en el código, es importante asegurarse de que los mensajes de registro se generen correctamente.</p>
+<p>Modifica el archivo <code>src/pymath/functions.py</code> para incluir un logger y registrar los resultados de las funciones.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/functions.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb17" data-filename="src/pymath/functions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(level<span class="op">=</span>logging.INFO)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f"Adding </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># resto de la función...</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Añade ahora una prueba para verificar que el logger se llama correctamente.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/test_add.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb18" data-filename="tests/test_add.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TestAddFunction(unittest.TestCase):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> test_logging(<span class="va">self</span>):</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="va">self</span>.assertLogs(<span class="st">'pymath.functions'</span>, level<span class="op">=</span><span class="st">'INFO'</span>) <span class="im">as</span> log:</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            add(<span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.assertIn(<span class="st">'INFO:pymath.functions:Adding 2 and 3'</span>, log.output)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Añade mensajes de logging a las funciones <code>substract</code> y <code>divide</code> y las pruebas correspondientes para verificar que se registran correctamente.</p>
+</div>
+</div>
+</section>
+<section id="ejercicios" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicios">Ejercicios</h2>
+<p>Añade estas funciones al archivo <code>src/pymath/functions.py</code> y crea las pruebas correspondientes en la carpeta <code>tests</code>, asegurándote de cubrir todos los casos posibles y obtener una cobertura del 100%.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>src/pymath/functions.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb19" data-filename="src/pymath/functions.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multiply(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f"Multiplying </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> by </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> a <span class="op">==</span> <span class="dv">0</span> <span class="kw">or</span> b <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">abs</span>(b)):</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> add(result, a)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">abs</span>(result) <span class="op">&gt;</span> <span class="dv">1_000_000</span>:</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>            logger.error(<span class="st">"Overflow detected"</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">OverflowError</span>(<span class="st">"Result too large"</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result <span class="cf">if</span> b <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="op">-</span>result</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_expression(a: <span class="bu">int</span>, b: <span class="bu">int</span>, op: <span class="bu">str</span>):</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f"Calculating: </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>op<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>b<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> op <span class="op">==</span> <span class="st">"+"</span>:</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> add(a, b)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> op <span class="op">==</span> <span class="st">"-"</span>:</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> substract(a, b)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> op <span class="op">==</span> <span class="st">"*"</span>:</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> multiply(a, b)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> op <span class="op">==</span> <span class="st">"/"</span>:</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> divide(a, b)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="ss">f"Unsupported operation: </span><span class="sc">{</span>op<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Unsupported operation '</span><span class="sc">{</span>op<span class="sc">}</span><span class="ss">'"</span>)</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> safe_divide(a: <span class="bu">int</span>, b: <span class="bu">int</span>, default<span class="op">=</span><span class="va">None</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> divide(a, b)</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> e:</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="ss">f"Attempted to divide </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> by zero"</span>)</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> default <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> default</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> average(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> numbers:</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"Empty list provided to average()"</span>)</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Cannot compute average of empty list"</span>)</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">all</span>(<span class="bu">isinstance</span>(n, <span class="bu">int</span>) <span class="cf">for</span> n <span class="kw">in</span> numbers):</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Non-integer value in average input"</span>)</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">"All elements must be integers"</span>)</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> numbers:</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>        total <span class="op">=</span> add(total, n)</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> divide(total, <span class="bu">len</span>(numbers))</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="anexo.-uso-de-la-terminal" class="level2">
+<h2 class="anchored" data-anchor-id="anexo.-uso-de-la-terminal">Anexo. Uso de la terminal</h2>
+<p>El fichero <code>.env</code> y la configuración de VS Code son útiles para que el editor reconozca las rutas de los módulos. Sin embargo, si prefieres ejecutar los tests desde la terminal deberás establecer la variable de entorno <code>PYTHONPATH</code> manualmente. Puedes hacerlo de la siguiente manera:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linux / Mac</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PYTHONPATH</span><span class="op">=</span>src</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> PYTHONPATH=src</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Una vez establecida la variable de entorno, puedes ejecutar los tests desde la terminal con el siguiente comando:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> unittest discover <span class="at">-s</span> tests</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esto ejecutará todos los tests en la carpeta <code>tests</code> y mostrará los resultados en la terminal.</p>
+<p>Para ejecutar los tests con cobertura, puedes usar el siguiente comando:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">coverage</span> run <span class="at">-m</span> unittest discover <span class="at">-s</span> tests</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">coverage</span> report <span class="at">-m</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esto ejecutará los tests y generará un informe de cobertura en la terminal. Si deseas generar un informe en formato HTML, puedes usar el siguiente comando:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">coverage</span> html</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esto generará un informe en formato HTML en la carpeta <code>htmlcov</code>, que podrás abrir en tu navegador para ver la cobertura de código de manera más visual.</p>
+<div class="menu section-ordered-list">
+<ol type="1">
+<li><a href="#Introducción">Introducción</a></li>
+<li><a href="#Make">Make</a></li>
+<li><a href="#Ccache">Ccache</a></li>
+<li><a href="#Ninja">Ninja</a></li>
+<li><a href="#CI">CI</a></li>
+</ol>
+</div>
+</section>
+<section id="Introducción" class="level1" data-stack-name="Introducción">
+<h1 data-stack-name="Introducción">Introducción</h1>
+<section id="cómo-compilamos-software" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="cómo-compilamos-software">Cómo compilamos <em>software</em></h2>
+<p>Hasta ahora, hemos compilado nuestros proyectos en C y C++ a través de comandos.</p>
+</section>
+<section id="cómo-compilamos-software-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-compilamos-software-1">Cómo compilamos <em>software</em></h2>
+<p>Hasta ahora, hemos compilado nuestros proyectos en C y C++ a través de comandos.</p>
+<p>Primero generamos los objetos individualizados de nuestros ficheros (<strong>compilación</strong>).</p>
+<pre class="shell"><code>g++ -c src/&lt;ficheros&gt;.cpp -I ...</code></pre>
+</section>
+<section id="cómo-compilamos-software-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-compilamos-software-2">Cómo compilamos <em>software</em></h2>
+<p>Hasta ahora, hemos compilado nuestros proyectos en C y C++ a través de comandos.</p>
+<p>Después enlazamos las llamadas entre objetos y librerías para generar un único ejecutable (<strong>enlazado</strong>).</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="at">-o</span> game src/<span class="op">&lt;</span>ficheros<span class="op">&gt;</span>.o <span class="at">-L</span> ... <span class="at">-llibreria</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="cómo-compilamos-software-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-compilamos-software-3">Cómo compilamos <em>software</em></h2>
+<p>Compilar a mano en un proyecto pequeño en <code>C++</code> es asumible, aunque pesado.</p>
+</section>
+<section id="cómo-compilamos-software-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-compilamos-software-4">Cómo compilamos <em>software</em></h2>
+<p>Compilar a mano en un proyecto pequeño en <code>C++</code> es asumible, aunque pesado.</p>
+<p>Sin embargo… ¿qué pasa cuando tenemos doscientos ficheros?</p>
+</section>
+<section id="una-vía-de-escape" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="una-vía-de-escape">Una vía de escape…</h2>
+<p>Para solucionarlo, podemos generar un único <em>shell script</em> que ejecutaremos cada vez que realicemos cambios en el proyecto.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">g++</span> <span class="at">-o</span> game src/<span class="pp">*</span>.cpp <span class="at">-I</span> src/ <span class="at">-I</span> <span class="op">&lt;</span>librerias<span class="op">&gt;</span> -L <span class="op">&lt;</span>librerias<span class="op">&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="un-problema-de-escalado" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="un-problema-de-escalado">Un problema de escalado</h2>
+<p>Esta solución <strong>recompila todo el proyecto</strong> independientemente de los cambios que hayamos realizado.</p>
+</section>
+<section id="un-problema-de-escalado-1" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="un-problema-de-escalado-1">Un problema de escalado</h2>
+<p>Esta solución <strong>recompila todo el proyecto</strong> independientemente de los cambios que hayamos realizado.</p>
+<p>En proyectos pequeños, no notamos este detalle…</p>
+</section>
+<section id="un-problema-de-escalado-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="un-problema-de-escalado-2">Un problema de escalado</h2>
+<p>Esta solución <strong>recompila todo el proyecto</strong> independientemente de los cambios que hayamos realizado.</p>
+<p>En proyectos pequeños, no notamos este detalle…</p>
+<p>¿Pero y en los grandes?</p>
+</section>
+<section id="un-problema-de-escalado-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="un-problema-de-escalado-3">Un problema de escalado</h2>
+<p>Esta solución <strong>recompila todo el proyecto</strong> independientemente de los cambios que hayamos realizado.</p>
+<p>En proyectos pequeños, no notamos este detalle…</p>
+<p>¿Pero y en los grandes?</p>
+<div class="badge">
+<p>En los proyectos grandes, esta política genera <strong>cuello de botella notable</strong>.</p>
+</div>
+</section>
+<section id="un-problema-de-escalado-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="un-problema-de-escalado-4">Un problema de escalado</h2>
+<p>Este motivo es lo que justifica la aparición de los <strong>entornos de desarrollo</strong></p>
+<div class="fragment">
+<ul>
+<li>Ecosistemas de compilación (Make, Ninja, CMake, etc)</li>
+<li>IDEs (Visual Studio, CLion)</li>
+</ul>
+</div>
+</section>
+<section id="capas-y-ecosistema-de-compilación" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="capas-y-ecosistema-de-compilación">Capas y ecosistema de compilación</h2>
+<p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
+</section>
+<section id="capas-y-ecosistema-de-compilación-1" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="capas-y-ecosistema-de-compilación-1">Capas y ecosistema de compilación</h2>
+<p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
+<p><strong>Capa 0: Compiladores</strong></p>
+<ul>
+<li>Traducen el código fuente a objetos y ejecutables.</li>
+<li><code>g++</code>, <code>clang</code>, <code>msvc</code>.</li>
+</ul>
+</section>
+<section id="capas-y-ecosistema-de-compilación-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="capas-y-ecosistema-de-compilación-2">Capas y ecosistema de compilación</h2>
+<p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
+<p><strong>Capa 1: <em>Backends</em> de compilación</strong></p>
+<ul>
+<li>Motores de reglas para compilar un proyecto.</li>
+<li><strong>Compilación incremental</strong>.</li>
+<li><code>make</code> es el estándar tradicional</li>
+<li><code>ninja</code> es una versión ultrarrápida, centrada en <strong>CI</strong>.</li>
+</ul>
+</section>
+<section id="capas-y-ecosistema-de-compilación-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="capas-y-ecosistema-de-compilación-3">Capas y ecosistema de compilación</h2>
+<p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
+<p><strong>Capa 1.5: Optimizadores de compilación</strong></p>
+<ul>
+<li>Mejoras de rendimiento para la compilación de proyectos.</li>
+<li><code>ccache / sccache</code> para realizar un cacheo local de la compilación.</li>
+<li><code>distcc / Iceceram</code> para hacer compilación distribuida en red.</li>
+</ul>
+</section>
+<section id="capas-y-ecosistema-de-compilación-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="capas-y-ecosistema-de-compilación-4">Capas y ecosistema de compilación</h2>
+<p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
+<p><strong>Capa 2: <em>Build Systems</em> (Tema 6)</strong></p>
+<ul>
+<li>Generadores de ficheros para <em>backends</em>.</li>
+<li>Multiplataforma
+<ul>
+<li>Son capaces de generar ficheros para compilar en varios Sistemas Operativos</li>
+</ul></li>
+<li><code>CMake</code> es el estándar.</li>
+</ul>
+</section>
+</section>
+<section id="Make" class="level1" data-stack-name="Make">
+<h1 data-stack-name="Make">Make</h1>
+<section id="conceptos-fundamentales-de-make" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="conceptos-fundamentales-de-make">Conceptos fundamentales de <code>make</code></h2>
+<p><strong>Make</strong> es un <strong><em>backend</em> de compilación</strong></p>
+</section>
+<section id="conceptos-fundamentales-de-make-1" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="conceptos-fundamentales-de-make-1">Conceptos fundamentales de <code>make</code></h2>
+<p><strong>Make</strong> es un <strong><em>backend</em> de compilación</strong></p>
+<ul>
+<li>Convierte los ficheros fuente en <strong>cualquier objetivo que propongas</strong>.</li>
+<li>Sabe qué comandos se deben ejecutar y en <strong>qué orden</strong>.</li>
+<li>Usa <em>timestamps</em> garantizar la <strong>compilación incremental</strong>.</li>
+</ul>
+</section>
+<section id="conceptos-fundamentales-de-make-2" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="conceptos-fundamentales-de-make-2">Conceptos fundamentales de <code>make</code></h2>
+<p>Se ejecuta a través del comando <code>make</code> en el terminal.</p>
+</section>
+<section id="conceptos-fundamentales-de-make-3" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="conceptos-fundamentales-de-make-3">Conceptos fundamentales de <code>make</code></h2>
+<p>Se ejecuta a través del comando <code>make</code> en el terminal.</p>
+<p>En el directorio debe haber un fichero <code>Makefile</code>.</p>
+</section>
+<section id="makefiles-básicos" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="makefiles-básicos">Makefiles básicos</h2>
+<p>Su funcionamiento consiste en establecer una lista de <strong>dependencias</strong>.</p>
+</section>
+<section id="makefiles-básicos-1" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-1">Makefiles básicos</h2>
+<p>Su funcionamiento consiste en establecer una lista de <strong>dependencias</strong>.</p>
+<ul>
+<li>Hay un <strong>fichero fuente</strong> y un <strong>fichero destino</strong>.
+<ul>
+<li>Si el <strong>fuente cambia</strong> el destino <strong>también</strong> (<em>timestamps</em>).</li>
+</ul></li>
+<li>Especificamos una serie de reglas para poder llegar al <strong>destino</strong>.
+<ul>
+<li>Las reglas siempre van con <strong>tabulador</strong> delante.</li>
+</ul></li>
+</ul>
+</section>
+<section id="makefiles-básicos-2" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-2">Makefiles básicos</h2>
+<p><strong>Estructura básica de un makefile</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dv">OBJETIVO:</span><span class="dt"> FUENTE</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>REGLA 1</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    REGLA 2</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefiles-básicos-3" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-3">Makefiles básicos</h2>
+<p><strong>Estructura básica de un makefile</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c main.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefiles-básicos-4" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-4">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c main.cpp -I .</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="dv">auxiliar.o:</span><span class="dt"> auxiliar.cpp</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c auxiliar.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefiles-básicos-5" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-5">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c main.cpp -I .</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="dv">auxiliar.o:</span><span class="dt"> auxiliar.cpp</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c auxiliar.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>¿Qué resultado da?</p>
+</section>
+<section id="makefiles-básicos-6" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-6">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<p>Un <code>Makefile</code> debe tener <strong>estructura de árbol</strong>.</p>
+</section>
+<section id="makefiles-básicos-7" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-7">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<p>Un <code>Makefile</code> debe tener <strong>estructura de árbol</strong>.</p>
+<ul>
+<li>Una instrucción raíz que tiene varias dependencias.
+<ul>
+<li>Dichas dependencias son <strong>objetivos</strong>, los cuales tienen otras dependencias.</li>
+</ul></li>
+</ul>
+</section>
+<section id="makefiles-básicos-8" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-8">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<p>Un <code>Makefile</code> debe tener <strong>estructura de árbol</strong>.</p>
+<ul>
+<li>Una instrucción raíz que tiene varias dependencias.
+<ul>
+<li>Dichas dependencias son <strong>objetivos</strong>, los cuales tienen otras dependencias.</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Advertencia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Por defecto, el comando <code>make</code> ejecuta el <strong>primer</strong> objetivo del fichero y asume que éste es el <strong>objetivo raíz</strong>.</p>
+</div>
+</div>
+</section>
+<section id="makefiles-básicos-9" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-9">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> main.o auxiliar.o</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c main.cpp -I .</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="dv">auxiliar.o:</span><span class="dt"> auxiliar.cpp</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c auxiliar.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefiles-básicos-10" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-10">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource makefile number-lines code-with-copy"><code class="sourceCode makefile"><span id="cb32-1"><a href="#cb32-1"></a><span class="dv">ejecutable:</span><span class="dt"> main.o auxiliar.o</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="er">    </span>g++ -c main.cpp -I .</span>
+<span id="cb32-5"><a href="#cb32-5"></a></span>
+<span id="cb32-6"><a href="#cb32-6"></a><span class="dv">auxiliar.o:</span><span class="dt"> auxiliar.cpp</span></span>
+<span id="cb32-7"><a href="#cb32-7"></a><span class="er">    </span>g++ -c auxiliar.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefiles-básicos-11" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-11">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource makefile number-lines code-with-copy"><code class="sourceCode makefile"><span id="cb33-1"><a href="#cb33-1"></a><span class="dv">ejecutable:</span><span class="dt"> main.o auxiliar.o</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="er">    </span>g++ -c main.cpp -I .</span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a><span class="dv">auxiliar.o:</span><span class="dt"> auxiliar.cpp</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a><span class="er">    </span>g++ -c auxiliar.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="makefiles-básicos-12" class="level2" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-auto-animate="true," data-visibility="uncounted" class="anchored" data-anchor-id="makefiles-básicos-12">Makefiles básicos</h2>
+<p><strong>Definición de múltiples objetivos</strong></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource makefile number-lines code-with-copy"><code class="sourceCode makefile"><span id="cb34-1"><a href="#cb34-1"></a><span class="dv">ejecutable:</span><span class="dt"> main.o auxiliar.o</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="dv">main.o:</span><span class="dt"> main.cpp</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="er">    </span>g++ -c main.cpp -I .</span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="dv">auxiliar.o:</span><span class="dt"> auxiliar.cpp</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="er">    </span>g++ -c auxiliar.cpp -I .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>¿Qué salida genera este makefile?</p>
+</section>
+<section id="generalizando-los-makefiles" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="generalizando-los-makefiles">Generalizando los makefiles</h2>
+<p>Así, deberíamos añadir los objetivos uno a uno y actualizar el principal.</p>
+<p>Aún siendo viable… ¿es lo mejor?</p>
+</section>
+<section id="generalizando-los-makefiles-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="generalizando-los-makefiles-1">Generalizando los makefiles</h2>
+<p>Así, deberíamos añadir los objetivos uno a uno y actualizar el principal.</p>
+<p>Aún siendo viable… ¿es lo mejor?</p>
+<div class="badge">
+<p>Los makefiles aceptan <strong>variables</strong> y <strong>macros</strong> para generalizar y simplificar el proceso de compilación.</p>
+</div>
+</section>
+<section id="generalizando-los-makefiles-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="generalizando-los-makefiles-2">Generalizando los makefiles</h2>
+<p><strong>Macros</strong></p>
+<p>Símbolos específicos que los makefiles interprentan para obtener información en la regla actual. Algunos conocidos:</p>
+<ul>
+<li><code>%</code> representa el TODO, como en el terminal el <code>*</code>.</li>
+<li><code>$^</code> representa la lista de dependencias completa de ese objetivo.</li>
+<li><code>$@</code> representa al objetivo actual.</li>
+</ul>
+</section>
+<section id="generalizando-los-makefiles-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="generalizando-los-makefiles-3">Generalizando los makefiles</h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> main.o auxiliar.o</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="dv">%.o :</span><span class="dt"> %.cpp</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> -c <span class="ch">$^</span> -I.</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="generalizando-los-makefiles-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="generalizando-los-makefiles-4">Generalizando los makefiles</h2>
+<p>También se pueden definir variables que usamos en el fichero</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJECTS</span> <span class="ch">:=</span><span class="st"> main.o auxiliar.o</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">)</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> <span class="ch">$^</span> &lt;def_librerias&gt;</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="dv">%.o :</span><span class="dt"> %.cpp</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> -c <span class="ch">$^</span> -I.</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="generalizando-los-makefiles-5" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="generalizando-los-makefiles-5">Generalizando los makefiles</h2>
+<p>También existen funciones especiales para facilitar el proceso</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SOURCES</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">wildcard</span><span class="st"> *.cpp</span><span class="ch">)</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJECTS</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">subst</span><span class="st"> .cpp</span><span class="kw">,</span><span class="st">.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">)</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> <span class="ch">$^</span> &lt;def_librerias&gt;</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="dv">%.o :</span><span class="dt"> %.cpp</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> -c <span class="ch">$^</span> -I.</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="múltiples-objetivos" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="múltiples-objetivos">Múltiples objetivos</h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SOURCES</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">wildcard</span><span class="st"> *.cpp</span><span class="ch">)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJECTS</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">subst</span><span class="st"> .cpp</span><span class="kw">,</span><span class="st">.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">)</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> <span class="ch">$^</span> &lt;def_librerias&gt;</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="dv">%.o :</span><span class="dt"> %.cpp</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> -c <span class="ch">$^</span> -I.</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="dv">info:</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="kw">info</span><span class="st"> </span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="kw">info</span><span class="st"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="múltiples-objetivos-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="múltiples-objetivos-1">Múltiples objetivos</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SOURCES</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">wildcard</span><span class="st"> *.cpp</span><span class="ch">)</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJECTS</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">subst</span><span class="st"> .cpp</span><span class="kw">,</span><span class="st">.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">)</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> <span class="ch">$^</span> &lt;def_librerias&gt;</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="dv">%.o :</span><span class="dt"> %.cpp</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> -c <span class="ch">$^</span> -I.</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="dv">info:</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="kw">info</span><span class="st"> </span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="kw">info</span><span class="st"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Advertencia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recuerda que, para que se ejecute <code>info</code>, debes explicitarlo cuando llames a <code>make</code>.</p>
+</div>
+</div>
+</section>
+<section id="múltiples-objetivos-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="múltiples-objetivos-2">Múltiples objetivos</h2>
+<div class="sourceCode" id="cb40"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SOURCES</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">wildcard</span><span class="st"> *.cpp</span><span class="ch">)</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJECTS</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">subst</span><span class="st"> .cpp</span><span class="kw">,</span><span class="st">.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="dt">.PHONY</span>  <span class="ch">:=</span><span class="st"> clean</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="dv">ejecutable:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">)</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> <span class="ch">$^</span> &lt;def_librerias&gt;</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="dv">%.o :</span><span class="dt"> %.cpp</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -o <span class="ch">$@</span> -c <span class="ch">$^</span> -I.</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="dv">info:</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="kw">info</span><span class="st"> </span><span class="ch">$(</span><span class="dt">SOURCES</span><span class="ch">))</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="kw">info</span><span class="st"> </span><span class="ch">$(</span><span class="dt">OBJECTS</span><span class="ch">))</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="dv">clean:</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>rm *.o</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    rm -rf dist/</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>¿Cuál es la diferencia entre <code>info</code> y <code>clean</code>?</p>
+</section>
+<section id="objetivos-especiales" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="objetivos-especiales">Objetivos especiales</h2>
+<p>En un proyecto <em>software</em> se esperan, al menos, los siguientes objetivos:</p>
+<div class="incremental">
+<ul class="incremental">
+<li><code>all</code>: Será el primero y representa el objetivo por defecto.</li>
+<li><code>clean</code>: Borra todos los ficheros intermedios que se puedan volver a generar al ejecutar make.</li>
+<li><code>dist</code>: Crea un fichero que contiene la distribución del proyecto.</li>
+<li><code>install</code>: Instala el resultado de crear el proyecto.</li>
+<li><code>uninstall</code>: Desinstala el resultado de crear el proyecto.</li>
+</ul>
+</div>
+</section>
+<section id="dependencias-de-orden" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="dependencias-de-orden">Dependencias de orden</h2>
+<p>Es posible condicionar el orden de ejecución de las instrucciones de un <code>makefile</code> mediante dependencias de orden.</p>
+</section>
+<section id="dependencias-de-orden-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="dependencias-de-orden-1">Dependencias de orden</h2>
+<p>Es posible condicionar el orden de ejecución de las instrucciones de un <code>makefile</code> mediante dependencias de orden. Se definen a través del símbolo <code>|</code>.</p>
+</section>
+<section id="dependencias-de-orden-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="dependencias-de-orden-2">Dependencias de orden</h2>
+<div class="badge">
+<p>Su único propósito es <strong>garantizar que la dependencia existe</strong> antes de ejecutar la regla.</p>
+</div>
+</section>
+<section id="dependencias-de-orden-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="dependencias-de-orden-3">Dependencias de orden</h2>
+<div class="badge">
+<p>Su único propósito es <strong>garantizar que la dependencia existe</strong> antes de ejecutar la regla.</p>
+</div>
+<p>¿Para qué crees que son útiles?</p>
+</section>
+<section id="dependencias-de-orden-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="dependencias-de-orden-4">Dependencias de orden</h2>
+<pre><code>build/%.o: %.cpp
+    g++ $(CFLAGS) -c -Iinclude $&lt; -o $@</code></pre>
+</section>
+<section id="dependencias-de-orden-5" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="dependencias-de-orden-5">Dependencias de orden</h2>
+<pre><code>build/%.o: %.cpp | build
+    g++ $(CFLAGS) -c -Iinclude $&lt; -o $@
+
+build:
+    mkdir build/</code></pre>
+</section>
+<section id="makfiles-multinivel" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="makfiles-multinivel">Makfiles multinivel</h2>
+<p>Si el proyecto que desarrollamos tiene la entidad suficiente, lo dividiremos en varios módulos, estando el código de cada uno de ellos en un subdirectorio.</p>
+</section>
+<section id="makfiles-multinivel-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="makfiles-multinivel-1">Makfiles multinivel</h2>
+<p>Si el proyecto que desarrollamos tiene la entidad suficiente, lo dividiremos en varios módulos, estando el código de cada uno de ellos en un subdirectorio.</p>
+<p>Por ejemplo: <code>src\</code>, <code>vendor\</code>, <code>tests\</code></p>
+</section>
+<section id="makfiles-multinivel-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="makfiles-multinivel-2">Makfiles multinivel</h2>
+<p>Si el proyecto que desarrollamos tiene la entidad suficiente, lo dividiremos en varios módulos, estando el código de cada uno de ellos en un subdirectorio.</p>
+<p>Por ejemplo: <code>src\</code>, <code>vendor\</code>, <code>tests\</code></p>
+<div class="badge">
+<p>¿Cómo gestionamos el proceso de compilación cuando incluimos esta complejidad estructural?</p>
+</div>
+</section>
+<section id="makfiles-multinivel-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="makfiles-multinivel-3">Makfiles multinivel</h2>
+<p>Proyecto de ejemplo</p>
+<pre><code>proyecto/
+├─ src/
+│  ├─ main.cpp
+│  └─ util.cpp
+├─ lib/
+│  └─ mathx.cpp
+└─ include/
+   └─ app.h</code></pre>
+</section>
+<section id="estrategia-monolítica" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="estrategia-monolítica">Estrategia monolítica</h2>
+<p><strong><em>One Makefile Rules All</em></strong></p>
+<div class="fragment">
+<p>Creamos un único <code>Makefile</code> (ubicado en la raíz) que gestiona absolutamente todas las dependencias</p>
+</div>
+</section>
+<section id="estrategia-monolítica-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-1">Estrategia monolítica</h2>
+<pre><code>proyecto/
+├─ Makefile
+├─ src/
+│  ├─ main.cpp
+│  └─ util.cpp
+├─ lib/
+│  └─ mathx.cpp
+└─ include/
+   └─ app.h</code></pre>
+</section>
+<section id="estrategia-monolítica-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-2">Estrategia monolítica</h2>
+<p>Primero hay que descubrir los fuentes y generar los <code>.o</code> correspondientes</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="dt">BUILD</span>   <span class="ch">:=</span><span class="st"> build</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="dt">SRC_DIRS</span> <span class="ch">:=</span><span class="st"> src lib</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="dt">SRCS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> find </span><span class="ch">$(</span><span class="dt">SRC_DIRS</span><span class="ch">)</span><span class="st"> -name '*.cpp'</span><span class="ch">)</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> %.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="st">/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRCS</span><span class="ch">))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estrategia-monolítica-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-3">Estrategia monolítica</h2>
+<div class="sourceCode" id="cb46"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="dv">game:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span> </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estrategia-monolítica-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-4">Estrategia monolítica</h2>
+<div class="sourceCode" id="cb47"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="dv">game:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="dv">$(BUILD)/%.o:</span><span class="dt"> %.cpp | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/%/</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c -Iinclude <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estrategia-monolítica-5" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-5">Estrategia monolítica</h2>
+<div class="sourceCode" id="cb48"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="dv">game:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="dv">$(BUILD)/%.o:</span><span class="dt"> %.cpp | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/%/</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c -Iinclude <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="dv">$(BUILD)/%/:</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">@</span><span class="fu">mkdir -p </span><span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estrategia-monolítica-6" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-6">Estrategia monolítica</h2>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li>Simple: mantienes un solo <code>Makefile</code> por proyecto.</li>
+<li>Mejor manejo de dependencias.</li>
+<li>Paralelizable: <code>make -j</code> no rompe las dependencias.</li>
+</ul>
+</section>
+<section id="estrategia-recursiva" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="estrategia-recursiva">Estrategia recursiva</h2>
+<p><code>make</code> <strong>permite realizar llamadas recursivas</strong>.</p>
+</section>
+<section id="estrategia-recursiva-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-recursiva-1">Estrategia recursiva</h2>
+<p><code>make</code> <strong>permite realizar llamadas recursivas</strong>.</p>
+<p>Cada carpeta contiene su propio <code>Makefile</code>.</p>
+</section>
+<section id="estrategia-recursiva-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-recursiva-2">Estrategia recursiva</h2>
+<p><code>make</code> <strong>permite realizar llamadas recursivas</strong>.</p>
+<p>Cada carpeta contiene su propio <code>Makefile</code>.</p>
+<p>Un <code>Makefile</code> coordinador se encarga de llamar a cada uno de ellos.</p>
+</section>
+<section id="estrategia-recursiva-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-recursiva-3">Estrategia recursiva</h2>
+<pre><code>proyecto/
+├─ Makefile
+├─ src/
+│  ├─ main.cpp
+│  ├─ util.cpp
+│  └─ Makefile
+├─ lib/
+│  ├─ Makefile
+│  └─ mathx.cpp
+└─ include/
+   ├─ Makefile
+   └─ app.h</code></pre>
+</section>
+<section id="estrategia-recursiva-4" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-recursiva-4">Estrategia recursiva</h2>
+<p>Código del <code>Makefile</code> coordinador</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SUBDIRS</span> <span class="ch">=</span><span class="st"> lib src</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">export</span><span class="dt"> BUILD </span><span class="ch">=</span><span class="st"> build</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all </span><span class="ch">$(</span><span class="dt">SUBDIRS</span><span class="ch">)</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="dv">all:</span><span class="dt"> </span><span class="ch">$/</span><span class="dt">(SUBDIRS)</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">@</span><span class="fu">echo </span><span class="st">"Proyecto compilado correctamente"</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="dv">$(SUBDIRS):</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> -C <span class="ch">$@</span> all --no-print-directory</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estrategia-recursiva-5" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-recursiva-5">Estrategia recursiva</h2>
+<p>Código del <code>Makefile</code> de <code>src</code> (por ejemplo)</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="dt">BIN</span>     <span class="ch">=</span><span class="st"> game</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="dt">SRCS</span>    <span class="ch">=</span><span class="st"> %.cpp</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="dt">OBJS</span>    <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> %.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="st">/src/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRCS</span><span class="ch">))</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="ot">.PHONY:</span><span class="dt"> all</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="dv">all:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">BIN</span><span class="ch">)</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="dv">$(BIN):</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">LIBSTATIC</span><span class="ch">)</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">LIBSTATIC</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="dv">$(BUILD)/src/%.o:</span><span class="dt"> %.c | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/src/</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a><span class="dv">$(BUILD)/src/:</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">@</span><span class="fu">mkdir </span><span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estrategia-monolítica-7" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="estrategia-monolítica-7">Estrategia monolítica</h2>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li><code>Makefile</code> más sencillo y mayor limpieza visual.</li>
+<li>Coordinación del proyecto a través de un makefile global.</li>
+<li>Permite compilaciones parciales para <em>testear</em> módulos.</li>
+</ul>
+</section>
+<section id="la-recursividad-es-buena" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="la-recursividad-es-buena">¿La recursividad es buena?</h2>
+<p>Tema polémico en la propia comunidad de C++:</p>
+<ul>
+<li>Peter Miller: <em>Recursive Make Considered Harmful</em>. Los <code>make</code> recursivos fragmentan el grafo de dependencias y eso lleva a builds incoherentes, largos tiempos de espera o necesidad de hacer make clean con frecuencia.</li>
+</ul>
+</section>
+<section id="la-recursividad-es-buena-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="la-recursividad-es-buena-1">¿La recursividad es buena?</h2>
+<p>Tema polémico en la propia comunidad de C++:</p>
+<ul>
+<li>En <em>StackOverflow</em> también hay debate:</li>
+</ul>
+<blockquote class="blockquote">
+<p>Recursive makefiles are bad primarily because you partition your dependency tree into several trees. This prevents dependencies between make instances from being expressed correctly.</p>
+</blockquote>
+</section>
+<section id="la-recursividad-es-buena-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="la-recursividad-es-buena-2">¿La recursividad es buena?</h2>
+<p>Tema polémico en la propia comunidad de C++:</p>
+<ul>
+<li>En <em>StackOverflow</em> también hay debate:</li>
+</ul>
+<blockquote class="blockquote">
+<p>Recursive make was originally meant … as long as there is a dependency across the recursive structure, make will make it very hard to fix the order.</p>
+</blockquote>
+</section>
+<section id="la-recursividad-es-buena-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="la-recursividad-es-buena-3">¿La recursividad es buena?</h2>
+<p>Tema polémico en la propia comunidad de C++:</p>
+<div class="badge">
+<p>Sistemas de build como CMake, Meson, Bazel, y otros escritos funcionalmente (Shake) han ganado popularidad porque abordan estos problemas: permiten gestionar dependencias completas sin renunciar a modularidad y escalabilidad.</p>
+</div>
+</section>
+<section id="ejecución-paralela" class="level2">
+<h2 class="anchored" data-anchor-id="ejecución-paralela">Ejecución paralela</h2>
+<div class="incremental">
+<ul class="incremental">
+<li><p><code>make</code> puede lanzar compilaciones en paralelo.</p></li>
+<li><p>Para ello debes emplear la opción <code>-j</code> seguida del numero de trabajos en paralelo a lanzar, por ejemplo: <code>make -j2</code></p></li>
+<li><p>Lanzar trabajos en paralelo suele descubrir fallos a la hora de especificar las dependencias, no es lo mismo satisfacerlas de forma secuencial que en paralelo.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="Ccache" class="level1" data-stack-name="Ccache">
+<h1 data-stack-name="Ccache">Caché de compilación</h1>
+<section id="un-gran-límite-de-make" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="un-gran-límite-de-make">Un gran límite de <code>make</code></h2>
+<p><code>make</code> garantiza que un fichero no se vuelva a recompilar a través de su <em>timestamp</em>.</p>
+</section>
+<section id="un-gran-límite-de-make-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="un-gran-límite-de-make-1">Un gran límite de <code>make</code></h2>
+<p><code>make</code> garantiza que un fichero no se vuelva a recompilar a través de su <em>timestamp</em>.</p>
+<p>Pero ¿qué sucede si <strong>cambio un comentario en un fichero</strong>?</p>
+</section>
+<section id="un-gran-límite-de-make-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="un-gran-límite-de-make-2">Un gran límite de <code>make</code></h2>
+<p><code>make</code> garantiza que un fichero no se vuelva a recompilar a través de su <em>timestamp</em>.</p>
+<p>Pero ¿qué sucede si <strong>cambio un comentario en un fichero</strong>?</p>
+<p><code>make</code> compilará dicho fichero, aunque <strong>el resultado sea el mismo</strong>.</p>
+</section>
+<section id="cachear-compilaciones" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="cachear-compilaciones">Cachear compilaciones</h2>
+<p>La solución es guardar <strong>compilaciones temporales</strong> (caché) de la compilación del proyecto.</p>
+</section>
+<section id="cachear-compilaciones-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cachear-compilaciones-1">Cachear compilaciones</h2>
+<p>La solución es guardar <strong>compilaciones temporales</strong> (caché) de la compilación del proyecto.</p>
+<p>Si el resultado va a ser el mismo, <strong>devolver el resultado ya obtenido</strong>.</p>
+</section>
+<section id="ccache" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="ccache">Ccache</h2>
+<p><em>Compiler Cache</em> (<code>ccache</code>) es una herramienta que nos permite realizar esto.</p>
+</section>
+<section id="ccache-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="ccache-1">Ccache</h2>
+<p><em>Compiler Cache</em> (<code>ccache</code>) es una herramienta que nos permite realizar esto.</p>
+<p>Se utiliza como una <strong>herramienta complementaria al compilador</strong>.</p>
+<pre class="shell"><code>ccache g++ -o app src.cpp</code></pre>
+</section>
+<section id="características" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="características">Características</h2>
+<ul>
+<li>La versión actual de ccache soporta los lenguajes: <code>C</code>, <code>C++</code>, <code>Objective-C</code> y <code>Objective-C++</code>.</li>
+<li>Mantiene estadísticas de aciertos/fallos.</li>
+<li>Gestión automática del tamaño de la cache.</li>
+<li>Puede cachear compilaciones con “warnings”.</li>
+<li>Añade una sobrecarga mínima al proceso de compilación.</li>
+<li>Opcionalmente comprime los archivos en la cache para ahorrar sitio.</li>
+</ul>
+</section>
+<section id="uso-de-ccache" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="uso-de-ccache">Uso de <code>ccache</code></h2>
+<p>Se puede usar como <strong>prefijo</strong>.</p>
+<pre class="shell"><code>ccache g++ -o app src.cpp</code></pre>
+</section>
+<section id="uso-de-ccache-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="uso-de-ccache-1">Uso de <code>ccache</code></h2>
+<p>Se puede usar como <strong>prefijo</strong>.</p>
+<pre class="shell"><code>ccache g++ -o app src.cpp</code></pre>
+<p>O <em>suplantando</em> al compilador</p>
+<pre class="shell"><code>cp ccache /usr/local/bin/
+ln -s ccache /usr/local/bin/gcc
+ln -s ccache /usr/local/bin/g++
+ln -s ccache /usr/local/bin/cc
+ln -s ccache /usr/local/bin/c++</code></pre>
+</section>
+<section id="cómo-funciona-ccache" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="cómo-funciona-ccache">Cómo funciona <code>ccache</code></h2>
+<p><code>cache</code> calcula un <strong>hash</strong> para identificar <strong>información única</strong> en la compilación</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Contenido del fichero fuente <strong>en compilación</strong>.</li>
+<li>Parámetros del compilador.</li>
+<li>Versión del compilador.</li>
+</ul>
+</div>
+</section>
+<section id="cómo-funciona-ccache-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-funciona-ccache-1">Cómo funciona <code>ccache</code></h2>
+<p><code>cache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
+<div class="incremental">
+<ul class="incremental">
+<li>Contenido del fichero fuente <strong>en compilación</strong>.</li>
+<li>Parámetros del compilador.</li>
+<li>Versión del compilador.</li>
+</ul>
+</div>
+<p>Utiliza el algoritmo <code>MD4</code> para codificar dicho <em>hash</em>.</p>
+</section>
+<section id="cómo-funciona-ccache-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-funciona-ccache-2">Cómo funciona <code>ccache</code></h2>
+<p><code>cache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
+<p>Si encuentra un <em>hash</em> idéntico en su registro: devuelve el resultado sin compilar.</p>
+</section>
+<section id="cómo-funciona-ccache-3" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="cómo-funciona-ccache-3">Cómo funciona <code>ccache</code></h2>
+<p><code>cache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
+<p>Si encuentra un <em>hash</em> idéntico en su registro: devuelve el resultado sin compilar.</p>
+<p>Si no encuentra nada: compila y guarda el resultado.</p>
+</section>
+</section>
+<section id="Ninja" class="level1" data-stack-name="Ninja">
+<h1 data-stack-name="Ninja">Ninja</h1>
+<section id="los-makefiles-están-bien-pero" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="los-makefiles-están-bien-pero">Los makefiles están bien pero…</h2>
+<ul>
+<li>Los proyectos grandes generan <strong><strong>builds</strong> lentas</strong>.</li>
+<li>Ni siquiera con la compilación paralela es suficiente</li>
+<li>Necesitamos <strong>una herramienta más rápida</strong>.</li>
+</ul>
+</section>
+<section id="qué-es-ninja" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="qué-es-ninja">¿Qué es Ninja?</h2>
+<p>Ninja es un sistemema de construcción y compilación enfocado en la <strong>velocidad</strong>.</p>
+</section>
+<section id="qué-es-ninja-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="qué-es-ninja-1">¿Qué es Ninja?</h2>
+<p>Ninja es un sistemema de construcción y compilación enfocado en la <strong>velocidad</strong>.</p>
+<ul>
+<li>Minimaliesta: tiene menos funciones y mayor rendimiento.</li>
+<li><em>Do less, but do it quick</em>.</li>
+<li>No reemplaza a <code>make</code>, pero se usa <strong>cada vez más</strong> con <em>Build Systems</em> como CMake, Meson, etc.</li>
+</ul>
+</section>
+<section id="ninja-básico" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="ninja-básico">Ninja básico</h2>
+<p>En <strong>Make</strong> escribes reglas y dependencias en un <code>Makefile</code>. El motor ya decide qué hacer y cómo ejecutarse.</p>
+</section>
+<section id="ninja-básico-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="ninja-básico-1">Ninja básico</h2>
+<p>En <strong>Make</strong> escribes reglas y dependencias en un <code>Makefile</code>. El motor ya decide qué hacer y cómo ejecutarse.</p>
+<p>En <strong>Ninja</strong> defines un <strong>grafo de acciones mínimo</strong> en <code>build.ninja</code>, el cual se ejecuta en el motor en paralelo.</p>
+</section>
+<section id="ninja-básico-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="ninja-básico-2">Ninja básico</h2>
+<p>En <strong>Make</strong> escribes reglas y dependencias en un <code>Makefile</code>. El motor ya decide qué hacer y cómo ejecutarse.</p>
+<p>En <strong>Ninja</strong> defines un <strong>grafo de acciones mínimo</strong> en <code>build.ninja</code>, el cual se ejecuta en el motor en paralelo.</p>
+<div class="badge">
+<p>Piensa en Ninja como <em>el backend de compilación</em>: recibe un DAG muy explícito y lo ejecuta a la máxima velocidad.</p>
+</div>
+</section>
+<section id="de-make-a-ninja" class="level2" data-auto-animate="true">
+<h2 data-auto-animate="true" class="anchored" data-anchor-id="de-make-a-ninja">De <code>make</code> a <code>ninja</code></h2>
+<div class="sourceCode" id="cb56"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="dv">app:</span><span class="dt"> main.o</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>gcc main.o -o app</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="dv">main.o:</span><span class="dt"> main.c</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>gcc -c main.c -o main.o</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="de-make-a-ninja-1" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="de-make-a-ninja-1">De <code>make</code> a <code>ninja</code></h2>
+<div class="sourceCode" id="cb57"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="dv">app:</span><span class="dt"> main.o</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ main.o -o app</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="dv">main.o:</span><span class="dt"> main.c</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="er">    </span>g++ -c main.cpp -o main.o</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>rule cc</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">command</span> <span class="ch">=</span><span class="st"> g++ -c </span><span class="ch">$i</span><span class="st">n -o </span><span class="ch">$o</span><span class="st">ut</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>rule link</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">command</span> <span class="ch">=</span><span class="st"> g++ </span><span class="ch">$i</span><span class="st">n -o </span><span class="ch">$o</span><span class="st">ut</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="dv">build main.o :</span><span class="dt"> cc main.cpp</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="dv">build app:</span><span class="dt"> link main.o</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>default app</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="de-make-a-ninja-2" class="level2" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-auto-animate="true" data-visibility="uncounted" class="anchored" data-anchor-id="de-make-a-ninja-2">De <code>make</code> a <code>ninja</code></h2>
+<div class="incremental">
+<ul class="incremental">
+<li>Las entradas <code>$in</code> y las salidas <code>$out</code> siempre tienen un ámbito <strong>local</strong> a la regla.</li>
+<li>Objetivo: <code>build salida: regla entradas</code>.</li>
+<li>Receta: <code>regla command = ...</code></li>
+</ul>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiado");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiado");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

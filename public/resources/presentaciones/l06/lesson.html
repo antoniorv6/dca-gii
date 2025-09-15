@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 6: Programación dirigida por eventos.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 6: Programación dirigida por eventos.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-03-26 mié 01:00</p>
+</section>
+
+<section>
+<section id="slide-org020c586">
+<h2 id="org020c586">Paradigma de programación.</h2>
+<ul>
+<li class="fragment appear">Se considera un <i>paradigma de programación</i> como un estilo o
+forma de escribir programas.</li>
+
+<li class="fragment appear">Un <i>paradigma de programación</i> se caracteriza por los <i>conceptos
+empleados</i> y por la <i>manera de abstraer los elementos</i> utilizados
+en dar con la solución a un problema haciendo uso de un algoritmo.</li>
+
+<li class="fragment appear">Esto hace que esté <i>limitado</i> por las características del lenguaje
+de programación empleado.</li>
+
+</ul>
+
+</section>
+<section id="slide-org020c586-split">
+
+<ul>
+<li>Uno de los <i>paradigmas de programación</i> más empleados es el de la
+<i>programación orientada a objetos</i>, el cual lo vamos a estudiar a
+lo largo de la asignatura.</li>
+
+<li class="fragment appear">Existen diversos <i>paradigmas de programación</i> y estos no tienen
+por qué ser excluyentes, se pueden complementar.</li>
+
+<li class="fragment appear">Por todo ello podemos refererirnos a la <i>programación dirigida por
+eventos</i> (en adelante <i>PDE</i> ) como un <i>nuevo</i> paradigma de
+programación.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org18e5feb">
+<h3 id="org18e5feb">Otros paradigmas de programación.</h3>
+<ul>
+<li class="fragment appear">Orientado a objetos.</li>
+<li class="fragment appear">Imperativo.</li>
+<li class="fragment appear">Declarativo.
+<ul>
+<li>Funcional.</li>
+<li>Lógico.</li>
+
+</ul></li>
+<li class="fragment appear">&#x2026;</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0e13267">
+<h2 id="org0e13267">Características de la <i>PDE</i>.</h2>
+<dl>
+<dt>Una aplicación escrita bajo el paradigma de la PDE se caracteriza por :</dt><dd><ul>
+<li class="fragment appear">La estructura básica del programa principal cambia.
+<ul>
+<li>Esta pasa a ser un bucle sin fin, del cual sólo se sale para
+terminar la aplicación.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org4d0fd40-split">
+<ul>
+<li>Lo que pasa dentro de este bucle está determinado por los sucesos
+(<i>eventos</i>) que ocurren como consecuencia de la interacción con el
+mundo exterior, con el entorno en el que se ejecuta la aplicación.</li>
+
+<li>Un <i>evento</i> representa cualquier cambio significativo en el estado
+del programa.</li>
+
+</ul></dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-org99cbdd8">
+<h3 id="org99cbdd8">Esquema básico de este tipo de aplicaciones I</h3>
+<ul>
+<li class="fragment appear">Al principio de las mismas realizamos una iniciación de todo el
+sistema de eventos.</li>
+
+<li class="fragment appear">Para todos los tipos de eventos que puedan ocurrir, especificamos en
+cuáles estamos interesados.</li>
+
+<li class="fragment appear">Se prepara el generador o generadores de estos eventos.</li>
+
+</ul>
+
+</section>
+<section id="slide-org99cbdd8-split">
+<ul>
+<li>Estas tres acciones suelen estar ya implementadas en las bibliotecas
+destinadas a realizar <i>PDE</i>.</li>
+
+<li>Para todos los eventos en los que estemos interesados debemos decir
+qué código se ejecutará en respuesta a los mismos - <i>ejecución
+diferida de código</i> -.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orga024f3b">
+<h3 id="orga024f3b">Esquema básico de este tipo de aplicaciones II</h3>
+<ul>
+<li class="fragment appear">Se espera a que se vayan produciendo los eventos.</li>
+
+<li class="fragment appear">Una vez producidos, son detectados y tratados por el <i>dispatcher</i> o
+<b>planificador de eventos</b>. Este se encarga de invocar el código, que
+previamente hemos dicho que debía ejecutarse para cada evento
+(<i>manejador del evento</i>, <i>callback</i>, <i>slot</i>, etc&#x2026;).</li>
+
+<li class="fragment appear">Todo esto se realiza de forma ininterrumpida hasta que finaliza la
+aplicación.</li>
+
+</ul>
+
+</section>
+<section id="slide-orga024f3b-split">
+<ul>
+<li>A esta <i>ejecución sin fin</i> es a lo que se conoce como <b>el bucle
+de espera de eventos</b>.</li>
+
+<li>Las aplicaciones con un interfaz gráfico de usuario siguen este
+esquema de programación que acabamos de comentar.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9a3d404">
+<h3 id="org9a3d404">Esquema básico de este tipo de aplicaciones III</h3>
+<ul>
+<li class="fragment appear">Un mismo manejador puede estar asociado a diferentes eventos.</li>
+<li class="fragment appear">Un evento puede tener asociados 0 o más manejadores.</li>
+<li class="fragment appear">Si asociamos más de un manejador a un evento, no debemos confiar en
+el orden de ejecución de los mismos.</li>
+<li class="fragment appear">A la acción de asociar un manejador a un evento se la suele llamar
+<i>conexión</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org654ef7e">
+<h3 id="org654ef7e">Programación secuencial vs. PDE.</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">SECUENCIAL                        |  // DIRIGIDA POR EVENTOS</span>
+repetir                              |  son_eventos (ev1, ev2, ev3...);
+  <span style="font-weight: bold;">presentar_menu</span> ();                 |  ...
+  opc = leer_opcion ();              |  cuando_ocurra ( ev1, accion1 );
+  ...                                |  cuando_ocurra ( ev2, accion2 );
+  <span style="font-weight: bold;">si</span> (opc == 1) <span style="font-weight: bold; text-decoration: underline;">entonces</span> <span style="font-weight: bold;">accion1</span> (); |  repetir
+  si (opc == 2) <span style="font-weight: bold; text-decoration: underline;">entonces</span> <span style="font-weight: bold;">accion2</span> (); |    ...
+  ...                                |  hasta terminar
+hasta terminar
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf6e15b6">
+<h3 id="orgf6e15b6">Diagrama</h3>
+<div class="org-center">
+
+<div id="org15564ae" class="figure">
+<p><img src="images/dpde.png" alt="dpde.png" />
+</p>
+<p><span class="figure-number">Figura 1: </span>Esquema básico de una aplicación bajo el paradigma de la <i>PDE</i>.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org7f60cd1">
+<h2 id="org7f60cd1"><i>PDE</i> y C++</h2>
+<ul>
+<li class="fragment appear">C++ <b>no</b> dispone de ningún mecanismo en el lenguaje para realizar este
+tipo de programación.</li>
+<li class="fragment appear">Debemos recurrir a soluciones externas para ello.</li>
+
+</ul>
+</section>
+<section id="slide-org7f60cd1-split">
+<ul>
+<li>Estas <i>soluciones</i> pueden ser de distinto tipo:
+<ul>
+<li class="fragment appear"><p>
+Usando un <a href="https://en.wikipedia.org/wiki/Preprocessor">preprocesador</a> especial que añade esta característica nueva al
+lenguaje. Es el caso de la biblioteca <a href="http://www.qt.io">Qt</a>. El preprocesador empleado se llama
+<a href="http://doc.qt.io/qt-5/moc.html">MOC</a> y la parte de <i>PDE</i> que implementa es la que denomina <a href="http://doc.qt.io/qt-5/signalsandslots.html">signal/slot</a>.
+</p>
+
+<p>
+Qt emplea el término <i>señal</i> (<b>signal</b>) en lugar de <i>evento</i> y el de <b>slot</b>
+en lugar de <i>callback</i>.
+</p></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org7f60cd1-split">
+
+<ul>
+<li>Mediante el uso de una biblioteca que implemente de algún modo el paradigma
+de la <i>PDE</i>. Existen varias de estas bibliotecas:
+<ol>
+<li><a href="https://libsigcplusplus.github.io/libsigcplusplus/">Libsigc++</a>, es una adaptación a C++ de la versión de <i>C</i> que hay en GLib.</li>
+<li><a href="https://developer.gnome.org/glib/stable/">GLib</a> (<a href="https://developer.gnome.org/gobject/stable/signal.html">signals</a>)</li>
+<li>Boost (<i><a href="http://www.boost.org/doc/libs/1_62_0/doc/html/signals2.html">signals2</a></i>).</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org34510ce">
+<h3 id="org34510ce">Un ejemplo sencillo con Qt.</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;QObject&gt;</span>
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Counter</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">QObject</span> {
+<span class="linenr"> 4: </span>    Q_OBJECT
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span><span style="font-weight: bold;">public</span>:
+<span class="linenr"> 7: </span>    <span style="font-weight: bold;">Counter</span>() { m_value = 0; }
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">value</span>() <span style="font-weight: bold;">const</span> { <span style="font-weight: bold;">return</span> m_value; }
+<span class="linenr">10: </span>
+<span class="linenr">11: </span><span style="font-weight: bold;">public</span> <span style="font-weight: bold;">slots</span>:
+<span class="linenr">12: </span>    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">setValue</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">value</span>);
+<span class="linenr">13: </span>
+<span class="linenr">14: </span><span style="font-weight: bold;">signals</span>:
+<span class="linenr">15: </span>    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">valueChanged</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">newValue</span>);
+<span class="linenr">16: </span>
+<span class="linenr">17: </span><span style="font-weight: bold;">private</span>:
+<span class="linenr">18: </span>    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">m_value</span>;
+<span class="linenr">19: </span>};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org34510ce-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">Counter</span>::<span style="font-weight: bold;">setValue</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">value</span>) {
+<span class="linenr"> 2: </span>   <span style="font-weight: bold;">if</span> (value != m_value) {
+<span class="linenr"> 3: </span>       m_value = value;
+<span class="linenr"> 4: </span>       <span style="font-weight: bold; text-decoration: underline;">emit</span> <span style="font-weight: bold; font-style: italic;">valueChanged</span>(value);
+<span class="linenr"> 5: </span>   }
+<span class="linenr"> 6: </span>}
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span><span style="font-weight: bold; text-decoration: underline;">Counter</span> <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span>;
+<span class="linenr"> 9: </span><span style="font-weight: bold; text-decoration: underline;">QObject</span>::connect(&amp;a, &amp;<span style="font-weight: bold; text-decoration: underline;">Counter</span>::valueChanged,
+<span class="linenr">10: </span>                 &amp;b, &amp;<span style="font-weight: bold; text-decoration: underline;">Counter</span>::setValue);
+<span class="linenr">11: </span>
+<span class="linenr">12: </span>a.setValue(12);     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">a.value() == 12, b.value() == 12</span>
+<span class="linenr">13: </span>b.setValue(48);     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">a.value() == 12, b.value() == 48</span>
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org3ca19a0">
+<h3 id="org3ca19a0">Un ejemplo sencillo con Libsigc++.</h3>
+<ul>
+<li><p>
+Las alternativas basadas en el uso de bibliotecas no requieren de
+modificaciones al lenguaje.
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;sigc++/sigc++.h&gt;</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">AlienDetector</span> {
+<span class="linenr"> 3: </span><span style="font-weight: bold;">public</span>:
+<span class="linenr"> 4: </span>  <span style="font-weight: bold;">AlienDetector</span>();
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span>  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">run</span>();
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span>  <span style="font-weight: bold; text-decoration: underline;">sigc</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">void</span>&gt; <span style="font-weight: bold; font-style: italic;">signal_detected</span>;
+<span class="linenr"> 9: </span>};
+<span class="linenr">10: </span>
+<span class="linenr">11: </span><span style="font-weight: bold; text-decoration: underline;">AlienDetector</span>::<span style="font-weight: bold;">AlienDetector</span>() {}
+<span class="linenr">12: </span>
+<span class="linenr">13: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">AlienDetector</span>::<span style="font-weight: bold;">run</span>() {
+<span class="linenr">14: </span>  sleep(3); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">wait for aliens</span>
+<span class="linenr">15: </span>  signal_detected.emit();
+<span class="linenr">16: </span>}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org3ca19a0-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">warn_people</span>() {
+<span class="linenr"> 4: </span>  cout &lt;&lt; <span style="font-style: italic;">"There are aliens in the carpark!"</span> &lt;&lt; endl;
+<span class="linenr"> 5: </span>}
+<span class="linenr"> 6: </span>
+<span class="linenr"> 7: </span><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+<span class="linenr"> 8: </span>  <span style="font-weight: bold; text-decoration: underline;">AlienDetector</span> <span style="font-weight: bold; font-style: italic;">mydetector</span>;
+<span class="linenr"> 9: </span>  mydetector.signal_detected.connect( <span style="font-weight: bold; text-decoration: underline;">sigc</span>::ptr_fun(warn_people) );
+<span class="linenr">10: </span>
+<span class="linenr">11: </span>  mydetector.run();
+<span class="linenr">12: </span>
+<span class="linenr">13: </span>  <span style="font-weight: bold;">return</span> 0;
+<span class="linenr">14: </span>}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgde2f9bd">
+<h2 id="orgde2f9bd"><i>Boost</i> y C++</h2>
+<ul>
+<li class="fragment appear"><a href="http://www.boost.org">Boost</a> es un conjunto de bibliotecas escritas en C++ con vistas a su
+portabilidad (compilador, s.o., etc&#x2026;).</li>
+<li class="fragment appear">Cada cierto tiempo se publica una nueva versión, la cual contiene
+actualizaciones a bibliotecas ya existentes y/o nuevas bibliotecas.</li>
+
+</ul>
+</section>
+<section id="slide-orgde2f9bd-split">
+<ul>
+<li>Cada nueva versión publicada viene acompañada de la <a href="http://www.boost.org/doc/libs/">documentación</a>
+pertinente para todas y cada una de las bibliotecas que la componen.</li>
+<li>El proyecto Boost es <i>importante</i> por:
+<ol>
+<li class="fragment appear">La <span class="underline">altísima</span> calidad del código fuente C++ que tienen sus
+bibliotecas.</li>
+<li class="fragment appear">Algunas de estas bibliotecas pueden pasar a formar parte de la
+biblioteca estándar de C++ en un futuro.</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdbf3ec5">
+<h2 id="orgdbf3ec5">Boost y <i>PDE</i> I</h2>
+<ul>
+<li class="fragment appear">Boost dispone de una biblioteca de implementación de señales
+(<i>eventos</i>) que que permite realizar <i>PDE</i>: <b>boost::signals</b>. Nos
+centraremos concretamente en su versión 2 o <b><a href="https://www.boost.org/doc/libs/release/libs/signals2/">boost::signals2</a></b>.</li>
+<li class="fragment appear">Esta biblioteca implementa un marco de PDE basado en la emisión de
+señales (eventos) y la posterior ejecución del código <span class="underline">asociado</span> a los
+mismos, los llamados <i>slots</i> o <i>callbacks</i>.</li>
+
+</ul>
+</section>
+<section id="slide-orgdbf3ec5-split">
+<ul>
+<li>Una <i>señal</i> o <i>evento</i> puede tener asociados 0 o más <i>manejadores</i> o
+<i>callbacks</i>, mientras que un <i>callback</i> o <i>slot</i> puede estar
+asociado con más de una señal.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb466ee7">
+<h2 id="orgb466ee7">Boost y <i>PDE</i> II</h2>
+<ul>
+<li class="fragment appear">A la asociación de un <i>slot</i> con una <i>señal</i> se le llama <b>conexión</b>.</li>
+<li class="fragment appear">Los <i>manejadores</i> o <i>slots</i> se ejecutan cuando la <i>señal</i> se emite (el
+evento se ha producido).</li>
+
+</ul>
+</section>
+<section id="slide-orgb466ee7-split">
+<ul>
+<li>Un <i>manejador</i> se puede desconectar de la <i>señal</i> a la que se ha
+conectado previamente.</li>
+<li>Un <i>manejador</i> puede devolver un valor. En el caso de
+<code>boost::signals2</code> es un dato de tipo <code>boost::optional</code>, este actúa
+como un <i>wrapper</i> sobre el valor real devuelto.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7a6a459">
+<h3 id="org7a6a459">boost::signals2 : ejemplos I</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compilar con: g++ signals1.cc -o signals1</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span class="linenr"> 3: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/signals2.hpp&gt;</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">my_first_slot</span> () {
+<span class="linenr"> 6: </span>  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"void my_first_slot()\n"</span>;
+<span class="linenr"> 7: </span>}
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Car</span> {
+<span class="linenr">10: </span><span style="font-weight: bold;">public</span>:
+<span class="linenr">11: </span>  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">out_of_gas_cb</span> () { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Gas needed!\n"</span>; }
+<span class="linenr">12: </span>  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">class_method</span> () { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Class Method!\n"</span>; }
+<span class="linenr">13: </span>};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org7a6a459-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+<span class="linenr"> 2: </span>  <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">void</span> ()&gt; <span style="font-weight: bold; font-style: italic;">sig</span>;
+<span class="linenr"> 3: </span>  <span style="font-weight: bold; text-decoration: underline;">Car</span> <span style="font-weight: bold; font-style: italic;">c</span>;
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span>  sig.connect(my_first_slot);
+<span class="linenr"> 6: </span>
+<span class="linenr"> 7: </span>  <span style="font-weight: bold; font-style: italic;">/////////////////////////////////////////////////////</span>
+<span class="linenr"> 8: </span>  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Caso especial:                                  //</span>
+<span class="linenr"> 9: </span>  <span style="font-weight: bold; font-style: italic;">//   </span><span style="font-weight: bold; font-style: italic;">El callback o slot es un m&#233;todo de una clase. //</span>
+<span class="linenr">10: </span>  <span style="font-weight: bold; font-style: italic;">/////////////////////////////////////////////////////</span>
+<span class="linenr">11: </span>  sig.connect( <span style="font-weight: bold; text-decoration: underline;">std</span>::bind(&amp;<span style="font-weight: bold; text-decoration: underline;">Car</span>::out_of_gas_cb, &amp;c) );
+<span class="linenr">12: </span>  sig.connect( <span style="font-weight: bold; text-decoration: underline;">Car</span>::class_method );
+<span class="linenr">13: </span>
+<span class="linenr">14: </span>  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Emitting the signal...\n"</span>;
+<span class="linenr">15: </span>  sig();
+<span class="linenr">16: </span>}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd74c7b1">
+<h3 id="orgd74c7b1">boost::signals2 : ejemplos II</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compilar con: g++ signals2.cc -o signals2</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span class="linenr"> 3: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/signals2.hpp&gt;</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Car</span> {
+<span class="linenr"> 6: </span><span style="font-weight: bold;">public</span>:
+<span class="linenr"> 7: </span>  <span style="font-weight: bold;">Car</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">b</span>) { brand = b; }
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">out_of_gas_cb</span> () {
+<span class="linenr">10: </span>    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; brand &lt;&lt; <span style="font-style: italic;">": Gas needed!\n"</span>;
+<span class="linenr">11: </span>  }
+<span class="linenr">12: </span>
+<span class="linenr">13: </span><span style="font-weight: bold;">private</span>:
+<span class="linenr">14: </span>  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">brand</span>;
+<span class="linenr">15: </span>};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgd74c7b1-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+<span class="linenr"> 2: </span>  <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">void</span> ()&gt; <span style="font-weight: bold; font-style: italic;">sig</span>;
+<span class="linenr"> 3: </span>  <span style="font-weight: bold; text-decoration: underline;">Car</span> <span style="font-weight: bold; font-style: italic;">a</span>(<span style="font-style: italic;">"audi"</span>);
+<span class="linenr"> 4: </span>  <span style="font-weight: bold; text-decoration: underline;">Car</span> <span style="font-weight: bold; font-style: italic;">s</span>(<span style="font-style: italic;">"seat"</span>);
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span>  <span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">auto cna = sig.connect(boost::bind(&amp;Car::out_of_gas, &amp;a));</span>
+<span class="linenr"> 7: </span>  <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">connection</span> <span style="font-weight: bold; font-style: italic;">cna</span> = sig.connect(<span style="font-weight: bold; text-decoration: underline;">std</span>::bind (&amp;<span style="font-weight: bold; text-decoration: underline;">Car</span>::out_of_gas_cb, &amp;a));
+<span class="linenr"> 8: </span>  <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">connection</span> <span style="font-weight: bold; font-style: italic;">cns</span> = sig.connect(<span style="font-weight: bold; text-decoration: underline;">std</span>::bind (&amp;<span style="font-weight: bold; text-decoration: underline;">Car</span>::out_of_gas_cb, &amp;s));
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span>  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Emitting the signal...\n"</span>;
+<span class="linenr">11: </span>  sig();
+<span class="linenr">12: </span>
+<span class="linenr">13: </span>  cna.disconnect ();            <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">disconnect audi signal</span>
+<span class="linenr">14: </span>
+<span class="linenr">15: </span>  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"\nDisconnect &amp; emit the signal...\n\n"</span>;
+<span class="linenr">16: </span>  sig();
+<span class="linenr">17: </span>}
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgd74c7b1-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">==============//</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Uso de bind: //</span>
+<span class="linenr"> 3: </span><span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">==============//---------------------------------------------------------//</span>
+<span class="linenr"> 4: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">int sub(int lhs, int rhs);      // returns lhs - rhs                    //</span>
+<span class="linenr"> 5: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">bind(sub, 3, 4);                // returns a function object whose      //</span>
+<span class="linenr"> 6: </span><span style="font-weight: bold; font-style: italic;">//                                 </span><span style="font-weight: bold; font-style: italic;">// operator() returns sub(3, 4)         //</span>
+<span class="linenr"> 7: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">1) bind(sub, 3, 4)();                                                   //</span>
+<span class="linenr"> 8: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">2) auto functor = bind(sub, 3, 4); // define a variable for the functor //</span>
+<span class="linenr"> 9: </span><span style="font-weight: bold; font-style: italic;">//   </span><span style="font-weight: bold; font-style: italic;">cout &lt;&lt; functor() &lt;&lt; '\n';      // call the functor, returning -1.    //</span>
+<span class="linenr">10: </span><span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">-------------------------------------------------------------------------//</span>
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org11729a9">
+<h3 id="org11729a9">boost::signals2 : ejemplos III</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compilar con: g++ signals3.cc -o signals3</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span class="linenr"> 3: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/signals2.hpp&gt;</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Car</span> {
+<span class="linenr"> 6: </span>  <span style="font-weight: bold;">public</span>:
+<span class="linenr"> 7: </span>    <span style="font-weight: bold;">Car</span> () { temp = 90; }
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">out_of_gas_cb</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">dist</span>) {
+<span class="linenr">10: </span>      <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Gas needed!\nDistance to next petrol station: "</span>
+<span class="linenr">11: </span>                &lt;&lt; dist &lt;&lt; <span style="font-style: italic;">"km\n"</span>;
+<span class="linenr">12: </span>    }
+<span class="linenr">13: </span>
+<span class="linenr">14: </span>  <span style="font-weight: bold;">private</span>:
+<span class="linenr">15: </span>    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">temp</span>;
+<span class="linenr">16: </span>};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org11729a9-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; text-decoration: underline;">Int</span> <span style="font-weight: bold;">main</span>() {
+<span class="linenr"> 2: </span>    <span style="font-weight: bold; text-decoration: underline;">Car</span> <span style="font-weight: bold; font-style: italic;">c</span>;
+<span class="linenr"> 3: </span>
+<span class="linenr"> 4: </span>    <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">void</span> (<span style="font-weight: bold; text-decoration: underline;">void</span>)&gt; <span style="font-weight: bold; font-style: italic;">sig</span>;
+<span class="linenr"> 5: </span>    <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">void</span> (<span style="font-weight: bold; text-decoration: underline;">Car</span>*, <span style="font-weight: bold; text-decoration: underline;">int</span>)&gt; <span style="font-weight: bold; font-style: italic;">sig2</span>;
+<span class="linenr"> 6: </span>
+<span class="linenr"> 7: </span>    sig.connect ( <span style="font-weight: bold; text-decoration: underline;">std</span>::bind(&amp;<span style="font-weight: bold; text-decoration: underline;">Car</span>::out_of_gas_cb, &amp;c, 20) );
+<span class="linenr"> 8: </span>    sig2.connect ( &amp;<span style="font-weight: bold; text-decoration: underline;">Car</span>::out_of_gas_cb );
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span>    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Emitting the signal...\n"</span>;
+<span class="linenr">11: </span>    sig();
+<span class="linenr">12: </span>    sig2(&amp;c, 12);
+<span class="linenr">13: </span>}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org7fc6ffd">
+<h3 id="org7fc6ffd">boost::signals2 : ejemplos IV</h3>
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compilar con: g++ signals4.cc -o signals4</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span class="linenr"> 3: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/signals2.hpp&gt;</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Car</span> {
+<span class="linenr"> 6: </span>  <span style="font-weight: bold;">public</span>:
+<span class="linenr"> 7: </span>    <span style="font-weight: bold;">Car</span> () { temp = 90; }
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">out_of_gas_cb</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">dist</span>) {
+<span class="linenr">10: </span>      <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Gas needed!\nDistance to next petrol station: "</span>
+<span class="linenr">11: </span>                &lt;&lt; dist &lt;&lt; <span style="font-style: italic;">"km\n"</span>;
+<span class="linenr">12: </span>      <span style="font-weight: bold;">return</span> temp;
+<span class="linenr">13: </span>    }
+<span class="linenr">14: </span>
+<span class="linenr">15: </span>  <span style="font-weight: bold;">private</span>:
+<span class="linenr">16: </span>    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">temp</span>;
+<span class="linenr">17: </span>};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org7fc6ffd-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+<span class="linenr"> 2: </span>    <span style="font-weight: bold; text-decoration: underline;">Car</span> <span style="font-weight: bold; font-style: italic;">c</span>;
+<span class="linenr"> 3: </span>
+<span class="linenr"> 4: </span>    <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span> (<span style="font-weight: bold; text-decoration: underline;">void</span>)&gt; <span style="font-weight: bold; font-style: italic;">sig</span>;
+<span class="linenr"> 5: </span>    sig.connect ( <span style="font-weight: bold; text-decoration: underline;">std</span>::bind(&amp;<span style="font-weight: bold; text-decoration: underline;">Car</span>::out_of_gas_cb, &amp;c, 20) );
+<span class="linenr"> 6: </span>
+<span class="linenr"> 7: </span>    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Emitting the signal...\n"</span>;
+<span class="linenr"> 8: </span>    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">t</span> = *sig();               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">returns a boost::optional</span>
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span>    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"The temp. of car's engine is "</span> &lt;&lt; t &lt;&lt; <span style="font-style: italic;">"&#186;C.\n"</span>;
+<span class="linenr">11: </span>}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orga4fc753">
+<h2 id="orga4fc753">Boost y <i>PDE</i> III</h2>
+<ul>
+<li class="fragment appear">Si conectas varios <i>slots</i> a una misma señal y estos devuelven
+valores, no olvides echar un vistazo a <a href="http://www.boost.org/doc/libs/1_62_0/doc/html/signals2/tutorial.html#idm45927784810560">Signal Return Values
+(Advanced)</a>.</li>
+<li class="fragment appear">Si por algún motivo necesitas tener control sobre el orden de
+ejecución de los <i>slots</i> conectados a una señal, consulta la
+documentación sobre los llamados <i>grupos de llamadas</i>: <a href="http://www.boost.org/doc/libs/1_62_0/doc/html/signals2/tutorial.html#idm45927784838688">Ordering Slot
+Call Groups (Intermediate)</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8eeaaba">
+<h2 id="org8eeaaba">Boost y PDE IV</h2>
+<ul>
+<li>¿Cómo capturar señales enviadas por el hardware y reconvertirlas en
+señales de <code>boost::signals2</code> ?</li>
+<li>Vamos a probarlo provocando una división por 0, capturar la
+excepción producida y reconvertirla en una <i>señal</i> de <code>boost::signals2</code>.</li>
+
+</ul>
+</section>
+<section id="slide-org8eeaaba-split">
+<ul>
+<li><p>
+Para ello empleamos la función <a href="https://linux.die.net/man/2/signal">signal</a> disponible en la biblioteca
+estándar de <code>C</code>.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/signals2.hpp&gt;</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span class="linenr"> 3: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cstdlib&gt;</span>
+<span class="linenr"> 4: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;csignal&gt;</span>
+<span class="linenr"> 5: </span><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;string&gt;</span>
+<span class="linenr"> 6: </span>
+<span class="linenr"> 7: </span><span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Hardware</span>;
+<span class="linenr">10: </span><span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">HWPtr</span> = Hardware *;
+<span class="linenr">11: </span>
+<span class="linenr">12: </span><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Hardware</span> {
+<span class="linenr">13: </span><span style="font-weight: bold;">public</span>:
+<span class="linenr">14: </span>  <span style="font-weight: bold;">Hardware</span>(<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">n</span>) {
+<span class="linenr">15: </span>    <span style="font-weight: bold;">if</span> (SIG_ERR == signal(SIGFPE, fpe)) {
+<span class="linenr">16: </span>      cerr &lt;&lt; <span style="font-style: italic;">"failure to setup signal."</span>;
+<span class="linenr">17: </span>    }
+<span class="linenr">18: </span>    name = n;
+<span class="linenr">19: </span>  }
+<span class="linenr">20: </span>
+<span class="linenr">21: </span>  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Signals //--------------------------------------------------------</span>
+<span class="linenr">22: </span>  <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">signals2</span>::<span style="font-weight: bold; text-decoration: underline;">signal</span>&lt;<span style="font-weight: bold; text-decoration: underline;">void</span>(<span style="font-weight: bold; font-style: italic;">HWPtr</span>)&gt; <span style="font-weight: bold; font-style: italic;">onDivisionByZero</span>;
+<span class="linenr">23: </span>
+<span class="linenr">24: </span>  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold;">hw_name</span>() { <span style="font-weight: bold;">return</span> name; }
+<span class="linenr">25: </span><span style="font-weight: bold;">private</span>:
+<span class="linenr">26: </span>  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">data</span>;
+<span class="linenr">27: </span>  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">name</span>;
+<span class="linenr">28: </span>  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Class methods //--------------------------------------------------</span>
+<span class="linenr">29: </span>  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">fpe</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>);
+<span class="linenr">30: </span>};
+<span class="linenr">31: </span>
+<span class="linenr">32: </span><span style="font-weight: bold; text-decoration: underline;">Hardware</span> <span style="font-weight: bold; font-style: italic;">gHw</span>(<span style="font-style: italic;">"Computer CPU"</span>);
+<span class="linenr">33: </span>
+<span class="linenr">34: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">Hardware</span>::<span style="font-weight: bold;">fpe</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>) {
+<span class="linenr">35: </span>  cerr &lt;&lt; <span style="font-style: italic;">"Low level signal caught.\nCalling high-level signal.\n\n"</span>;
+<span class="linenr">36: </span>  gHw.data = n;
+<span class="linenr">37: </span>  gHw.onDivisionByZero(&amp;gHw);
+<span class="linenr">38: </span>}
+<span class="linenr">39: </span>
+<span class="linenr">40: </span><span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">-- Main program: Compilar con '-O' ----------------------------------</span>
+<span class="linenr">41: </span>
+<span class="linenr">42: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">myFPEHandler</span>(<span style="font-weight: bold; text-decoration: underline;">HWPtr</span> <span style="font-weight: bold; font-style: italic;">h</span>) {
+<span class="linenr">43: </span>  cout &lt;&lt; <span style="font-style: italic;">"&#183; "</span> &lt;&lt; h-&gt;hw_name() &lt;&lt; <span style="font-style: italic;">" : Division por cero.\n"</span>;
+<span class="linenr">44: </span>  exit(1);
+<span class="linenr">45: </span>}
+<span class="linenr">46: </span>
+<span class="linenr">47: </span><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">argc</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> *<span style="font-weight: bold; font-style: italic;">argv</span>[]) {
+<span class="linenr">48: </span>  gHw.onDivisionByZero.connect(myFPEHandler);
+<span class="linenr">49: </span>
+<span class="linenr">50: </span>  <span style="font-weight: bold;">auto</span> <span style="font-weight: bold; font-style: italic;">n</span> = 3;
+<span class="linenr">51: </span>  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">den</span> = 0;
+<span class="linenr">52: </span>
+<span class="linenr">53: </span>  cout &lt;&lt; <span style="font-style: italic;">"Division hecha?: r= "</span> &lt;&lt; r &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+<span class="linenr">54: </span>
+<span class="linenr">55: </span>  <span style="font-weight: bold;">auto</span> <span style="font-weight: bold; font-style: italic;">r</span> = n / den;
+<span class="linenr">56: </span>  <span style="font-weight: bold;">return</span> 0;
+<span class="linenr">57: </span>}
+<span class="linenr">58: </span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org41b6992">
+<h2 id="org41b6992">Boost y programación secuencial vs. <i>PDE</i>.</h2>
+<ul>
+<li>Del ejemplo del <i>Control de Misión</i> compara las versiones <i>secuencial</i>
+y <i>dirigida por eventos</i>:</li>
+
+</ul>
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">SECUENCIAL</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">MissionControl</span>::<span style="font-weight: bold;">follow_voyagers</span> () {
+<span class="linenr"> 3: </span>  <span style="font-weight: bold; text-decoration: underline;">ulong</span> <span style="font-weight: bold; font-style: italic;">impulses</span> = 0;
+<span class="linenr"> 4: </span>  <span style="font-weight: bold;">while</span> ((<span style="font-weight: bold;">not</span> v1.is_outof_ss()) <span style="font-weight: bold;">or</span>
+<span class="linenr"> 5: </span>         (<span style="font-weight: bold;">not</span> v2.is_outof_ss())) {
+<span class="linenr"> 6: </span>    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"["</span> &lt;&lt; ++impulses
+<span class="linenr"> 7: </span>              &lt;&lt; <span style="font-style: italic;">"]-------Following Voyagers-------------\n"</span>;
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>    v1.travel ();
+<span class="linenr">10: </span>    <span style="font-weight: bold;">if</span> (v1.is_outof_ss()) do_something_when_outof_ss(v1);
+<span class="linenr">11: </span>
+<span class="linenr">12: </span>    v2.travel ();
+<span class="linenr">13: </span>    <span style="font-weight: bold;">if</span> (v2.is_outof_ss()) do_something_when_outof_ss(v2);
+<span class="linenr">14: </span>  }
+<span class="linenr">15: </span>}
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org41b6992-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-C++"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">DIRIGIDA POR EVENTOS</span>
+<span class="linenr"> 2: </span><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">MissionControl</span>::<span style="font-weight: bold;">follow_voyagers</span> () {
+<span class="linenr"> 3: </span>  <span style="font-weight: bold; text-decoration: underline;">ulong</span> <span style="font-weight: bold; font-style: italic;">impulses</span> = 0;
+<span class="linenr"> 4: </span>  <span style="font-weight: bold;">while</span> ((<span style="font-weight: bold;">not</span> v1.is_outof_ss()) <span style="font-weight: bold;">or</span>
+<span class="linenr"> 5: </span>         (<span style="font-weight: bold;">not</span> v2.is_outof_ss())) {
+<span class="linenr"> 6: </span>    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"["</span> &lt;&lt; ++impulses
+<span class="linenr"> 7: </span>              &lt;&lt; <span style="font-style: italic;">"]---------Following Voyagers-----------\n"</span>;
+<span class="linenr"> 8: </span>    v1.travel ();
+<span class="linenr"> 9: </span>    v2.travel ();
+<span class="linenr">10: </span>  }
+<span class="linenr">11: </span>}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org5ddac74">
+<h2 id="org5ddac74">PDE y patrones de diseño. Ampliación de conocimientos.</h2>
+<ul>
+<li>La PDE estudiada es una realización concreta de un <a href="https://es.wikipedia.org/wiki/Patr%C3%B3n_de_dise%C3%B1o">patrón de diseño</a>
+software. Concretamente del patrón llamado <span class="underline">Observer</span>.</li>
+<li>El libro
+<a href="https://www.amazon.es/Design-Patterns-Object-Oriented-professional-computing/dp/0201633612">Design
+Patterns: Elements of Reusable Object-Oriented Software</a> se
+considera un libro básico en esta materia.</li>
+<li>En la página de enlaces de la web de la asignatura tienes recogido
+un curso en <i>YouTube</i> sobre patrones de diseño en <code>C++</code>. <a href="https://youtu.be/BKmH7m_OrPI?si=ewv-SLiXGGwl_eli">Aquí</a> tienes el
+primero de los vídeos dedicados al patrón <i>Observer</i>.</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org67dc747">
+<h2 id="org67dc747">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

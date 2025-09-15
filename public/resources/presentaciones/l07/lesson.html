@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 7: Relaciones entre objetos. Herencia, polimorfismo, enlace dinámico.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 7: Relaciones entre objetos. Herencia, polimorfismo, enlace dinámico.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-04-08 mar 23:51</p>
+</section>
+
+<section>
+<section id="slide-org4093530">
+<h2 id="org4093530">Herencia</h2>
+<ul>
+<li>Las relaciones de herencia suelen representar situaciones donde
+las clases base son o representan conceptos más generales mientras
+que las derivadas son más específicas.</li>
+
+<li>Ya sabemos que modelan una relación de <i>parecido</i> entre elementos
+del mundo real: <b>es un</b>.</li>
+
+<li>Aunque, si el lenguaje lo permite, podemos modelar otro tipo de
+relaciones con ellas.</li>
+
+<li>Cuando una clase base es abstracta y además no tiene <i>datos</i> se
+dice que es un interfaz.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9f2808e">
+<h3 id="org9f2808e"><b>C++</b> y las relaciones de herencia.</h3>
+<ul>
+<li><b>C++</b> permite <i>etiquetar</i> la relación de herencia entre dos
+clases.</li>
+
+</ul>
+
+<ul>
+<li class="fragment appear"><p>
+Una clase puede heredar de otra de forma <b>publica</b>, <b>privada</b> y/o
+<b>protegida</b>.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Derived</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Base</span> {};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Derived</span> : <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">Base</span> {};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Derived</span> : <span style="font-weight: bold;">protected</span> <span style="font-weight: bold; text-decoration: underline;">Base</span> {};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9f2808e-split">
+
+<h3><b>C++</b> y las relaciones de herencia.</h3>
+<ul>
+<li>IMPORTANTE:
+<dl>
+<dt class="fragment appear">Herencia pública :</dt><dd class="fragment appear">Lo público en la clase base es público y
+lo protegido en la clase base es protegido en la clase
+derivada. Lo privado de una clase siempre es privado de esa
+clase. Representa relaciones <b>es un</b>.</dd>
+
+<dt class="fragment appear">Herencia privada :</dt><dd class="fragment appear">Lo público y protegido en la clase base
+es privado en la clase derivada. Simula relaciones de
+<b>composición</b> o <b>agregación</b>.</dd>
+
+</dl></li>
+
+</ul>
+
+</section>
+<section id="slide-org9f2808e-split">
+
+<h3><b>C++</b> y las relaciones de herencia.</h3>
+<dl>
+<dt>Herencia protegida :</dt><dd>Lo público y protegido en la clase base
+es protegido en la clase derivada. Simula relaciones de
+<b>composición</b> o <b>agregación</b>.</dd>
+
+</dl>
+
+</section>
+<section id="slide-org9f2808e-split">
+
+<h3><b>C++</b> y las relaciones de herencia.</h3>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Visibilidad en Base</th>
+<th scope="col" class="org-left">Herencia public</th>
+<th scope="col" class="org-left">Herencia protected</th>
+<th scope="col" class="org-left">Herencia private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">public</td>
+<td class="org-left">public</td>
+<td class="org-left">protected</td>
+<td class="org-left">private</td>
+</tr>
+
+<tr>
+<td class="org-left">protected</td>
+<td class="org-left">protected</td>
+<td class="org-left">protected</td>
+<td class="org-left">private</td>
+</tr>
+
+<tr>
+<td class="org-left">private</td>
+<td class="org-left">no accesible</td>
+<td class="org-left">no accesible</td>
+<td class="org-left">no accesible</td>
+</tr>
+</tbody>
+</table>
+
+</section>
+</section>
+<section>
+<section id="slide-org0e2d1f1">
+<h3 id="org0e2d1f1">Herencia multiple de clases.</h3>
+<ul>
+<li>Sirve para representar que una nueva clase tiene cierto tipo de
+relación con otras clases de forma simultánea.</li>
+
+</ul>
+
+<ul>
+<li class="fragment appear"><p>
+En <b>C++</b> basta con separar por comas las clases base de las que
+heredamos:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Derived</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Base1</span>, <span style="font-weight: bold;">protected</span> <span style="font-weight: bold; text-decoration: underline;">Base2</span>, <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">Base3</span> {};
+</code></pre>
+</div></li>
+
+</ul>
+</section>
+<section id="slide-org0e2d1f1-split">
+
+<h3>Herencia multiple de clases.</h3>
+<ul>
+<li>Ya sabemos que la herencia múltiple de clases puede plantearnos
+el problema de la herencia repetida.</li>
+<li><p>
+Para resolverlo podemos (en ocasiones) transformar ciertas
+clases en <i>interfaces</i>, o emplear la <i>herencia virtual</i>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Storable</span> {...};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Transmitter</span>: <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">Storable</span> {...};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Receiver</span>: <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">Storable</span> {...};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Radio</span>: <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Transmitter</span>, <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Receiver</span> {...};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9933590">
+<h3 id="org9933590">Reutilización de métodos en clases derivadas.</h3>
+<ul>
+<li>Un método heredado en una clase derivada se puede:
+<ul>
+<li class="fragment appear"><p>
+quedar como se hereda:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> : {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span> () {...}
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">D</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">B</span> {...};
+<span style="font-weight: bold; text-decoration: underline;">D</span> <span style="font-weight: bold; font-style: italic;">d</span>;
+d.m();                          <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">B::m</span>
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org9933590-split">
+
+<h3>Reutilización de métodos en clases derivadas.</h3>
+<ul>
+<li><p>
+reescribir completamente:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> : {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span> () {...}
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">D</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">B</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span> () { ... };
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">C++11 admite override, p.e.</span>
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span> () { ... } <span style="font-weight: bold;">override</span>;
+...
+};
+<span style="font-weight: bold; text-decoration: underline;">D</span> <span style="font-weight: bold; font-style: italic;">d</span>;
+d.m();                          <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">D::m</span>
+</code></pre>
+</div></li>
+<li>Para más información sobre <a href="https://en.cppreference.com/w/cpp/language/override">override</a> consulta su documentación.</li>
+
+</ul>
+
+</section>
+<section id="slide-org9933590-split">
+
+<h3>Reutilización de métodos en clases derivadas.</h3>
+
+<ul>
+<li>Un método heredado en una clase derivada se puede:
+<ul>
+<li class="fragment appear"><p>
+<i>refinar</i>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> : {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span> () {...}
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">D</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">B</span> {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span> () {
+      ...;
+      <span style="font-weight: bold; text-decoration: underline;">B</span>::m ();                  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Heredado</span>
+      ...;
+   };
+...
+};
+<span style="font-weight: bold; text-decoration: underline;">D</span> <span style="font-weight: bold; font-style: italic;">d</span>;
+d.m();                          <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">D::m</span>
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org2a008cf">
+<h3 id="org2a008cf">Constructores y destructor en clases derivadas.</h3>
+<ul>
+<li>En cualquier constructor de una clase derivada podemos invocar el
+constructor que queramos de sus clases base.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Si no lo hacemos, entonces se invoca automáticamente el
+constructor por defecto. Recuerda que si no lo creamos y nuestra
+clase no tiene declarado de forma explícita ningún constructor
+entonces el compilador genera uno por nosotros.</li>
+<li class="fragment appear">Desde <code>C++11</code> en adelante podemos <a href="https://en.cppreference.com/w/cpp/language/default_constructor">pedir explícitamente que cree o
+se elimine</a> el constructor por defecto.</li>
+
+</ul>
+
+</section>
+<section id="slide-org2a008cf-split">
+
+<h3>Constructores y destructor en clases derivadas.</h3>
+<ul>
+<li><p>
+La forma de invocar un constructor de una clase base desde uno de
+una clase derivada es:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> : {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">B</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">b</span>) {...}
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">D</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">B</span> {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">D</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> <span style="font-weight: bold; font-style: italic;">c</span>) : B(n), _c(c) , ac(n) { ... }; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Fase de iniciacion.</span>
+<span style="font-weight: bold;">private</span>:
+   <span style="font-weight: bold; text-decoration: underline;">char</span> <span style="font-weight: bold; font-style: italic;">_c</span>;
+   <span style="font-weight: bold; text-decoration: underline;">AnotherClass</span> <span style="font-weight: bold; font-style: italic;">ac</span>;
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org2a008cf-split">
+
+<h3>Constructores y destructor en clases derivadas.</h3>
+
+<ul>
+<li><b>Importante:</b> A los constructores y destructor les afecta la zona
+de visibilidad de la clase bajo la cual se declaran!  Tenlo en
+cuenta.</li>
+
+</ul>
+<ul>
+<li class="fragment appear"><b>Importante:</b> El destructor de una clase base debería tener enlace
+dinámico: <code>virtual ~T()</code>. Piensa por qué puede ser apropiado
+hacerlo.</li>
+
+<li class="fragment appear">Los constructores de clases derivadas se invocan en el orden de
+la herencia, primero los de clases base luego los de objetos
+contenidos por valor y finalmente el de la clase derivada.</li>
+
+</ul>
+</section>
+<section id="slide-org2a008cf-split">
+
+<h3>Constructores y destructor en clases derivadas.</h3>
+<ul>
+<li>El orden de invocación de destructores es justo a la inversa.</li>
+
+<li>Un destructor no se suele invocar directamente, pero si es
+necesario se puede hacer.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">A</span> {
+  <span style="font-weight: bold;">public</span>:
+    ~<span style="font-weight: bold;">A</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Destructor de A\n"</span>; }
+};
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  <span style="font-weight: bold; text-decoration: underline;">A</span> <span style="font-weight: bold; font-style: italic;">a</span>;
+  a.~A();  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Invocaci&#243;n manual</span>
+  <span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">Al terminar el &#225;mbito, se vuelve a invocar.</span>
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org14a80a5">
+<h2 id="org14a80a5">Composición y agregación</h2>
+<ul>
+<li>Aunque son dos relaciones similares, en el fondo son diferentes.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orga78766d">
+<h3 id="orga78766d">Composición</h3>
+<ul>
+<li><p>
+El objeto contenedor es <i>dueño</i> del ámbito de vida del objeto contenido:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> {
+...
+   Robot () : mySensor (<span style="font-style: italic;">"temp-sensor"</span>) {}  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Fase de iniciaci&#243;n</span>
+<span style="font-weight: bold;">private</span>:
+   <span style="font-weight: bold; text-decoration: underline;">Sensor</span> <span style="font-weight: bold; font-style: italic;">mySensor</span>;             <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">'mySensor' es un Objeto completo</span>
+};
+
+<span style="font-weight: bold; text-decoration: underline;">Robot</span>* <span style="font-weight: bold; font-style: italic;">r2d2</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>;        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Creamos a r2d2</span>
+...
+<span style="font-weight: bold;">delete</span> r2d2;                    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">'mySensor' desaparece con r2d2</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb9cd947">
+<h3 id="orgb9cd947">Agregación</h3>
+<ul>
+<li><p>
+El objeto contenedor sólo tiene una referencia al objeto
+contenido, no controla su ámbito de vida:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">Robot</span> () { aSensor = <span style="font-weight: bold; text-decoration: underline;">nullptr</span>; }
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">setSensor</span> (<span style="font-weight: bold; text-decoration: underline;">Sensor</span>* <span style="font-weight: bold; font-style: italic;">s</span>) { aSensor = s; }
+...
+<span style="font-weight: bold;">private</span>:
+   <span style="font-weight: bold; text-decoration: underline;">Sensor</span>* <span style="font-weight: bold; font-style: italic;">aSensor</span>;             <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">'aSensor' es una referencia</span>
+};
+
+<span style="font-weight: bold; text-decoration: underline;">Robot</span>* <span style="font-weight: bold; font-style: italic;">c3po</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>;
+<span style="font-weight: bold; text-decoration: underline;">Sensor</span> <span style="font-weight: bold; font-style: italic;">lightSensor</span>;
+
+c3po.setSensor (&amp;lightSensor);
+...
+<span style="font-weight: bold;">delete</span> c3po;
+...
+{
+   <span style="font-weight: bold; text-decoration: underline;">Robot</span> <span style="font-weight: bold; font-style: italic;">anotherRobot</span>;
+   anotherRobot.setSensor (&amp;lightSensor);
+   ...
+}
+
+<span style="font-weight: bold;">if</span> (lightSensor.isLightOn()) ...
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf7af4ef">
+<h2 id="orgf7af4ef">Relaciones de uso.</h2>
+<ul>
+<li>Las relaciones de <i>uso</i> entre objetos son aquellas que no son ni
+de herencia ni de composición y en las que intervienen al menos
+dos objetos, uno los cuales solicita a otro u otros que lleven a
+cabo una o varias acciones.</li>
+
+<li>Estos otros objetos pueden estar accesibles como:
+<ul>
+<li class="fragment appear"><p>
+variables globales:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">TempSensor</span> <span style="font-weight: bold; font-style: italic;">aTempSensor</span>;
+...
+<span style="font-weight: bold;">class</span> Robot {
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">doSomeThing</span> () {
+      <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">temp</span> = aTempSensor.readTemp();
+   }
+}
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf7af4ef-split">
+
+<ul>
+<li>Estos otros objetos pueden estar accesibles como:
+<ul>
+<li class="fragment appear"><p>
+variables locales:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> {
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">doSomeThing</span> () {
+      <span style="font-weight: bold; text-decoration: underline;">TempSensor</span> <span style="font-weight: bold; font-style: italic;">aTempSensor</span>;
+      <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">temp</span> = aTempSensor.readTemp();
+   }
+}
+</code></pre>
+</div></li>
+<li class="fragment appear"><p>
+parámetros de un método:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> {
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">doSomeThing</span> (<span style="font-weight: bold; text-decoration: underline;">TempSensor</span> <span style="font-weight: bold; font-style: italic;">aTempSensor</span>) {
+      <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">temp</span> = aTempSensor.readTemp();
+   }
+}
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf25373a">
+<h2 id="orgf25373a">Polimorfismo</h2>
+<ul>
+<li>Es un término <i>nuevo</i> aplicado a la tarea de programar que aparece
+con la relación de herencia que modela la relación <b>es un</b>.</li>
+
+</ul>
+
+<ul>
+<li class="fragment appear">Lo podemos ver como el hecho de que tenemos un interfaz común para
+objetos de tipos diferentes, pero que mantienen entre ellos una
+relación de tipo <b>es un</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf25373a-split">
+
+<ul>
+<li>Nos evita el uso de sentencias <code>switch</code> en base a un campo tipo.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {                       |   <span style="font-weight: bold;">class</span> Circle : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {
+<span style="font-weight: bold;">public</span>:                             |   <span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold;">area</span> () = 0;       |      <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">float</span> area () {...}
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">draw</span> () = 0;        |      <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> draw () {}
+   ...                              |      ...
+}                                   |   }
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Rectangle</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {    |   <span style="font-weight: bold;">class</span> Triangle : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {
+<span style="font-weight: bold;">public</span>:                             |   <span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold;">area</span> () {...}      |      <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">float</span> area () {...}
+   <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">draw</span> () {}          |      <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> draw () {}
+   ...                              |      ...
+}                                   |   }
+
+...
+Shape* aos[MAXSHAPES];
+<span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; MAXSHAPES; i++) {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">st</span> = rand(1..4);          <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">numero aleatorio: 1=circulo,</span>
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">2=rectangulo, 3=triangulo</span>
+  <span style="font-weight: bold;">if</span> (st == 1) aos[i] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Circle</span>;
+  <span style="font-weight: bold;">if</span> (st == 2) aos[i] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Rectangle</span>;
+  <span style="font-weight: bold;">if</span> (st == 3) aos[i] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Triangle</span>;
+}
+...
+<span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; MAXSHAPES; i++) aos[i]-&gt;draw(); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">No switch was harmed here!</span>
+</code></pre>
+</div>
+<ul>
+<li>En este <a href="https://youtu.be/kxKKHKSMGIg">vídeo</a> puedes ver el ejemplo de las figuras geométricas de
+forma pŕactica.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org001cc45">
+<h2 id="org001cc45">Principio de sustitución de Liskov</h2>
+<ul>
+<li><p>
+Principio definido por Bárbara Liskov en 1994.
+</p>
+<blockquote  class="fragment (appear)">
+<p>
+Dados dos tipos <b>S</b> y <b>T</b>, si <b>S</b> es un subtipo de <b>T</b> (p.e. por <i>herencia</i>)
+entonces en un programa que haga uso de ambos, cualquier <i>objeto</i> de
+tipo <b>T</b> puede ser sustituído por uno de tipo <b>S</b> sin que se vean
+alteradas ningunas de las propiedades deseables del programa,
+tales como corrección, cometido, etc&#x2026;
+</p>
+</blockquote></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0c79a7b">
+<h2 id="org0c79a7b">Enlace dinámico.</h2>
+<ul>
+<li class="fragment appear">Algunos autores también lo llaman <b>enlace tardío</b> (<i>late
+binding</i>), y en algunas traducciones puedes encontrar referencias
+a él como <i>despacho dinámico</i>.</li>
+
+<li class="fragment appear">De temas anteriores ya sabemos lo que esto implica: La elección
+del código a ejecutar (<i>método</i>) en respuesta a un mensaje enviado
+a un objeto se hace en tiempo de ejecución y no de compilación.</li>
+
+</ul>
+</section>
+<section id="slide-org0c79a7b-split">
+
+<h2>Enlace dinámico.</h2>
+<ul>
+<li>Solemos encontrarnos con esta situación cuando tenemos clases
+relacionadas mediante herencia (<i>jerarquía de clases</i>) las cuales
+proporcionan implementaciones diferentes para el mismo mensaje.</li>
+
+<li>En <b>C++</b> los métodos con enlace dinámico son aquellos que van
+anotados con la palabra reservada <code>virtual</code>. De lo contrario el
+enlace por defecto de métodos en <b>C++</b> es estático (<i>tiempo de
+compilación</i>), esto es así por razones de eficiencia del código en
+tiempo de ejecución.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orge72c9e4">
+<h2 id="orge72c9e4">Enlace dinámico de métodos en C++</h2>
+<p>
+Para que en <b>C++</b> un método tenga enlace dinámico tenemos que tener
+en cuenta lo siguiente:
+</p>
+
+<ul>
+<li class="fragment appear">El método en la clase base debe ser declarado <code>virtual</code>, y
+además&#x2026;</li>
+
+<li class="fragment appear">Debe tener <i>exactamente la misma signatura</i> en la clase derivada,
+con una excepción, se permiten <i>tipos covariantes</i> en el tipo de
+resultado del método en clases derivadas.</li>
+
+</ul>
+</section>
+<section id="slide-orge72c9e4-split">
+
+<h2>Enlace dinámico de métodos en C++</h2>
+<ul>
+<li>Dados dos tipos <b>B</b> y <b>D</b>, se consideran tipos covariantes si <b>D</b>
+deriva directa o indirectamente de <b>B</b>, por tanto los métodos
+virtuales definidos en clases derivadas pueden tener un tipo de
+resultado distinto del método en la clase base si este tipo es
+derivado del tipo de dato que devuelve el método en la clase base.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8495fe4">
+<h3 id="org8495fe4">Un ejemplo de enlace dinámico y covarianza de tipos en C++</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">Shape</span> () { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Shape const.\n"</span>;}
+    <span style="font-weight: bold;">virtual</span> ~<span style="font-weight: bold;">Shape</span> () { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Shape Dest.\n"</span>;}
+
+    <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span>* <span style="font-weight: bold;">clone</span> () = 0; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">F&#237;jate en la clase derivada...</span>
+  };
+
+  <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Line</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">Line</span> () { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Line const.\n"</span>;}
+    ~<span style="font-weight: bold;">Line</span> () { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Line Dest.\n"</span>;}
+
+    <span style="font-weight: bold; text-decoration: underline;">Line</span>* <span style="font-weight: bold;">clone</span> () { <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Line</span>; } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Line deriva de Shape!</span>
+  };
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org9b5087b">
+<h3 id="org9b5087b">¿Es necesario el modificador virtual en las clases derivadas?</h3>
+<ul>
+<li class="fragment appear"><p>
+No, no lo es. Lo podemos ver en el ejemplo anterior.
+</p>
+
+<p>
+El método <code>Line::clone()</code> no lo tiene. El compilador ya lo sabe.
+</p></li>
+
+</ul>
+
+</section>
+<section id="slide-org9b5087b-split">
+
+<h3>¿Es necesario el modificador virtual en las clases derivadas?</h3>
+
+<ul>
+<li><p>
+<b>C++11</b> introduce el modificador <code>override</code> (opcional)
+y nos permite detectar errores de compilación 
+relacionados con el <i>enlace dinámico</i>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">A</span> {
+<span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">foo</span>();         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Enlace din&#225;mico</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">bar</span>();
+};
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">A</span> {
+<span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">foo</span>() <span style="font-weight: bold;">const</span> <span style="font-weight: bold;">override</span>; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Error: B::foo does not override A::foo</span>
+                               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">(signature mismatch)</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">foo</span>() <span style="font-weight: bold;">override</span>;       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">OK: B::foo overrides A::foo</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">bar</span>() <span style="font-weight: bold;">override</span>;       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Error: A::bar is not virtual</span>
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org89ea33c">
+<h2 id="org89ea33c">C++, enlace dinámico y destructores.</h2>
+<ul>
+<li class="fragment appear">El destructor de una clase es un método más&#x2026;</li>
+
+<li class="fragment appear">Que puede estar <i>especializado</i> en clases derivadas.</li>
+
+<li class="fragment appear">Es por eso que en la <i>clase base</i> debería estar declarado como
+<code>virtual</code>&#x2026;</li>
+
+<li class="fragment appear">De lo contrario si destruimos un objeto de una clase derivada
+mediante un puntero a la clase base, sólo se invocará el
+destructor de la clase base y no el de la derivada.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orge5462f6">
+<h2 id="orge5462f6">Enlace dinámico de métodos y otros LOO</h2>
+<ul>
+<li class="fragment appear">El caso de <b>C++</b> es uno de los pocos LOO que han optado por el
+<i>enlace estático de métodos por defecto</i>.</li>
+
+<li class="fragment appear">En general, los LOO eligen <i>por defecto el enlace dinámico</i> de
+métodos (<i>Java</i>, <i>C#</i>, <i>D</i>, <i>SmallTalk</i>, etc&#x2026;).</li>
+
+</ul>
+</section>
+<section id="slide-orge5462f6-split">
+
+<h2>Enlace dinámico de métodos y otros LOO</h2>
+<ul>
+<li><p>
+En estos otros LOO tenemos que indicar explícitamente que queremos
+que un método tenga enlace estático para no incurrir en la
+penalización que ya conocemos respecto a la doble
+indirección.
+</p>
+
+<p>
+Casi todos ellos suelen emplear el modificador <b>final</b>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-java"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Java</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span> {
+  <span style="font-weight: bold;">public</span> Shape () {...}
+  <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">final</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">store</span> () {...}     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">enlace est&#225;tico</span>
+}
+</code></pre>
+</div></li>
+
+<li>Esto, además, implica que <code>Shape.store()</code> no puede ser redefinido
+en clases derivadas.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgbe54726">
+<h3 id="orgbe54726">C++11 tiene modificador <i>final</i> para métodos y clases&#x2026;</h3>
+<ul>
+<li class="fragment appear">Si, <a href="https://en.cppreference.com/w/cpp/language/final">lo tiene</a>.</li>
+<li class="fragment appear"><p>
+Símplemente dice que una función virtual no puede ser redefinida
+en una clase derivada o que no podemos derivar de una clase,
+mira:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">A</span> {
+    <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">foo</span>() <span style="font-weight: bold;">final</span>;   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">A::foo is final</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">bar</span>() <span style="font-weight: bold;">final</span>;           <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Error: non-virtual</span>
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">function cannot be final</span>
+};
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> <span style="font-weight: bold;">final</span> : <span style="font-weight: bold; text-decoration: underline;">A</span> {            <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">B is final</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">foo</span>();                 <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Error: foo cannot be overridden</span>
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">as it's final in A</span>
+};
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">C</span> : <span style="font-weight: bold; text-decoration: underline;">B</span> {                  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Error: B is final</span>
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org050a0e0">
+<h2 id="org050a0e0">UML</h2>
+<ul>
+<li>En el paradigma de <i>POO</i> existen formas de representar la estructura
+de clases y relaciones entre objetos de un diseño de manera
+independiente de la sintáxis concreta de un lenguaje de
+programación.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Se conocen como <b>lenguajes de modelado</b>. El más empleado hoy en día
+es <b>UML</b>: Unified Modeling Language.</li>
+<li class="fragment appear">Estos lenguajes nos permiten representar nuestro diseño orientado a
+objetos de manera gráfica, fácil de entender y que permite cierto
+tipo de automatizaciones.</li>
+
+</ul>
+
+</section>
+<section id="slide-org050a0e0-split">
+
+<ul>
+<li>Un ejemplo muy sencillo sobre como representar clases y las
+relaciones de herencia, composición y agregación entre ellas:</li>
+
+</ul>
+<div class="org-center">
+
+<div id="orgaadb0e3" class="figure">
+<p><img src="./images/class_diagram.png" alt="class_diagram.png" />
+</p>
+<p><span class="figure-number">Figura 1: </span>Herencia, composición y agregación.</p>
+</div>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgf6e141a">
+<h2 id="orgf6e141a">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

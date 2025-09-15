@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 11: POO y lenguajes no OO.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 11: POO y lenguajes no OO.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-04-30 mié 01:04</p>
+</section>
+
+<section>
+<section id="slide-org03848b6">
+<h2 id="org03848b6">¿Es necesario un LOO para hacer POO?</h2>
+<ul>
+<li class="fragment appear">La utilización del paradigma de <i>programación orientada a objetos</i>
+requiere cierta disciplina por parte del programador y elementos
+sintácticos por parte del lenguaje empleado.</li>
+
+<li class="fragment appear">Con los lenguajes no orientados a objetos (<i>LNOO</i>) esto último <i>no
+lo tenemos disponible</i> pero aún así, sí que es posible hacer POO
+con un LNOO.</li>
+
+</ul>
+</section>
+<section id="slide-org03848b6-split">
+<ul>
+<li>No vamos a disponer de los elementos que convierten a un lenguaje
+de programación en un LOO, pero sí que vamos a poder <i>simularlos</i>
+de manera bastante efectiva.</li>
+
+<li>En este tema explicaremos cómo hacerlo en el lenguaje <b>C</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9116762">
+<h3 id="org9116762">¿Qué podemos simular?</h3>
+<ul>
+<li class="fragment appear">Representación de clases.</li>
+<li class="fragment appear">Paso de mensajes.</li>
+<li class="fragment appear">Constructores y destructor de una clase.</li>
+<li class="fragment appear">Representación de la herencia simple.</li>
+<li class="fragment appear">Resolución de métodos en tiempo de ejecución.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org71ed8b6">
+<h3 id="org71ed8b6">¿Cómo es posible hacerlo?</h3>
+<ul>
+<li class="fragment appear">Dado que trabajaremos en <b>C</b>, vamos a aprovechar la gestión de
+punteros y la reserva de memoria dinámica de que dispone.</li>
+
+<li class="fragment appear">Esto permitirá que la simulación de las características antes
+comentadas se lleve a cabo con <i>poca</i> o <i>nula</i> pérdida de
+eficiencia.</li>
+
+<li class="fragment appear">De hecho veremos <i>ejemplos reales</i> que emplean esta técnica.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5540723">
+<h2 id="org5540723">Representación de clases</h2>
+<ul>
+<li class="fragment appear">Empleamos aquello que más se le parece: <code>struct</code></li>
+
+<li class="fragment appear">De manera que cada clase del diseño se <i>convierte</i> en un <code>struct</code>
+del lenguaje.</li>
+
+<li class="fragment appear">Cada atributo (<i>datos</i>) definido en la clase es un campo del
+<code>struct</code> creado.</li>
+
+</ul>
+</section>
+<section id="slide-org5540723-split">
+<ul>
+<li>Los objetos serán instancias de estos <code>struct</code> y podrán estar
+ubicados en el almacenamiento global, en la pila o en memoria
+dinámica (preferiblemente en este último).</li>
+
+<li>Por lo tanto la referencia a un objeto se puede representar
+mediante un puntero a su <code>struct</code>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4ddaa3c">
+<h3 id="org4ddaa3c">Ejemplo de una clase en <b>C</b></h3>
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; text-decoration: underline;">Length</span>;
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span> {
+  <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">xmin</span>;
+  <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">ymin</span>;
+  <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">xmax</span>;
+  <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">ymax</span>;
+}
+...
+<span style="font-weight: bold;">struct</span> Window* w;
+...
+Lenght x1 = w-&gt;xmin;            <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Mejor emplear setters/getters</span><span style="font-weight: bold; font-style: italic;"> */</span>
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org00085e7">
+<h2 id="org00085e7">Paso de mensajes</h2>
+<ul>
+<li class="fragment appear">Debemos seguir un convenio para nombrar a las funciones de manera
+que las identifiquemos con métodos de una clase:
+<code>NombreClase_nombreMetodo</code>.</li>
+
+<li class="fragment appear">En el caso de constructor y destructor emplearemos:
+<code>NombreClase_create</code> y en el del destructor <code>NombreClase_destroy</code>.</li>
+
+</ul>
+</section>
+<section id="slide-org00085e7-split">
+<ul>
+<li>Cada método de instancia recibirá un primer parámetro, lo
+llamaremos <i>self</i>, que representará al objeto receptor del
+mensaje. Hemos de hacerlo de manera explícita.</li>
+
+<li>El tipo de este parámetro será <i>puntero a la clase receptora del
+mensaje</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgae5dd36">
+<h3 id="orgae5dd36">Un ejemplo de la signatura de un método</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; font-style: italic;">/*************************/</span>
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Clase: Window</span><span style="font-weight: bold; font-style: italic;">         */</span>
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Metodo: addToSelected</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold; font-style: italic;">/*************************/</span>
+<span style="font-weight: bold;">Window_addToSelected</span> (<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>* <span style="font-weight: bold; font-style: italic;">self</span>, <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span>* <span style="font-weight: bold; font-style: italic;">s</span>);
+</code></pre>
+</div>
+
+<ul>
+<li class="fragment appear">El paso de parámetros lo hacemos por puntero ya que es más
+eficiente.</li>
+
+<li class="fragment appear">Como en cualquier función, tenemos accesibles sus parámetros para
+realizar cualquier operación que queramos con ellos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3f08f97">
+<h2 id="org3f08f97">Constructores y destructor de una clase</h2>
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Objetos en memoria dinamica</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>* <span style="font-weight: bold;">Window_create</span>(<span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">y</span>, <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">w</span>, <span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">h</span>) {
+  <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>* <span style="font-weight: bold; font-style: italic;">ventana</span>;
+  ventana = (<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>*) malloc(<span style="font-weight: bold;">sizeof</span>(<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>));
+  ventana -&gt; xmin = x;
+  ventana -&gt; ymin = y;
+  ventana -&gt; xmax = x + w;
+  ventana -&gt; ymax = y + h;
+  <span style="font-weight: bold;">return</span> ventana;
+}
+</code></pre>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Window_destroy</span> (<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>* <span style="font-weight: bold; font-style: italic;">self</span>) {
+   <span style="font-weight: bold;">if</span> (self != <span style="font-weight: bold; text-decoration: underline;">NULL</span>) free (self);
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org32aaca3">
+<h2 id="org32aaca3">Representación de la herencia simple.</h2>
+<div class="outline-text-2" id="text-org32aaca3">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org806a88e">
+<h3 id="org806a88e">Preliminares</h3>
+<ul>
+<li class="fragment appear"><p>
+La simulación de la herencia simple se basa en una idea muy sencilla:
+</p>
+<ol>
+<li class="fragment appear"><p>
+Colocamos al principio de la clase derivada los atributos
+heredados de la clase base y <b>en el mismo orden</b> en el que
+están en la clase base.
+</p>
+
+<blockquote  class="fragment (appear)">
+<p>
+Esto se puede simplificar si los agrupamos en un <i>struct</i>.
+</p>
+</blockquote></li>
+
+</ol>
+</section>
+<section id="slide-org6840031-split">
+<ol>
+<li>Añadimos a continuación la parte específica de la clase
+derivada, es decir, los atributos nuevos que añade la clase
+derivada.</li>
+
+<li>Veamos un ejemplo:</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf774098">
+<h3 id="orgf774098">Simulando la herencia simple</h3>
+<div class="org-center">
+
+<div id="orgefbf851" class="figure">
+<p><img src="./images/herencia6.png" alt="herencia6.png" />
+</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org7138adf">
+<h3 id="org7138adf">Simulando la herencia simple</h3>
+<div class="org-center">
+
+<div id="org412e687" class="figure">
+<p><img src="./images/herencia9.png" alt="herencia9.png" />
+</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgded364a">
+<h3 id="orgded364a">Descriptores de clase</h3>
+<ul>
+<li class="fragment appear">Para que esta simulación sea completa y podamos añadir
+posteriormente los <i>métodos</i> a la clase, necesitamos añadir un
+campo más a cada una de las <i>struct</i> anteriores. <b>Lo añadiremos
+al principio</b>.</li>
+
+<li class="fragment appear">Se trata de un puntero a su <b>descriptor de clase</b>. Se
+llamará <b>dc</b>.</li>
+
+</ul>
+</section>
+<section id="slide-orgded364a-split">
+<ul>
+<li>Los <i>descriptores de clase</i> son otro tipo de <i>struct</i> que
+incluyen a los métodos y variables de clase.</li>
+
+<li>Por tanto el gráfico anterior quedaría así:</li>
+
+</ul>
+
+</section>
+<section id="slide-orgded364a-split">
+
+<div class="org-center">
+
+<div id="org2c4f3f8" class="figure">
+<p><img src="./images/herencia11.png" alt="herencia11.png" />
+</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org75f036b">
+<h3 id="org75f036b">Descriptores de clase</h3>
+<ul>
+<li class="fragment appear">Utilizando esta técnica podemos pasar un puntero a un objeto de
+clase Rectangulo o Circulo a una función que espere un puntero a
+un objeto de tipo Figura.</li>
+
+<li class="fragment appear">Así conseguimos que entre dos clases relacionadas por herencia,
+la representación en memoria de sus primeros <i>N</i>-bytes sea
+igual. Esta es la base de la representación de la relación <b>Es
+Un</b> (<i>Is A</i>) que hay entre una clase derivada y su base.</li>
+
+</ul>
+</section>
+<section id="slide-org75f036b-split">
+<ul>
+<li><p>
+En el siguiente ejemplo un <i>puntero a un Rectangulo</i> se
+interpreta como un <i>puntero a una Figura</i>:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Rectangle</span>* <span style="font-weight: bold; font-style: italic;">r</span>;
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>*    <span style="font-weight: bold; font-style: italic;">w</span>;
+
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">prototipo de: Window_addToSelected</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Window_addToSelected</span> (<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Window</span>* <span style="font-weight: bold; font-style: italic;">self</span>, <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span>* <span style="font-weight: bold; font-style: italic;">s</span>);
+...
+Window_addToSelected (w, r);
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org2caabfe">
+<h3 id="org2caabfe">Resolución dinámica de métodos</h3>
+<ul>
+<li class="fragment appear">Se trata de elegir en tiempo de ejecución qué método invocar en
+respuesta a un mismo mensaje enviado a distintos objetos.</li>
+
+<li class="fragment appear">En lenguaje <b>C</b> vamos a emplear punteros a funciones para
+realizarlo.</li>
+
+<li class="fragment appear">Para implementarlo de forma sencilla vamos a hacer uso del
+<i>descriptor de clase</i> comentado anteriormente.</li>
+
+</ul>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<ul>
+<li>El <i>descriptor de clase</i> es una estructura que contiene:
+<ul>
+<li class="fragment appear">Una cadena con el nombre de la clase que representa.</li>
+
+<li class="fragment appear">Un puntero a cada método de la clase, incluídos los heredados.</li>
+
+<li class="fragment appear">Las <i>variables de clase</i> que pueda tener la clase a la que
+representa.</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org2caabfe-split">
+<ul>
+<li>Los <i>descriptores de clase</i> sólo son necesarios para aquellas
+clases que vayan a tener instancias y no para clases abstractas
+tales como `Figura'.</li>
+
+<li>El nombre de la estructura que representa al <i>descriptor de
+clase</i> es el mismo que el de la clase añadiéndole el sufijo
+<b>Class</b>: <i>ShapeClass</i>, <i>CircleClass</i>, etc&#x2026;</li>
+
+<li>Veamos un ejemplo de descriptores de clase:</li>
+
+</ul>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; font-style: italic;">/**********************************/</span>
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Descriptor de clase para Shape</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold; font-style: italic;">/**********************************/</span>
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">ShapeClass</span> {
+  <span style="font-weight: bold; text-decoration: underline;">char</span>*   <span style="font-weight: bold; font-style: italic;">classname</span>;
+  <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">move</span>)    ();
+  <span style="font-weight: bold; text-decoration: underline;">Boolean</span> (*<span style="font-weight: bold;">selected</span>)();
+  <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">ungroup</span>) ();
+  <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">draw</span>)    ();
+};
+
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Descriptor de clase para Circle</span><span style="font-weight: bold; font-style: italic;"> */</span> <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Descriptor de clase para Rectangle</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">CircleClass</span> {                  <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">RectangleClass</span> {
+  <span style="font-weight: bold; text-decoration: underline;">char</span>*   <span style="font-weight: bold; font-style: italic;">classname</span>;                    <span style="font-weight: bold; text-decoration: underline;">char</span>*   <span style="font-weight: bold; font-style: italic;">classname</span>;
+  <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">move</span>)     ();               <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">move</span>)    ();
+  <span style="font-weight: bold; text-decoration: underline;">Boolean</span> (*<span style="font-weight: bold;">selected</span>) ();               <span style="font-weight: bold; text-decoration: underline;">Boolean</span> (*<span style="font-weight: bold;">selected</span>)();
+  <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">ungroup</span>)  ();               <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">ungroup</span>) ();
+  <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">draw</span>)     ();               <span style="font-weight: bold; text-decoration: underline;">void</span>    (*<span style="font-weight: bold;">draw</span>)    ();
+};                                    };
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<ul>
+<li>La estructura del descriptor de clase define los nombres de las
+operaciones <i>visibles</i> de la clase y, si existen, contendrá las
+<b>variables de clase</b> de la <i>clase</i> a la que representa.</li>
+
+</ul>
+
+<ul>
+<li class="fragment appear">Todavía tenemos que definir e iniciar un <i>objeto descriptor de
+clase</i> para cada clase.</li>
+
+</ul>
+</section>
+<section id="slide-org2caabfe-split">
+<ul>
+<li>Cada uno de estos <i>objetos descriptores de clase</i> es una única
+variable global, la cual será la única instancia de la clase
+<i>descriptor de clase</i> correspondiente.</li>
+
+<li>Cada <i>campo</i> del objeto descriptor de clase debe ser iniciado con
+el nombre de la función de <b>C</b> (su dirección) definida o heredada
+por la clase, por ejemplo:</li>
+
+</ul>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">RectangleClass</span> <span style="font-weight: bold; font-style: italic;">RectangleClass</span> = {
+   <span style="font-style: italic;">"Rectangle"</span>,
+   Shape_move,         <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">void    (*move)    ()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+   Rectangle_selected, <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Boolean (*selected)()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+   Shape_ungroup,      <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">void    (*ungroup) ()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+   Rectangle_draw      <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">void    (*draw)    ()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+};
+
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">CircleClass</span> <span style="font-weight: bold; font-style: italic;">CircleClass</span> = {
+   <span style="font-style: italic;">"Circle"</span>,
+   Shape_move,      <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">void    (*move)    ()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+   Circle_selected, <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Boolean (*selected)()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+   Shape_ungroup,   <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">void    (*ungroup) ()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+   Circle_draw      <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">void    (*draw)    ()</span><span style="font-weight: bold; font-style: italic;"> */</span>
+};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<ul>
+<li>Cuando se crea un objeto, guardamos en su primer campo <b>dc</b>, que
+es de tipo <i>puntero a su descriptor de clase</i>, la dirección del
+objeto <i>global</i> descriptor de la clase.</li>
+
+<li class="fragment appear">De este modo, y en tiempo de ejecución, podemos obtener:
+
+<ul>
+<li class="fragment appear">El nombre de esta clase.</li>
+
+<li class="fragment appear">Sus variables de clase.</li>
+
+<li class="fragment appear">Los métodos asociados a esta clase.</li>
+
+</ul></li>
+
+<li class="fragment appear">Por ejemplo, la creación de un objeto de clase <i>Circle</i> se haría
+así:</li>
+
+</ul>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Circle</span>*
+<span style="font-weight: bold;">Circle_create</span>(<span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">x0</span>,<span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">y0</span>,<span style="font-weight: bold; text-decoration: underline;">Length</span> <span style="font-weight: bold; font-style: italic;">r</span>) {
+    <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Circle</span>* <span style="font-weight: bold; font-style: italic;">nc</span>;
+
+    nc = (<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Circle</span>*) malloc(<span style="font-weight: bold;">sizeof</span>(<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Circle</span>));
+    nc -&gt; dc     = &amp;CircleClass; <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">descriptor de clase</span><span style="font-weight: bold; font-style: italic;"> */</span>
+    nc -&gt; x      = x0;
+    nc -&gt; y      = y0;
+    nc -&gt; radius = r;
+    <span style="font-weight: bold;">return</span> nc;
+}
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<ul>
+<li>¿Y si crearámos varios círculos?</li>
+
+<li class="fragment appear"><p>
+Visualmente podríamos representarlo así:
+</p>
+<div class="org-center">
+
+<div id="org896875e" class="figure">
+<p><img src="./images/dclase4.png" alt="dclase4.png" />
+</p>
+</div>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org2caabfe-split">
+
+<ul>
+<li>Como vamos a ver, la resolución en tiempo de ejecución de un
+método para un objeto se realizará a partir del objeto
+<i>descriptor de clase</i> al que apunta su campo <b>dc</b>.</li>
+
+<li class="fragment appear">Para ello accedemos al campo del <i>descriptor de clase</i> al que se
+refiere la operación que queremos.</li>
+
+<li class="fragment appear"><p>
+Si crearamos un <i>círculo</i> y le enviáramos mensajes:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Primero: Ya se han creado los descriptores de clase</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Shape</span>* <span style="font-weight: bold; font-style: italic;">f</span>;
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Circle</span>* <span style="font-weight: bold; font-style: italic;">c1</span> = Circle_create(...);
+f = c1;
+
+f-&gt;dc-&gt;move(f, ...); <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Invoca Figura::mover</span><span style="font-weight: bold; font-style: italic;"> */</span>
+f-&gt;dc-&gt;draw(f, ...); <span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Invoca Circulo::dibujar</span><span style="font-weight: bold; font-style: italic;"> */</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org6de8e87">
+<h2 id="org6de8e87">Casos de uso</h2>
+<ul>
+<li>Estas técnicas se emplean (y se amplían) en proyectos software reales.
+<ol>
+<li class="fragment appear">Uno de esos proyectos es la biblioteca de creación de
+interfaces de usuario <a href="http://www.gtk.org/">Gtk+</a>. Con ella está construída la
+interfaz de usuario del <i>IDE</i> <a href="https://www.geany.org/">geany</a> o de <a href="https://wiki.gnome.org/Apps/Nemiver">nemiver</a> (ambos
+instalados en la máquina virtual empleada en prácticas).</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-org6de8e87-split">
+<ul>
+<li>También es la base del código <b>C</b> generado por el compilador de
+<b>Vala</b> , se puede ver con este sencillo ejemplo:</li>
+
+</ul>
+
+</section>
+<section id="slide-org6de8e87-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-java"   ><code trim> <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Compilar con valac -C valaoop.vala</span>
+
+ <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Clase base</span>
+ <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Droid</span> {
+        <span style="font-weight: bold;">public</span> Droid (string n) {
+          name = n;
+        }
+
+        <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">name</span> {get; set;}
+        <span style="font-weight: bold;">public</span> virtual <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">move</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">y</span>) {
+                <span style="font-weight: bold;">this</span>.x = x;
+                <span style="font-weight: bold;">this</span>.y = y;
+        }
+
+        <span style="font-weight: bold;">protected</span> <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">x</span>;
+        <span style="font-weight: bold;">protected</span> <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">y</span>;
+}
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Clase derivada</span>
+<span style="font-weight: bold;">public</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">AquaDroid</span> : Droid {
+        <span style="font-weight: bold;">public</span> AquaDroid(<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">md</span> = 100) {
+                base (n);
+                depth = md;
+        }
+
+        <span style="font-weight: bold;">public</span> override <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">move</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">y</span>) {
+                <span style="font-weight: bold;">this</span>.x = x/2;
+                <span style="font-weight: bold;">this</span>.y = y/2;
+        }
+
+        <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">depth</span>;
+}
+</code></pre>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org2a2c820">
+<h2 id="org2a2c820">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection } from 'astro:content';
+import {Content, getHeadings} from '../content/sobreExamen/intro.md';
+
+const headings = getHeadings();
+
+// Get all markdown files from the sobreExamen collection
+const practices = await getCollection('sobreExamen');
+
+// Create the sidebar items
+const sidebar = practices.map(practice => ({
+    label: practice.data.title,  // Uses the title from frontmatter
+    link: `/sobreExamen/${practice.slug}` // Creates the link using the file slug
+}));
+
+---
+
+<Layout>
+    <StarlightPage 
+        frontmatter={{
+            title: 'Sobre el examen',
+        }} 
+        headings={headings}
+        sidebar={sidebar}
+    >
+        <Content />
+    </StarlightPage>
+</Layout>

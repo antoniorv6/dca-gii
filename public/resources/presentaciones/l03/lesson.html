@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 3: Tipos Abstractos de Datos</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 3: Tipos Abstractos de Datos</h1><p class="subtitle">Árboles, Grafos.</p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-02-25 mar 23:00</p>
+</section>
+
+
+<section>
+<section id="slide-org0c9b7a6">
+<h2 id="org0c9b7a6">Árboles</h2>
+<ul>
+<li class="fragment appear">Es un TAD que representa una colección de elementos llamados <b>nodos</b>.</li>
+<li class="fragment appear">Uno de estos <i>nodos</i> es especial, nos referimos a él como la
+<b>raíz</b> del árbol.</li>
+<li class="fragment appear">Entre los <i>nodos</i> hay una relación de <i>paternidad</i> la cual impone
+una estructura jerárquica sobre ellos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org818d5c5">
+<h3 id="org818d5c5">Definición</h3>
+<ul>
+<li>El TAD Árbol se suele definir de manera recursiva:
+<ol>
+<li class="fragment appear">Un sólo nodo es por sí mismo un árbol. Este nodo es la raíz del
+árbol.</li>
+<li class="fragment appear">Dado un nodo \(n\) y una serie de árboles \(A_1, A_2, ... , A_k\)
+con raíces \(n_1, n_2, ..., n_k\), podemos crear un nuevo árbol
+haciendo que \(n\) sea el padre de los nodos \(n_1, n_2, ...,
+        n_k\). Decimos entonces que \(n\) es la raíz del nuevo árbol,
+\(A_1, ..., A_k\) son <i>subárboles</i> de la raíz y a los nodos \(n_1,
+        n_2, ..., n_k\) son <i>hijos</i> del nodo \(n\).</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-org818d5c5-split">
+
+<h3>Definición</h3>
+
+<ul>
+<li>Un <i>árbol vacío</i> se representa por la letra griega \(\Lambda\).</li>
+
+<li class="fragment appear">Los TADs <code>Árbol</code> se emplean p.e. en lugar de <code>Listas</code> cuando la
+cantidad de elementos almacenada es muy grande y el tiempo de
+acceso lineal es <i>costoso</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3973339">
+<h3 id="org3973339">Aspecto</h3>
+<p>
+Se suelen representar de este modo
+</p>
+
+<div class="org-center">
+
+<div id="org78e725e" class="figure">
+<p><img src="./images/tree1.png" alt="tree1.png" class="fragment appear" height="&quot;50%&quot;," width="&quot;50%&quot;," align="&quot;center&quot;" />
+</p>
+<p><span class="figure-number">Figura 1: </span>Ejemplo general.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-org3973339-split">
+
+<h3>Aspecto</h3>
+
+<div class="org-center">
+
+<div id="orga56ff21" class="figure">
+<p><img src="./images/tree2.png" alt="tree2.png" class="fragment appear" height="&quot;50%&quot;," width="&quot;50%&quot;," align="&quot;center&quot;" />
+</p>
+<p><span class="figure-number">Figura 2: </span>Un árbol concreto.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd2ab94e">
+<h3 id="orgd2ab94e">Conceptos</h3>
+<ul>
+<li>Si <code>r</code> es la raíz de un <code>Árbol</code> se dice que cada <i>subárbol</i> es un
+hijo de <code>r</code> y que <code>r</code> es el padre de la <i>raíz</i> de cada uno de los
+<i>subárboles</i>.</li>
+<li class="fragment appear">En un <code>Árbol</code> con \(n\) nodos hay \(n-1\) aristas.</li>
+<li class="fragment appear">En principio cada <i>nodo</i> puede tener un número arbitrario de hijos,
+incluso \(0\).</li>
+<li class="fragment appear">Los <i>nodos</i> sin hijos se llaman <b>hojas</b>.</li>
+<li class="fragment appear">Los <i>nodos</i> con el mismo <i>padre</i> son <b>hermanos</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd2ab94e-split">
+
+<h3>Conceptos</h3>
+
+<ul>
+<li>Un camino de un nodo \(n_1\) a otro \(n_k\) se define como la
+secuencia de nodos \(n_1, n_2, ..., n_k\) tal que \(n_i\) es el padre
+de \(n_{i+1}\) , \(\forall i : 1 \le i < k\). Su longitud es el
+número de aristas que lo forman, \(k-1\).</li>
+<li class="fragment appear">Existe un camino de longitud cero entre cada nodo y él mismo.</li>
+<li class="fragment appear">En un <code>Árbol</code> hay sólo un camino de la <i>raíz</i> a cada nodo.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd2ab94e-split">
+
+<h3>Conceptos</h3>
+<ul>
+<li>Para un nodo \(n_i\) su <b>profundidad</b> es la longitud del camino
+único desde la <i>raíz</i> a ese nodo. Luego la profundidad de la
+<i>raíz</i> es \(0\).</li>
+
+</ul>
+<ul>
+<li>La <b>altura</b> de \(n_i\) es el camino más largo desde \(n_i\) a una
+hoja. Luego la altura de cualquier hoja es \(0\), y la altura de un
+<code>Árbol</code> es la altura de su <i>raíz</i>.</li>
+<li class="fragment appear">La profundidad de un <code>Árbol</code> es la profundidad de la hoja más
+profunda, es decir, su altura.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd2ab94e-split">
+
+<h3>Conceptos</h3>
+
+<ul>
+<li>Si \(n_1 \ne n_2\) se dice que \(n_1\) es un <i>antecesor
+propio</i> de \(n_2\), y que \(n_2\) es un <i>descendiente propio</i> de
+\(n_1\).</li>
+
+<li>Los <code>Árboles</code> cuyos nodos pueden tener <code>n</code> hijos se denominan
+<i>n-arios</i>. El caso particular en el cual ningún nodo tiene más de
+dos hijos se denomina <code>Árbol binario</code>.</li>
+
+<li>Si hay un camino de \(n_1\) a \(n_2\) se dice que \(n_2\) es
+<b>descendiente</b> de \(n_1\) y a su vez \(n_1\) es el <b>antecesor</b> de
+\(n_2\).</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgcbbeb98">
+<h3 id="orgcbbeb98">Orden de los nodos</h3>
+<ul>
+<li class="fragment appear">Los hijos de un nodo pueden estar ordenados o no.</li>
+<li class="fragment appear">Caso de estarlo, se suele hacer de izquierda a derecha.</li>
+<li class="fragment appear">Si no se ordenan por ningún criterio el <code>Árbol</code> se llama <i>no
+ordenado</i>.</li>
+
+</ul>
+</section>
+<section id="slide-orgcbbeb98-split">
+
+<h3>Orden de los nodos</h3>
+<ul>
+<li>La ordenación es útil en el caso de dos nodos cualesquiera entre
+los cuales no existe relación antecesor/descendiente. Entonces si
+<code>a</code> y <code>b</code> son <i>hermanos</i> y <code>a</code> está a la izquierda de <code>b</code>,
+entonces todos los descencientes de <code>a</code> están a la izquierda de
+<code>b</code> y de todos sus descendientes.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd07311c">
+<h3 id="orgd07311c">Recorrido ordenado de un Árbol</h3>
+<ul>
+<li class="fragment appear">Tenemos varias formas de recorrer ordenadamente un <code>Árbol</code>.</li>
+<li class="fragment appear"><b>Pre-orden</b> -orden previo- , <b>In-orden</b> -orden simétrico- y
+<b>Post-orden</b> -orden posterior-.</li>
+
+</ul>
+</section>
+<section id="slide-orgd07311c-split">
+
+<h3>Recorrido ordenado de un Árbol</h3>
+<ul>
+<li>Estos ordenamientos se definen recursivamente así:
+<ol>
+<li class="fragment appear">Si un <code>Árbol</code> <b><i>A</i></b> es nulo, entonces la lista vacía es el
+listado de los nodos de <b><i>A</i></b> en los órdenes previo, simétrico
+y posterior.</li>
+<li class="fragment appear">Si <b><i>A</i></b> contiene un solo nodo, este único nodo es el listado
+de los nodos de <b><i>A</i></b> en los órdenes previo, simétrico y
+posterior.</li>
+<li class="fragment appear">Pero si ninguno de los anteriores es el caso&#x2026;</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-orgd07311c-split">
+
+<h3>Recorrido ordenado de un Árbol</h3>
+
+<p align="left">
+Sea <b><i>A</i></b> un <code>Árbol</code> con raíz \(n\) y subárboles \(A_1, A_2,...,A_k\)
+representado de este modo:
+</p>
+
+<div class="org-center">
+
+<div id="orgf6ef27c" class="figure">
+<p><img src="./images/tree3.png" alt="tree3.png" class="fragment (appear)" />
+</p>
+</div>
+</div>
+
+<p class="fragment (appear)" align="left">
+Entonces&#x2026;
+</p>
+
+</section>
+<section id="slide-orgd07311c-split">
+
+<h3>Recorrido ordenado de un Árbol</h3>
+
+<ol>
+<li>El <b>listado en orden previo</b> de los nodos de <b><i>A</i></b> está formado
+por la <i>raíz</i> de <b><i>A</i></b>, seguida de los nodos de \(A_1\) en orden
+previo, luego por los nodos de \(A_2\) en orden previo y así
+sucesivamente hasta los nodos de \(A_k\) en orden previo.</li>
+
+<li class="fragment appear">El <b>listado en orden simétrico</b> de los nodos de <b><i>A</i></b> está
+formado los nodos de \(A_1\) en orden simétrico, seguidos de \(n\),
+y detrás los nodos de \(A_2, ..., A_k\) con cada grupo de nodos en
+orden simétrico.</li>
+
+</ol>
+
+</section>
+<section id="slide-orgd07311c-split">
+
+<h3>Recorrido ordenado de un Árbol</h3>
+
+<ol>
+<li>El <b>listado en orden posterior</b> de los nodos de <b><i>A</i></b> tiene los
+nodos de \(A_1\) en orden posterior, luego los de \(A_2\) en orden
+posterior y así sucesivamente hasta los de \(A_k\) en orden
+posterior y por último la raíz \(n\).</li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-org3c2a214">
+<h2 id="org3c2a214">Árboles. Operaciones básicas</h2>
+<ul>
+<li class="fragment appear"><b>Parent</b> (n) : Devuelve el padre del nodo <code>n</code>. Si <code>n</code> es la raíz
+(no tiene padre) se devuelve \(\Lambda\). En este caso podemos
+interpretar \(\Lambda\) como un <i>nodo nulo</i> que indica que se ha
+salido del árbol.</li>
+<li class="fragment appear"><b>LeftMostChild</b> (n) : Devuelve el hijo más a la izquierda del nodo
+<code>n</code> o \(\Lambda\) si <code>n</code> es una hoja (no tiene hijos).</li>
+
+</ul>
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+<ul>
+<li><b>RightSibling</b> (n) : Devuelve el hermano a la derecha del nodo
+<code>n</code>, el cual se define como el nodo <code>m</code> que tiene el mismo padre
+<code>p</code> que <code>n</code>, de manera que <code>m</code> está inmediatamente a la derecha de
+<code>n</code> en el ordenamiento de los hijos de <code>p</code>. Fíjate que también
+puede devolver \(\Lambda\) si es el caso.</li>
+
+</ul>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<ul>
+<li><b>Label</b> (n) : Devuelve la etiqueta del nodo <code>n</code>.</li>
+<li class="fragment appear"><b>Create</b> (v, \(A_1, A_2, ..., A_i\)) : Crea y devuelve un nuevo nodo
+<code>r</code> que tiene etiqueta <code>v</code> y le asigna \(i\) hijos que son las
+raíces de los árboles \(A_1, A_2, ..., A_i\), en ese orden desde la
+izquierda. Si \(i = 0\) entonces <code>r</code> es la <i>raíz</i> y una <i>hoja</i>.</li>
+
+</ul>
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+<ul>
+<li><b>Root</b> () : Devuelve la <i>raíz</i> del árbol o \(\Lambda\) si el árbol
+es nulo.</li>
+<li><b>MakeNull</b> () : Convierte el árbol en nulo.</li>
+
+</ul>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<ul>
+<li><b>Search</b> (x) : Devuelve el nodo que contiene el dato <code>x</code> o <i>null</i>
+si el dato no está en el árbol.</li>
+<li class="fragment appear"><b>Insert</b> (x) : Inserta en el lugar que le corresponde un nodo con
+<code>dato = x</code>.</li>
+
+</ul>
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+<ul>
+<li><b>Delete</b> (x) : Elimina el nodo con <code>dato = x</code>. <br />
+Posibilidades:
+<ol>
+<li>Si es un nodo <i>hoja</i>, se puede eliminar directamente.</li>
+<li>Si el nodo solo tiene un hijo, este hijo pasa a ser hijo de
+<i>su abuelo</i>.</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<p>
+Vamos a borrar el nodo <i>4</i>:
+</p>
+
+<div class="org-center">
+
+<div id="org2dbc912" class="figure">
+<p><img src="./images/treedel1s1.png" alt="treedel1s1.png" />
+</p>
+<p><span class="figure-number">Figura 3: </span>Borrado del nodo 4.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<div class="org-center">
+
+<div id="orge499272" class="figure">
+<p><img src="./images/treedel1s2.png" alt="treedel1s2.png" />
+</p>
+<p><span class="figure-number">Figura 4: </span>Nodo 4 borrado.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<ol>
+<li value="3">Si el nodo tiene dos hijos podemos sustituir el dato de este
+nodo por el dato más pequeño del subárbol derecho y eliminar ese
+nodo del subarbol derecho.</li>
+
+</ol>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<p>
+Vamos a borrar el nodo <i>2</i> :
+</p>
+
+<div class="org-center">
+
+<div id="orgc35dd72" class="figure">
+<p><img src="./images/treedel2s1.png" alt="treedel2s1.png" />
+</p>
+<p><span class="figure-number">Figura 5: </span>Borrado del nodo 2.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-org3c2a214-split">
+
+<h2>Árboles. Operaciones básicas</h2>
+
+<div class="org-center">
+
+<div id="orgd984a4f" class="figure">
+<p><img src="./images/treedel2s2.png" alt="treedel2s2.png" />
+</p>
+<p><span class="figure-number">Figura 6: </span>Nodo 2 borrado.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org692b697">
+<h2 id="org692b697">Árboles. Implementación</h2>
+<div class="outline-text-2" id="text-org692b697">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgc1fb43a">
+<h3 id="orgc1fb43a">Mediante vectores</h3>
+<ul>
+<li>Necesitamos numerar los nodos del árbol: \(0, 1, 2, ..., n\).</li>
+<li class="fragment appear">Creamos un vector \(L\) de enteros donde el índice \(i\) representa
+al nodo actual y su contenido \(j\) es el índice en el vector de su
+padre.</li>
+<li class="fragment appear">El nodo que representa la raíz tiene asignado el valor \(0\).</li>
+<li class="fragment appear">Según esto si \(L[i] = j\), entonces \(j\) es el padre del nodo \(i\) y
+\(L[i] = 0\) si el nodo \(i\) es hijo de la raíz.</li>
+<li class="fragment appear">Esta representación complica la implementación de determinadas
+operaciones, por lo que emplearemos otra.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org337e782">
+<h3 id="org337e782">Mediante listas de hijos</h3>
+<ul>
+<li>Cada <i>nodo</i> mantiene una lista de sus nodos-hijo.</li>
+<li class="fragment appear">Si el número máximo de hijos es fijo, podríamos incluso usar un
+<i>vector</i> de nodos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc743a3e">
+<h3 id="orgc743a3e">Clases necesarias para la representación</h3>
+<p align="left">
+Necesitamos al menos dos clases de <i>Alto Nivel</i>:
+</p>
+<ol>
+<li>Tree</li>
+
+</ol>
+
+
+<div class="org-src-container">
+
+<pre  class="fragment (none appear)"   ><code trim><span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">char</span> <span style="font-weight: bold; text-decoration: underline;">Element</span>;           <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Hasta que veamos genericidad...</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Tree</span>
+{
+<span style="font-weight: bold;">public</span>:
+
+  <span style="font-weight: bold;">Tree</span>        (<span style="font-weight: bold; text-decoration: underline;">void</span>) { fRoot = <span style="font-weight: bold; text-decoration: underline;">nullptr</span>; }
+  ~<span style="font-weight: bold;">Tree</span>       (<span style="font-weight: bold; text-decoration: underline;">void</span>);
+
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">insert</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Element</span> &amp;<span style="font-weight: bold; font-style: italic;">i</span>);
+
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">NodePtr</span> <span style="font-weight: bold; font-style: italic;">fRoot</span>;
+};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgc743a3e-split">
+
+<p align="left">
+Y la otra:
+</p>
+<ol>
+<li value="2">Node</li>
+
+</ol>
+
+
+
+<div class="org-src-container">
+
+<pre  class="fragment (none appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Node</span>
+{
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">Node</span>                   (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">i</span>)  { fItem = i; }
+  ~<span style="font-weight: bold;">Nodo</span>                  (<span style="font-weight: bold; text-decoration: underline;">void</span>)       {}
+
+  <span style="font-weight: bold; text-decoration: underline;">Tree</span>&amp;    <span style="font-weight: bold;">sibling</span>       (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>)      { <span style="font-weight: bold;">return</span> fSiblings[n]; }
+  <span style="font-weight: bold; text-decoration: underline;">Tree</span>&amp;    <span style="font-weight: bold;">leftSibling</span>   (<span style="font-weight: bold; text-decoration: underline;">void</span>)       { <span style="font-weight: bold;">return</span> fSiblings[0]; }
+  <span style="font-weight: bold; text-decoration: underline;">Tree</span>&amp;    <span style="font-weight: bold;">rightSibling</span>  (<span style="font-weight: bold; text-decoration: underline;">void</span>)       { <span style="font-weight: bold;">return</span> fSiblings[1]; }
+  <span style="font-weight: bold; text-decoration: underline;">Element</span>&amp; <span style="font-weight: bold;">item</span>          (<span style="font-weight: bold; text-decoration: underline;">void</span>)       { <span style="font-weight: bold;">return</span> fItem; }
+
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">fItem</span>;
+  <span style="font-weight: bold; text-decoration: underline;">Tree</span> <span style="font-weight: bold; font-style: italic;">fSiblings</span>[2];            <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Como m&#225;ximo 2 hijos</span>
+};
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc788977">
+<h3 id="orgc788977">Árboles binarios</h3>
+<ul>
+<li>Se trata de un tipo especial de árbol. Algunos de los ejemplos que
+hemos visto previamente usan este tipo de árboles.</li>
+<li class="fragment appear">Un nodo tiene como máximo dos hijos.</li>
+<li class="fragment appear">A estos hijos se les llama <i>hijo izquierdo</i> (<i>LeftSibling</i>) e
+<i>hijo derecho</i> (<i>RightSibling</i>).</li>
+<li class="fragment appear">A menudo se emplean estableciendo una relación de orden, el dato del
+hijo izquierdo es menor que el dato de su padre, y el dato del
+hijo derecho es mayor que el dato del padre.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3d4052f">
+<h3 id="org3d4052f">Árboles binarios</h3>
+<ul>
+<li>Esto permite hacer inserciones automáticas en base a la etiqueta
+del nodo nuevo insertado.</li>
+
+<li class="fragment appear">Por ejemplo, si insertamos en un árbol binario ordenado de enteros
+la secuencia de números (\(8, 5, 9, 4, 1, 6, 2\)) obtendríamos el
+árbol:</li>
+
+</ul>
+
+
+</section>
+<section id="slide-org3d4052f-split">
+
+<h3>Árboles binarios</h3>
+
+<p align="left">
+Árbol resultado de insertar por este orden: \(8, 5, 9, 4, 1, 6, 2\)
+</p>
+<div class="org-center">
+
+<div id="orga5bc96b" class="figure">
+<p><img src="./images/tree4.png" alt="tree4.png" />
+</p>
+<p><span class="figure-number">Figura 7: </span>Insertamos 8, 5, 9, 4, 1, 6, 2.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org9a9226e">
+<h3 id="org9a9226e">Árboles de otros tipos.</h3>
+<ul>
+<li>Los árboles <i>n-arios</i> o la particularización llamada <a href="https://es.wikipedia.org/wiki/%C3%81rbol_binario">árbol binario</a>
+no son los únicos tipos de árboles.</li>
+<li class="fragment appear">Es interesante que eches un vistazo a estos otros tipos de árboles
+y que veas por qué se caracterizan:
+<ul>
+<li><a href="https://es.wikipedia.org/wiki/%C3%81rbol_AVL">Árboles AVL</a>.</li>
+<li><a href="https://es.wikipedia.org/wiki/%C3%81rbol_biselado">Árbol biselado o desplegado</a>.</li>
+<li><a href="https://es.wikipedia.org/wiki/%C3%81rbol-B">Árboles B</a>.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3304bbe">
+<h2 id="org3304bbe">Grafos</h2>
+<ul>
+<li>En problemas de disciplinas como la <i>informática</i>, las
+<i>matemáticas</i>, <i>diversas ingenierías</i>, etc&#x2026; a menudo necesitamos
+representar relaciones (de distinto tipo) entre objetos.</li>
+<li class="fragment appear">Estas relaciones podemos plasmarlas mediante el uso de una
+estructura de datos conocida como <b>Grafo</b>.</li>
+<li class="fragment appear">A grandes rasgos un <i>grafo</i> es un conjunto de vértices y uno de
+aristas que conectan esos vértices.</li>
+
+</ul>
+</section>
+<section id="slide-org3304bbe-split">
+<ul>
+<li>Existen <i>grafos</i> de distinto tipo en función de las
+características en las que nos fijemos:
+<ul>
+<li>Dirigidos y no dirigidos.</li>
+<li class="fragment appear">Etiquetados y no etiquetados (ponderados).</li>
+<li class="fragment appear">Aleatorios ( <i>las aristas están asociadas a una probabilidad</i> ).</li>
+<li class="fragment appear">Cíclicos y acíclicos.</li>
+<li class="fragment appear">etc&#x2026;</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9bc36ea">
+<h2 id="org9bc36ea">Grafos. Definiciones</h2>
+<ul>
+<li>Un grafo \(G\) se define como un par \(G = ( V, E )\), donde \(V\) es un
+conjunto de vértices y \(E\) es un conjunto de aristas.</li>
+<li class="fragment appear">Cada <i>arista</i> (o <i>arco</i> ) es, a su vez, un par \(( v, w ) : v,w \in
+   V\). Si este par es <b>ordenado</b>, entonces el grafo es <b>dirigido</b>
+(<i>digrafo</i> ).</li>
+<li class="fragment appear"><p>
+Un vértice \(w\) es adyacente a otro \(v\) \(\iff (v, w) \in
+   E\).<br />
+</p>
+
+<p>
+<i>Aclaración</i> : \((p \iff q) \equiv (p \rightarrow q) \wedge (q
+   \rightarrow p)\).
+</p></li>
+
+</ul>
+
+</section>
+<section id="slide-org9bc36ea-split">
+<ul>
+<li>En un <i>grafo no dirigido</i> la arista \((w, v)\) es equivalente a la
+\((v, w)\) y por tanto \(w\) es adyacente \(v\) y \(v\) es adyacente a
+\(w\).</li>
+<li>En un <i>grafo no dirigido</i> se llama <b>grado</b> de un vértice al número
+de aristas que inciden en el. En un <i>grafo dirigido</i> hablamos de
+<b>grado de entrada</b> y <b>grado de salida</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org9bc36ea-split">
+
+<ul>
+<li>Un <i>camino</i> en un grafo es una secuencia de vértices \(w_1, w_2,
+   ..., w_n : (w_i, w_{i+1}) \in E, \forall\ 1 \le i < n\). Si \(w_1
+   = w_n\) se habla de <b>camino cerrado</b>.</li>
+<li class="fragment appear">La longitud de un camino es el número de aristas del mismo, o lo
+que es lo mismo \(n-1\). Se pueden permitir caminos de un vértice a
+sí mismo.</li>
+<li class="fragment appear">Una arista \((v, v)\) de un vértice a sí mismo da lugar a un camino
+llamado <i>ciclo</i>. Por tanto un ciclo es un camino de longitud mínima
+igual a 1. Un grafo sin ciclos se considera <i>acíclico</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org9bc36ea-split">
+
+<ul>
+<li>Se llama <i>grafo conexo o conectado</i> a uno no-dirigido que tiene
+un camino desde cualquier vértice a cualquier otro. Si el grafo
+fuera dirigido, entonces se le llama <i>fuertemente conexo</i>.</li>
+<li class="fragment appear">Si un grafo dirigido no es fuertemente conexo pero el grafo
+subyacente no dirigido (sin direccion en las aristas) es conexo,
+entonces se le llama <i>débilmente conexo</i>.</li>
+<li class="fragment appear">Se llama <i>grafo completo</i> a aquel que tiene una arista entre
+cualquier par de vértices.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4954cf5">
+<h2 id="org4954cf5">Grafos. Operaciones básicas</h2>
+<ul>
+<li><b>First</b> (v): Devuelve el índice del primer vértice adyacente a
+<code>v</code>. Si no hay ninguno, se devuelve un valor que represente un
+vértice nulo.</li>
+<li class="fragment appear"><b>Next</b> (v, i): Devuelve el índice posterior a <code>i</code> de entre los
+vértices adyacentes a <code>v</code>. Si <code>i</code> es el último índice de los
+vertices adyacentes a <code>v</code> se devuelve un valor que represente un
+vértice nulo.</li>
+<li class="fragment appear"><b>Vertex</b> (v, i): Devuelve el vértice cuyo índice <code>i</code> está entre
+los vértices adyacentes a <code>v</code>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8f264a8">
+<h2 id="org8f264a8">Grafos. Implementación</h2>
+<p>
+Usaremos grafos dirigidos, los no dirigidos se pueden representar de
+manera similar.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgeeda717">
+<h3 id="orgeeda717">Matriz de adyacencia</h3>
+<ul>
+<li>Una primera representación consiste en hacer uso de una <b>matriz de
+adyacencia</b>.</li>
+<li class="fragment appear">Se trata de una matriz bidimensional, llamése \(a\), donde para
+cada arista \((u,v)\) del grafo hacemos \(a[u][v] = 1\), y si no
+existe dicha arista \(a[u][v] = 0\).</li>
+<li class="fragment appear">Si la arista tiene un peso asociado \(p\) : \(a[u][v] = p\). En estos
+casos podemos usar un peso muy grande o muy pequeño (\(\infty,
+    -\infty\)) para indicar que una arista no existe.</li>
+
+</ul>
+</section>
+<section id="slide-orgeeda717-split">
+<ul>
+<li><b>Pega</b>: excesivo consumo de memoria. Sin embargo es válida si el
+grafo es denso: \(\mid A \mid\ \simeq\ {\mid V \mid}^2\).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org40b6161">
+<h3 id="org40b6161">Lista de adyacencia</h3>
+<ul>
+<li>Si el grafo no es denso (<i>disperso</i> ) se usa una <b>lista de
+adyacencia</b>.</li>
+<li class="fragment appear">Cada vértice mantiene una lista de todos los vértices adyacentes.</li>
+<li class="fragment appear">Por lo tanto el espacio necesario de almacenamiento pasa a ser
+\(\simeq\ \mid A \mid + \mid V \mid\).</li>
+<li class="fragment appear">De este modo, una operación muy habitual en <i>grafos</i> como es
+encontrar todos los vértices adyacentes a uno dado consiste en
+recorrer la lista de adyacencia del vértice en cuestión.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf0de87e">
+<h3 id="orgf0de87e">Ejemplo</h3>
+<p>
+El siguiente grafo:
+</p>
+
+<div class="org-center">
+
+<div id="orgc6d6943" class="figure">
+<p><img src="./images/gd1.png" alt="gd1.png" />
+</p>
+<p><span class="figure-number">Figura 8: </span>Grafo de partida.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-orgf0de87e-split">
+
+<h3>Ejemplo</h3>
+
+<p>
+Produce esta lista de adyacencia:
+</p>
+
+<div class="org-center">
+
+<div id="org8789571" class="figure">
+<p><img src="./images/lagd1.png" alt="lagd1.png" />
+</p>
+<p><span class="figure-number">Figura 9: </span>Lista de adyacencia obtenida.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org6cf9c68">
+<h2 id="org6cf9c68">Grafos. Tipos de problemas</h2>
+<dl>
+<dt>Conectividad:</dt><dd>Consiste en saber decir si un grafo es conexo o
+no. Se trata de un problema básico ya que la solución a algunos
+otros problemas dependen de esta respuesta.</dd>
+
+<dt class="fragment appear">Alcanzabilidad:</dt><dd class="fragment appear">El problema de la alcanzabilidad está
+relacionado con la conexión. En él se nos dan un grafo \(G(V,
+      E)\), un vértice origen \(s \in V\) y un vértice destino \(d \in V\)
+y tenemos que decir si existe un camino de \(s\) a \(d\) (\(s
+      \rightsquigarrow d\)).</dd>
+
+</dl>
+
+</section>
+<section id="slide-org6cf9c68-split">
+
+<dl>
+<dt>Recorrido:</dt><dd><p>
+Consiste en visitar sistemáticamente todos los nodos
+de un grafo.
+</p></dd>
+<dt>Caminos más cortos:</dt><dd>Partiendo del caso anterior es posible
+llegar a \(d\) desde \(s\) por varios caminos. Es posible que nos
+interese el <i>camino más corto</i> (\(G\) no-dirigido), <i>de menor
+coste</i> (\(G\) ponderado), etc&#x2026;</dd>
+
+</dl>
+
+</section>
+<section id="slide-org6cf9c68-split">
+<dl>
+<dt>Hay variantes:</dt><dd><ul>
+<li>de un origen \(s\) a un solo destino \(d\).</li>
+
+<li>de un origen \(s\) a todos los posibles destinos \(d\), uno a uno.</li>
+
+<li>\(\forall (u, v) \mid u,v \in V\) se nos pide encontrar el camino más
+corto de \(u\) a \(v\).</li>
+
+</ul></dd>
+
+</dl>
+
+</section>
+<section id="slide-org6cf9c68-split">
+
+<dl>
+<dt>Árboles de expansión:</dt><dd><p>
+Consiste en encontrar un árbol de
+expansión en el grafo. Este se define como: dado un grafo
+conexo y no-dirigido \(G = (V, E)\), un árbol de expansión es un
+subconjunto acíclico \(T \subseteq E\) que conecta todos los
+vértices de \(G\).
+</p>
+
+<p>
+Si el grafo es ponderado este problema se transforma en
+encontrar el árbol de expansión mínima.
+</p></dd>
+
+</dl>
+
+</section>
+<section id="slide-org6cf9c68-split">
+<dl>
+<dt>Ordenación topológica:</dt><dd>Consiste en ordenar los vértices de un
+grafo dirigido acíclico, de manera que si hay un camino desde
+\(v_i\) a \(v_j\) entonces \(v_j\) aparece después de \(v_i\) en la
+ordenación.</dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-org6b7d504">
+<h2 id="org6b7d504">Grafos. Algoritmos</h2>
+<div class="outline-text-2" id="text-org6b7d504">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb57fc02">
+<h3 id="orgb57fc02">Ordenación topologica</h3>
+<p>
+Asigna un orden lineal a los vértices de un <i>GDA</i> de manera que si
+existe una arista de \(i \rightarrow j\), entonces \(i\) aparece antes
+que \(j\) en el ordenamiento lineal.
+</p>
+
+<p>
+<b>Algoritmo</b>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span>[] topologicalOrder (Graph g) {
+   <span style="font-weight: bold;">for</span> cont = 0..|V|-1 {
+      v = vertInDegree0();      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Nuevo vertice grado entrada == 0</span>
+      <span style="font-weight: bold;">if</span> (v &lt; 0) error (<span style="font-style: italic;">"ciclo"</span>);
+      <span style="font-weight: bold;">else</span> {
+        num_top[v] = cont;      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Vertice 'v' ocupa la posicion 'cont' en el orden topologico</span>
+        <span style="font-weight: bold;">for</span> w adjacent to v     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Eliminamos 'v' del grafo.</span>
+          --inDegree[w];
+      }
+   }
+   <span style="font-weight: bold;">return</span> num_top;
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgade69c0">
+<h3 id="orgade69c0">Camino más corto en grafo ponderado desde un sólo origen</h3>
+<p>
+<b>Algoritmo</b>:<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Asume que no hay etiquetas negativas asociadas a ninguna arista</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Dijkstra</span>(<span style="font-weight: bold; text-decoration: underline;">Graph</span> <span style="font-weight: bold; font-style: italic;">G</span>, <span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;Weight&gt;&amp; <span style="font-weight: bold; font-style: italic;">D</span>) { <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Comenzamos en 1 el indice en vectores y matrices</span>
+        S = {1};                   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Nodo 1 guardado en conjunto S</span>
+        <span style="font-weight: bold;">for</span> i = 2 .. n
+             D[i] = C[1][i];       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Inicializamos D con el coste de ir de 1..i</span>
+        <span style="font-weight: bold;">for</span> i = 1 .. n-1 {
+             -seleccionamos w en V-S tal que D[w] es un minimo;
+             -a&#241;adimos w a S;
+             foreach vertex v en V-S
+                  D[v] = min(D[v], D[w] + C[w][v]); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">C[w][v] == INFTY si no existe w-&gt;v</span>
+        }
+    }
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgade69c0-split">
+
+<p>
+Si aplicamos Dijkstra a este grafo:
+</p>
+
+<div class="org-center">
+
+<div id="org25dcf4d" class="figure">
+<p><img src="./images/djk.png" alt="djk.png" />
+</p>
+<p><span class="figure-number">Figura 10: </span>Dijkstra.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-orgade69c0-split">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Tabla 1</span> Resultado de aplicar el algoritmo de Dijkstra al grafo anterior.</caption>
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+
+<col  class="org-right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right"><b>Iteración</b></th>
+<th scope="col" class="org-left"><b>S</b></th>
+<th scope="col" class="org-right"><b>w</b></th>
+<th scope="col" class="org-right"><code>D[2]</code></th>
+<th scope="col" class="org-right"><code>D[3]</code></th>
+<th scope="col" class="org-right"><code>D[4]</code></th>
+<th scope="col" class="org-right"><code>D[5]</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">Inicial</td>
+<td class="org-left">{1}</td>
+<td class="org-right">-</td>
+<td class="org-right">10</td>
+<td class="org-right">\(\infty\)</td>
+<td class="org-right">30</td>
+<td class="org-right">100</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">{1,2}</td>
+<td class="org-right">2</td>
+<td class="org-right">10</td>
+<td class="org-right">60</td>
+<td class="org-right">30</td>
+<td class="org-right">100</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">{1,2,4}</td>
+<td class="org-right">4</td>
+<td class="org-right">10</td>
+<td class="org-right">50</td>
+<td class="org-right">30</td>
+<td class="org-right">90</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-right">3</td>
+<td class="org-left">{1,2,4,3}</td>
+<td class="org-right">3</td>
+<td class="org-right">10</td>
+<td class="org-right">50</td>
+<td class="org-right">30</td>
+<td class="org-right">60</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-right">4</td>
+<td class="org-left">{1,2,4,3,5}</td>
+<td class="org-right">5</td>
+<td class="org-right">10</td>
+<td class="org-right">50</td>
+<td class="org-right">30</td>
+<td class="org-right">60</td>
+</tr>
+</tbody>
+</table>
+
+</section>
+</section>
+<section>
+<section id="slide-org62f26a9">
+<h3 id="org62f26a9">Árbol de expansión mínima</h3>
+<ul>
+<li>Un árbol de expansión de un grafo no dirigido \(G = (V, E)\) es un
+árbol formado por todos los vértices de \(G\) y algunas de (pueden
+ser todas) las aristas de \(G\), de manera que no hay ciclos.</li>
+
+<li class="fragment appear">Si cada arista \((u, v)\) \(\in E\) tiene asociado un peso (\(G\) es
+ponderado), al árbol de expansión cuyas aristas pesan lo mínimo,
+se le llama arbol de expansión mínima.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgca37cf8">
+<h3 id="orgca37cf8">Árbol de expansión mínima. Prim</h3>
+<p>
+<b>Algoritmo</b>: La entrada al agoritmo la constituyen el grafo \(G\) y
+la salida se devuelve en T que es un conjunto de aristas.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Prim</span> (<span style="font-weight: bold; text-decoration: underline;">Graph</span> <span style="font-weight: bold; font-style: italic;">G</span>, <span style="font-weight: bold; text-decoration: underline;">set</span>&lt;Edge&gt;&amp; <span style="font-weight: bold; font-style: italic;">T</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">set</span>&lt;Vertex&gt; <span style="font-weight: bold; font-style: italic;">U</span>;
+  <span style="font-weight: bold; text-decoration: underline;">Vertex</span> <span style="font-weight: bold; font-style: italic;">u</span>, <span style="font-weight: bold; font-style: italic;">v</span>;
+
+  T = {};
+  U = {1};
+  <span style="font-weight: bold;">while</span> U != V {
+    (u, v) arista con coste m&#237;nimo tal que u esta en U y v en V-U;
+    T = T + {(u, v)};
+    U = U + {v};
+  }
+}
+</code></pre>
+</div>
+
+<ul>
+<li>Y <a href="https://www.tutorialspoint.com/data_structures_algorithms/prims_spanning_tree_algorithm.htm">aquí</a>  encontrarás una explicación de su funcionamiento.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgca37cf8-split">
+
+<p>
+Aplicar Prim al siguiente grafo:
+</p>
+<div class="org-center">
+
+<div id="org6e6ecb1" class="figure">
+<p><img src="./images/prim.png" alt="prim.png" />
+</p>
+<p><span class="figure-number">Figura 11: </span>Prim.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-orgca37cf8-split">
+
+<p class="fragment (none appear)">
+Produce <i>en este orden</i> estas aristas:
+T = { (1,3) , (3,6), (6,4) , (3,2) , (2,5) }
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org23f0373">
+<h3 id="org23f0373">Árbol de expansión mínima. Kruskal</h3>
+<p>
+<b>Algoritmo</b>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Kruskal</span> (<span style="font-weight: bold; text-decoration: underline;">Graph</span> <span style="font-weight: bold; font-style: italic;">G</span>, <span style="font-weight: bold; text-decoration: underline;">set</span>&lt;Edge&gt;&amp; <span style="font-weight: bold; font-style: italic;">T</span>)
+{
+   T = {};
+   V;                           <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">todos los Arcos del grafo G</span>
+   Mientras (T contenga menos de n-1 arcos y V != {}) {
+      De las aristas en E seleccionar la de <span style="font-weight: bold; text-decoration: underline;">menor</span> <span style="font-weight: bold; font-style: italic;">coste</span> (i,j)
+      V = V - {(i,j)};
+      Si el nodo-i y el nodo-j no est&#225;n en el mismo &#225;rbol entonces
+         T = T + {(i,j)}
+   }
+}
+</code></pre>
+</div>
+
+<ul>
+<li>Y <a href="https://www.tutorialspoint.com/data_structures_algorithms/kruskals_spanning_tree_algorithm.htm">aquí</a> encontrarás una explicación de su funcionamiento.</li>
+
+</ul>
+
+</section>
+<section id="slide-org23f0373-split">
+
+<p>
+Aplicar Kruskal al siguiente grafo:
+</p>
+<div class="org-center">
+
+<div id="org27afe92" class="figure">
+<p><img src="./images/kka.png" alt="kka.png" />
+</p>
+<p><span class="figure-number">Figura 12: </span>Kruskal.</p>
+</div>
+</div>
+
+</section>
+<section id="slide-org23f0373-split">
+
+<p class="fragment (appear)">
+Produce <i>en este orden</i> estas aristas:
+T = { (1,3) , (4,6), (2,5) , (3,6) , (3,2) }
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org80fc946">
+<h3 id="org80fc946">Recorrido. Búsqueda en profundidad</h3>
+<ul>
+<li>Vamos a ver el algoritmo de <i>búsqueda en profundidad</i>.</li>
+<li class="fragment appear">Es una generalización del recorrido en orden previo de un árbol.</li>
+
+</ul>
+
+</section>
+<section id="slide-org80fc946-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold; font-style: italic;">visited</span>[N];               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">N = numero de nodos del grafo</span>
+<span style="font-weight: bold;">for</span> i = 0..N-1
+  visited[i] = <span style="font-weight: bold; text-decoration: underline;">false</span>;
+
+<span style="font-weight: bold;">for</span> i = 0..N-1
+  <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> visited[i]
+    dfs (i);
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">dfs</span> (<span style="font-weight: bold; text-decoration: underline;">Vertex</span> <span style="font-weight: bold; font-style: italic;">v</span>) {
+   <span style="font-weight: bold; text-decoration: underline;">Vertex</span> <span style="font-weight: bold; font-style: italic;">w</span>;
+
+   visited[v] = <span style="font-weight: bold; text-decoration: underline;">true</span>;
+   <span style="font-weight: bold;">for</span> w in L[v]                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Para todo nodo w adyacente a v</span>
+     <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">not</span> visited[w]
+       dfs (w);
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org2cea3f8">
+<h3 id="org2cea3f8">Visualización de grafos</h3>
+<ul>
+<li>Te puede resultar interesante este software: <a href="http://graphviz.org/">Graphviz</a>.</li>
+<li>Con él puedes describir mediante un lenguaje formal grafos y
+otros tipos de información estructural.</li>
+<li>Echa un vistazo a la <a href="http://www.graphviz.org/gallery/">colección de ejemplos</a> que hay en su página.</li>
+<li>Los grafos y árboles que aparecen en este tema están hechos con
+<i>Graphviz</i>. La herramienta empleada ha sido <a href="https://en.wikipedia.org/wiki/DOT_(graph_description_language)">dot</a>.</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org2154385">
+<h2 id="org2154385">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

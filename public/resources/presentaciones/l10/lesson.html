@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 10: Características de otros LOO.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 10: Características de otros LOO.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-04-29 mar 23:54</p>
+</section>
+
+<section>
+<section id="slide-orgba43e71">
+<h2 id="orgba43e71">Introducción</h2>
+<ul>
+<li class="fragment appear">De temas anteriores conocemos las características que debe tener
+un lenguaje de programación para ser considerado como <i>orientado a
+objetos</i>.</li>
+
+<li class="fragment appear">También hemos hablado de la parte histórica de este paradigma de
+programación:
+<ul>
+<li>A <i>Simula-67</i> se le considera el primer LOO.</li>
+<li>Y a <i>Smalltalk</i> como el ejemplo icónico de LOO.</li>
+
+</ul></li>
+
+<li class="fragment appear">En este tema vamos a ver de que manera otros LOO implementan
+algunos de los principios que hemos visto en la práctica sólo con
+<b>C++</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc05bed0">
+<h2 id="orgc05bed0">Lenguajes elegidos</h2>
+<ul>
+<li class="fragment appear">SmallTalk</li>
+<li class="fragment appear">Objective-C</li>
+<li class="fragment appear">Java</li>
+<li class="fragment appear">C#</li>
+<li class="fragment appear">Vala</li>
+<li class="fragment appear">D</li>
+<li class="fragment appear">Python</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9b45622">
+<h2 id="org9b45622">SmallTalk</h2>
+<ul>
+<li class="fragment appear">Surge en los años 70 en los laboratorios de investigación de <a href="https://es.wikipedia.org/wiki/Xerox">XEROX</a>
+( <a href="https://es.wikipedia.org/wiki/Xerox_PARC">XEROX PARC</a>).</li>
+
+<li class="fragment appear">Trataba de aunar las tareas de programación y gestión a nivel de
+S.O. del computador.</li>
+
+<li class="fragment appear">Introdujo :
+<ul>
+<li class="fragment appear">El interfaz gráfico que conocemos hoy en día para comunicarnos
+con un ordenador, así como la metáfora del escritorio de una
+oficina en la pantalla del computador.</li>
+
+<li class="fragment appear">El concepto de una <a href="https://es.wikipedia.org/wiki/M%C3%A1quina_virtual">máquina virtual</a> para representar y ejecutar
+su código objeto. Este concepto lo han empleado luego lenguajes
+como Java y C#.</li>
+
+<li class="fragment appear">Una biblioteca de clases y objetos reusables que
+facilitaban las labores del programador.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orge5b7735">
+<h3 id="orge5b7735">El lenguaje SmallTalk</h3>
+<ul>
+<li class="fragment appear">En SmallTalk todo es un objeto, incluso los tipos base de
+lenguaje y por tanto las constantes de estos.</li>
+<li class="fragment appear">Tiene sólo herencia simple y con una clase base común: <code>Object</code>.</li>
+<li class="fragment appear">Es débilmente tipado.</li>
+<li class="fragment appear">Dispone de un <i>browser</i> de clases.</li>
+<li class="fragment appear">Dispone de recolección de basura.</li>
+<li class="fragment appear">Tenemos diversas implementaciones disponibles, una de ellas
+bastante sencilla de instalar y usar en diversos S.O.: <a href="http://squeak.org/">Squeak
+SmallTalk</a>.</li>
+<li class="fragment appear">El equivalente a <i>this</i> de <b>C++</b> es <b>self</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9ce9abe">
+<h3 id="org9ce9abe">Ejemplos de código SmallTalk</h3>
+<ul>
+<li class="fragment appear">Hola mundo:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>  "Hello world Program"
+<span class="linenr">2: </span>  'Hello World!' printNl !
+</code></pre>
+</div>
+
+<ul>
+<li>Cáculo del factorial de un número:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>  factorial
+<span class="linenr">2: </span>"Answer the factorial of the receiver."
+<span class="linenr">3: </span>
+<span class="linenr">4: </span>self = 0 ifTrue: [^ 1].
+<span class="linenr">5: </span>self &gt; 0 ifTrue: [^ self * (self - 1) factorial].
+<span class="linenr">6: </span>self error: 'Not valid for negative integers'
+</code></pre>
+</div>
+
+<ul>
+<li>Ejemplo de llamada al factorial:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>  Transcript show: 10 factorial.
+</code></pre>
+</div>
+
+<ul>
+<li>Ejemplo de un bucle:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>10 timesRepeat: [
+<span class="linenr">2: </span>   Transcript show:'hello'.
+<span class="linenr">3: </span>   Transcript cr.
+<span class="linenr">4: </span>].
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org72c8fa5">
+<h3 id="org72c8fa5">Ejemplos de código SmallTalk</h3>
+<ul>
+<li class="fragment appear">Bucle <i>for</i>:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>1 to: 10 do:[ :i |
+<span class="linenr">2: </span>   Transcript show:i.
+<span class="linenr">3: </span>   Transcript show:' '.
+<span class="linenr">4: </span>   Transcript show:i sqt.
+<span class="linenr">5: </span>   Transcript cr.
+<span class="linenr">6: </span>].
+</code></pre>
+</div>
+
+<ul>
+<li>Bucle sobre una coleccion:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>#('a' 'b' 'c' ) do: [:each |
+<span class="linenr">2: </span>   Transcript show: each.
+<span class="linenr">3: </span>   Transcript cr.
+<span class="linenr">4: </span>].
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org2338d10">
+<h3 id="org2338d10">Ejemplos de código SmallTalk</h3>
+<ul>
+<li>Los <b>[&#x2026;]</b> que acompañan al <b>do:</b> ¡son un objeto!:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-smalltalk"   ><code trim><span class="linenr">1: </span>|myArray myOperation|
+<span class="linenr">2: </span>
+<span class="linenr">3: </span>myArray := #('a' 'b' 'c' ).
+<span class="linenr">4: </span>myOperation := [:each |
+<span class="linenr">5: </span>                  Transcript show: each.
+<span class="linenr">6: </span>                  Transcript cr.
+<span class="linenr">7: </span>               ].
+<span class="linenr">8: </span>myArray do: myOperation.
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org86dde18">
+<h2 id="org86dde18">Otros LOO</h2>
+<ul>
+<li class="fragment appear">En los 80 comienza a imponerse el desarrollo de
+aplicaciones bajo el <i>paradigma orientado a objetos</i>.</li>
+
+<li class="fragment appear">Lenguajes como SmallTalk o bien son interpretados o producen
+ejecutables lentos.</li>
+
+<li class="fragment appear">Por tanto desarrolladores de compiladores de lenguajes se plantean incorporar algunas de las características
+de la POO a este tipo de lenguajes.</li>
+
+<li class="fragment appear">Surgieron así <i>extensiones</i> de lenguajes como <a href="https://es.wikipedia.org/wiki/Pascal_%2528lenguaje_de_programaci%25C3%25B3n%2529">Pascal</a> y de <b>C</b>.</li>
+
+<li class="fragment appear">En el caso de Pascal se creó <a href="https://es.wikipedia.org/wiki/Object_Pascal">Object Pascal</a> y en el de <b>C</b>
+aparecieron varias extensiones para convertirlo en un LOO: <b>C++</b>,
+<b>Objective-C</b> y otras.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org949e73a">
+<h2 id="org949e73a">Objective-C</h2>
+<ul>
+<li class="fragment appear">Los creadores de Objective-C (Brad Cox y Tom Love) estaban muy
+influenciados por SmallTalk.</li>
+
+<li class="fragment appear">La extensión que crearon de <b>C</b> es una mezcla de ambos lenguajes:
+<ul>
+<li>Sintáxis de <b>C</b> para la parte procedural.</li>
+<li>Sintáxis de <b>SmallTalk</b> para la parte de POO.</li>
+
+</ul></li>
+
+<li class="fragment appear">En los 80 y 90 <i>Objective-C</i> fue superado ampliamente en uso por
+<b>C++</b>. Pero en 1998 algo ocurrió&#x2026;</li>
+
+<li class="fragment appear">&#x2026; <a href="https://es.wikipedia.org/wiki/NeXT">NeXT</a> Inc. licenció el uso de Objective-C y preparó el
+compilador de C de GNU (gcc) para que lo soportara. Se convirtió
+en el lenguaje de desarrollo de NeXTStep, más tarde OpenStep y más
+tarde OS-X / iOS.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org03a26ed">
+<h3 id="org03a26ed">El lenguaje Objective-C</h3>
+<ul>
+<li class="fragment appear">Dispone de herencia simple.</li>
+
+<li class="fragment appear">Es fuertemente tipado pero dispone de un tipo base <i>id</i>. Sería
+como una referencia a la clase base Object.</li>
+
+<li class="fragment appear">En lugar de <i>#include</i> usa <i>#import</i>: <code>#import &lt;stdio.h&gt;</code></li>
+
+<li class="fragment appear">Los ficheros de cabecera usan la extensión <b>.h</b> y los de
+implementación <b>.m</b>.</li>
+
+<li class="fragment appear">Los mensajes a objetos se envían con notación de SmallTalk:
+<code>[obj method:parameter];</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3811907">
+<h3 id="org3811907">Ejemplos de código Objective-C</h3>
+<p>
+Puedes encontrar más en la <a href="https://es.wikipedia.org/wiki/Objective-C">página</a> de la wikipedia.
+</p>
+<ul>
+<li><p>
+Declaración de una clase:
+</p></li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-objc"   ><code trim><span class="linenr">1: </span>  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">class.h</span>
+<span class="linenr">2: </span>  <span style="font-weight: bold;">@interface</span> <span style="font-weight: bold; text-decoration: underline;">classname</span> : <span style="font-weight: bold; text-decoration: underline;">superclassname</span> { ... }
+<span class="linenr">3: </span>  +<span style="font-weight: bold;">classMethod1</span>;
+<span class="linenr">4: </span>  +(<span style="font-weight: bold; text-decoration: underline;">return_type</span>) <span style="font-weight: bold;">classMethod2</span>;
+<span class="linenr">5: </span>  +(<span style="font-weight: bold; text-decoration: underline;">return_type</span>) <span style="font-weight: bold;">classMethod3</span>: (<span style="font-weight: bold; text-decoration: underline;">param1_type</span>)<span style="font-weight: bold; font-style: italic;">parameter_varName</span>;
+<span class="linenr">6: </span>  -(<span style="font-weight: bold; text-decoration: underline;">return_type</span>) <span style="font-weight: bold;">instanceMethod</span>: (<span style="font-weight: bold; text-decoration: underline;">param1_type</span>)<span style="font-weight: bold; font-style: italic;">param1_varName</span>
+<span class="linenr">7: </span>                                 <span style="font-weight: bold;">secondParam</span>: (<span style="font-weight: bold; text-decoration: underline;">param2_type</span>)<span style="font-weight: bold; font-style: italic;">param2_varName</span>;
+<span class="linenr">8: </span>  <span style="font-weight: bold;">@end</span>
+</code></pre>
+</div>
+<ul>
+<li><p>
+Implementación:
+</p></li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-objc"   ><code trim><span class="linenr"> 1: </span><span style="font-weight: bold;">  #import</span> <span style="font-style: italic;">"class.h"</span>
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span>  <span style="font-weight: bold;">@implementation</span> <span style="font-weight: bold; text-decoration: underline;">classname</span>
+<span class="linenr"> 4: </span>  +<span style="font-weight: bold;">classMethod</span> {
+<span class="linenr"> 5: </span>      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">implementation</span>
+<span class="linenr"> 6: </span>  }
+<span class="linenr"> 7: </span>  -<span style="font-weight: bold;">instanceMethod</span> {
+<span class="linenr"> 8: </span>      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">implementation</span>
+<span class="linenr"> 9: </span>  }
+<span class="linenr">10: </span>  <span style="font-weight: bold;">@end</span>
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orge35480d">
+<h3 id="orge35480d">Ejemplos de código Objective-C</h3>
+<ul>
+<li>Se admite dar nombre a argumentos de métodos:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span class="linenr">1: </span>  -(<span style="font-weight: bold; text-decoration: underline;">int</span>)<span style="font-weight: bold;">changeColorToRed</span>:(<span style="font-weight: bold; text-decoration: underline;">float</span>)<span style="font-weight: bold; font-style: italic;">red</span> <span style="font-weight: bold;">green</span>:(<span style="font-weight: bold; text-decoration: underline;">float</span>)<span style="font-weight: bold; font-style: italic;">green</span> <span style="font-weight: bold;">blue</span>:(<span style="font-weight: bold; text-decoration: underline;">float</span>)<span style="font-weight: bold; font-style: italic;">blue</span>
+<span class="linenr">2: </span>  [myColor changeColorToRed:5.0 green:2.0 blue:6.0];
+</code></pre>
+</div>
+<ul>
+<li>Creación de objetos</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span class="linenr">1: </span>  <span style="font-weight: bold; text-decoration: underline;">MyObject</span> * <span style="font-weight: bold; font-style: italic;">o</span> = [[MyObject alloc] init];
+<span class="linenr">2: </span>  ...
+<span class="linenr">3: </span>  -(<span style="font-weight: bold; text-decoration: underline;">id</span>) init {
+<span class="linenr">4: </span>    <span style="font-weight: bold;">self</span> = [<span style="font-weight: bold;">super</span> init];
+<span class="linenr">5: </span>    <span style="font-weight: bold;">if</span> (<span style="font-weight: bold;">self</span>) {...}
+<span class="linenr">6: </span>    <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">self</span>;
+<span class="linenr">7: </span>  }
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org9016c67">
+<h2 id="org9016c67">Java</h2>
+<ul>
+<li class="fragment appear"><a href="http://java.com/en/">Creado</a> por Sun MicroSystems en 1995. Hoy en día es propiedad de
+<a href="http://www.oracle.com/index.html">Oracle</a> Corp.</li>
+
+<li class="fragment appear">Sintáxis muy parecida a la de <b>C++</b>.</li>
+
+<li class="fragment appear">Es compilado y usa una máquina virtual (<i>JVM</i>) para respresentar y
+ejecutar su código objeto.</li>
+
+<li class="fragment appear">Desde 2010 aproximadamente es uno de los lenguajes de programación
+más usados. El espaldarazo definitivo le vino por su uso en el
+S.O. Android de Google.</li>
+
+<li class="fragment appear">Puede generar aplicaciones que funcionan tanto en la parte de
+escritorio como en la parte web.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org6bd1822">
+<h3 id="org6bd1822">El lenguaje Java</h3>
+<ul>
+<li class="fragment appear">Dispone de clases e interfaces.</li>
+
+<li class="fragment appear">Fuertemente tipado con herencia simple de clases y múltiple de
+interfaces.</li>
+
+<li class="fragment appear">Genericidad que permite crear una biblioteca de colecciones muy
+amplia y que ha marcado un estándar entre los programadores.</li>
+
+<li class="fragment appear">Recolección de basura.</li>
+
+<li class="fragment appear">No tiene destructores, si finalizadores. No hay archivos de cabecera
+e implementación.</li>
+
+<li class="fragment appear">No puede haber funciones libres, incluso la función <i>main</i> en Java
+debe formar parte de una clase.</li>
+
+<li class="fragment appear">No dispone de espacios de nombres pero si de paquetes:
+<i>package</i>. Estos deben ser importados donde se usan mediante la orden
+<i>import</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgbc4f34d">
+<h3 id="orgbc4f34d">Componentes de Java</h3>
+<ul>
+<li class="fragment appear">Disponemos de dos paquetes de software relacionados con Java:
+<ul>
+<li><a href="http://openjdk.java.net/">OpenJDK</a></li>
+<li>OpenJRE</li>
+
+</ul></li>
+<li class="fragment appear">Disponemos de un compilador (<i>javac</i>) y de la máquina virtual para
+ejecutar el código compilado (<i>java</i>).</li>
+<li class="fragment appear">Formando parte del JRE se encuentra la biblioteca de clases de
+Java (<i>JCL</i>).</li>
+<li class="fragment appear">No es imprescindible pero si conveniente, para desarrollar en Java
+es bueno disponer de un IDE:
+<ul>
+<li><a href="http://www.eclipse.org/">Eclipse</a></li>
+<li><a href="https://netbeans.org/">NetBeans</a></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org20152db">
+<h3 id="org20152db">Ejemplos de código Java</h3>
+<ul>
+<li><p>
+Creación de una clase:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Model</span> {
+<span class="linenr">2: </span>      <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">Map</span>&lt;<span style="font-weight: bold; text-decoration: underline;">Character</span>, <span style="font-weight: bold; text-decoration: underline;">FeatureVector</span>&gt; <span style="font-weight: bold; font-style: italic;">features</span>;
+<span class="linenr">3: </span>      <span style="font-weight: bold; font-style: italic;">/// </span><span style="font-weight: bold; font-style: italic;">Default constructor</span>
+<span class="linenr">4: </span>      <span style="font-weight: bold;">public</span> Model() {
+<span class="linenr">5: </span>        features = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">HashMap</span>&lt;&gt;();
+<span class="linenr">6: </span>      }
+<span class="linenr">7: </span>      ...
+</code></pre>
+</div></li>
+
+<li class="fragment appear"><p>
+Herencia de clases:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-java"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold;">package</span> <span style="font-weight: bold; text-decoration: underline;">gtaligner</span>;
+<span class="linenr">2: </span>    <span style="font-weight: bold;">import</span> <span style="font-weight: bold; text-decoration: underline;">gtaligner</span>.<span style="font-weight: bold; text-decoration: underline;">io</span>.<span style="font-weight: bold; text-decoration: underline;">Messages</span>;
+<span class="linenr">3: </span>    <span style="font-weight: bold;">import</span> <span style="font-weight: bold; text-decoration: underline;">gtaligner</span>.<span style="font-weight: bold; text-decoration: underline;">io</span>.<span style="font-weight: bold; text-decoration: underline;">TextReader</span>;
+<span class="linenr">4: </span>    <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">BWImage</span> <span style="font-weight: bold;">extends</span> <span style="font-weight: bold; text-decoration: underline;">BufferedImage</span> {
+<span class="linenr">5: </span>       <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">int</span>[] <span style="font-weight: bold; font-style: italic;">weights</span>;
+<span class="linenr">6: </span>       ....
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4c7288d">
+<h3 id="org4c7288d">Ejemplos de código Java</h3>
+<ul>
+<li><p>
+Herencia de interfaz:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-java"   ><code trim><span class="linenr">1: </span>  <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">interface</span> <span style="font-weight: bold; text-decoration: underline;">Sortable</span> {
+<span class="linenr">2: </span>     <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">isLessThan</span> (<span style="font-weight: bold; text-decoration: underline;">Sortable</span> <span style="font-weight: bold; font-style: italic;">b</span>);
+<span class="linenr">3: </span>  }
+<span class="linenr">4: </span>  <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Line</span> <span style="font-weight: bold;">implements</span> <span style="font-weight: bold; text-decoration: underline;">Sortable</span> {...}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd8e078a">
+<h2 id="orgd8e078a">C# (C Sharp)</h2>
+<ul>
+<li class="fragment appear"><a href="https://msdn.microsoft.com/es-es/library/kx37x362.aspx">Creado</a> por <a href="https://www.microsoft.com">Microsoft</a>.</li>
+<li class="fragment appear">Similar en arquitectura a Java. Dispone de una máquina virtual en
+la que se ejecuta el código compilado.</li>
+<li class="fragment appear">A la plataforma creada por Microsoft para desarrollar y ejecutar
+código en <b>C#</b> (y otros lenguajes) se le llama <a href="https://es.wikipedia.org/wiki/Microsoft_.NET">.Net</a>.</li>
+<li class="fragment appear"><b>C#</b> se parece mucho a <b>C++</b> en cuanto a sintáxis y palabras
+reservadas.</li>
+<li class="fragment appear">Dispone de manera estándar de una biblioteca de clases muy amplia.</li>
+<li class="fragment appear"><b>.Net</b> permite mezclar código objeto generado por diferentes
+lenguajes. Los tipos base de todos los lenguajes para <b>.Net</b> ocupan
+lo mismo.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4e1ea1b">
+<h3 id="org4e1ea1b">El lenguaje C#</h3>
+<ul>
+<li class="fragment appear">Dispone de clases e interfaces.</li>
+<li class="fragment appear">Fuertemente tipado con herencia simple de clases y múltiple de
+interfaces.</li>
+<li class="fragment appear">Genericidad que permite crear una biblioteca de colecciones muy
+amplia.</li>
+<li class="fragment appear">Recolección de basura.</li>
+<li class="fragment appear">Tiene destructores pero se parecen más a los finalizadores de
+Java.</li>
+<li class="fragment appear">No hay archivos de cabecera e implementación.</li>
+<li class="fragment appear">Se recomienda desarrollar con <a href="https://msdn.microsoft.com/es-es/vstudio/aa718325.aspx">VisualStudio</a> o con la versión de
+código abierto <a href="https://code.visualstudio.com/">visual studio code</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4be96ea">
+<h3 id="org4be96ea">Ejemplo de código C#</h3>
+<ul>
+<li>El siguiente código de ejemplo está tomado de <a href="https://code.msdn.microsoft.com/Simple-Calculator-d1d8cf4c">aquí</a>.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-csharp"   ><code trim><span class="linenr">1: </span>  <span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">System.Windows</span>;
+<span class="linenr">2: </span>  <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; font-style: italic;">MyCalculatorv1</span>
+<span class="linenr">3: </span>  {
+<span class="linenr">4: </span>      <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">partial</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">App</span> : <span style="font-weight: bold; text-decoration: underline;">Application</span>
+<span class="linenr">5: </span>      {
+<span class="linenr">6: </span>      }
+<span class="linenr">7: </span>  }
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org8f7f15c">
+<h3 id="org8f7f15c">Ejemplo de código C#</h3>
+<div class="org-src-container">
+
+<pre  class="src src-csharp"   ><code trim><span class="linenr"> 1: </span>  <span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">System</span>;
+<span class="linenr"> 2: </span>  <span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">System.Windows</span>;
+<span class="linenr"> 3: </span>  <span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">System.Windows.Controls</span>;
+<span class="linenr"> 4: </span>  <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; font-style: italic;">MyCalculatorv1</span> {
+<span class="linenr"> 5: </span>   <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">partial</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">MainWindow</span> : <span style="font-weight: bold; text-decoration: underline;">Window</span> {
+<span class="linenr"> 6: </span>     <span style="font-weight: bold;">public</span> <span style="font-weight: bold;">MainWindow</span>() {
+<span class="linenr"> 7: </span>         <span style="font-weight: bold;">InitializeComponent</span>();
+<span class="linenr"> 8: </span>     }
+<span class="linenr"> 9: </span>     <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Button_Click_1</span>(<span style="font-weight: bold; text-decoration: underline;">object</span> <span style="font-weight: bold; font-style: italic;">sender</span>, <span style="font-weight: bold; text-decoration: underline;">RoutedEventArgs</span> <span style="font-weight: bold; font-style: italic;">e</span>) {
+<span class="linenr">10: </span>         <span style="font-weight: bold; text-decoration: underline;">Button</span> <span style="font-weight: bold; font-style: italic;">b</span> = (<span style="font-weight: bold; text-decoration: underline;">Button</span>) sender;
+<span class="linenr">11: </span>         tb.Text += b.Content.<span style="font-weight: bold;">ToString</span>();
+<span class="linenr">12: </span>     }
+<span class="linenr">13: </span>     <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Result_click</span>(<span style="font-weight: bold; text-decoration: underline;">object</span> <span style="font-weight: bold; font-style: italic;">sender</span>, <span style="font-weight: bold; text-decoration: underline;">RoutedEventArgs</span> <span style="font-weight: bold; font-style: italic;">e</span>) {
+<span class="linenr">14: </span>         <span style="font-weight: bold;">try</span> {
+<span class="linenr">15: </span>             <span style="font-weight: bold;">result</span>();
+<span class="linenr">16: </span>         }
+<span class="linenr">17: </span>         <span style="font-weight: bold;">catch</span> (Exception exc) {
+<span class="linenr">18: </span>             tb.Text = <span style="font-style: italic;">"Error!"</span>;
+<span class="linenr">19: </span>         }
+<span class="linenr">20: </span>     }
+<span class="linenr">21: </span>     ...
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org3479e2c">
+<h3 id="org3479e2c">Proyecto mono</h3>
+<ul>
+<li><a href="http://www.mono-project.com">Mono</a> es una implementación libre y de código abierto de <i>.Net</i>,
+de la máquina virtual y del compilador de C#.</li>
+<li>Ha permitido disponer de esta tecnología en S.O. distintos a Windows.</li>
+<li>Dispone de su propio IDE: <a href="http://www.monodevelop.com/">MonoDevelop</a>.</li>
+<li>El compilador libre que teneis instalado de <b>C#</b> se llama <i>mcs</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org42c8e38">
+<h2 id="org42c8e38">Vala</h2>
+<ul>
+<li><a href="https://wiki.gnome.org/Projects/Vala">Vala</a> es un lenguaje muy parecido a <b>C#</b>, aunque toma cosas de
+<b>C++</b> y también de <b>Java</b>.</li>
+<li>Está asociado a proyectos de código abierto.</li>
+<li>Puedes ver documentación sobre el mismo <a href="https://wiki.gnome.org/Projects/Vala">aquí</a>.</li>
+<li>Dispone de una biblioteca de colecciones llamada <a href="https://wiki.gnome.org/Projects/Vala/GeeSamples">Gee</a>.</li>
+<li>Permite crear aplicaciones con interfaz gráfico de usuario de
+manera muy sencilla, mira este <a href="https://youtu.be/k9hE0mumsCM">vídeo</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4571cd6">
+<h3 id="org4571cd6">El lenguaje Vala</h3>
+<ul>
+<li>Dispone de clases e interfaces.</li>
+<li>Fuertemente tipado con herencia simple de clases y múltiple de
+interfaces.</li>
+<li>Genericidad que permite crear una biblioteca de colecciones muy
+amplia (Gee).</li>
+<li>Liberación de memoria basada en cuenta de referencias.</li>
+<li>Tiene destructores como en <b>C++</b>.</li>
+<li>Permite <a href="https://blogs.gnome.org/jnelson/2011/05/30/a-few-of-my-favorite-vala-things-enums/">añadir métodos a tipos enumerados</a>.</li>
+<li>Dispone de la <a href="https://wiki.gnome.org/Projects/Vala/Tutorial#Signals">emisión de señales</a> y ejecución de código diferido en
+el mismo lenguaje.</li>
+<li>Al igual que en <b>C#</b> dispone de <a href="https://wiki.gnome.org/Projects/Vala/Tutorial#Properties">propiedades</a>.</li>
+<li>No hay archivos de cabecera e implementación.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org250cdf1">
+<h3 id="org250cdf1">Ejemplo de código Vala</h3>
+<ul>
+<li>Un ejemplo sencillo:</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-java"   ><code trim><span class="linenr"> 1: </span>  <span style="font-weight: bold; text-decoration: underline;">using</span> <span style="font-weight: bold; font-style: italic;">GLib</span>;
+<span class="linenr"> 2: </span>  <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Droid</span> {
+<span class="linenr"> 3: </span>      <span style="font-weight: bold;">public</span> Droid (string n) {
+<span class="linenr"> 4: </span>        name = n;
+<span class="linenr"> 5: </span>      }
+<span class="linenr"> 6: </span>      <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">name</span> {get; set;}  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">propiedad: variable+set+get todo-junto</span>
+<span class="linenr"> 7: </span>  }
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span>  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {
+<span class="linenr">10: </span>      <span style="font-weight: bold; text-decoration: underline;">Droid</span> <span style="font-weight: bold; font-style: italic;">d</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Droid</span> (<span style="font-style: italic;">"correo"</span>);
+<span class="linenr">11: </span>
+<span class="linenr">12: </span>      stdout.printf(<span style="font-style: italic;">"Nombre: %s\n"</span>, d.name);
+<span class="linenr">13: </span>      <span style="font-weight: bold;">return</span> 0;
+<span class="linenr">14: </span>  }
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf9f8710">
+<h3 id="orgf9f8710">Características adicionales a Vala</h3>
+<ul>
+<li>Dispone de una <a href="http://valadoc.org/#!wiki=index">web</a> con la documentación de todas las bibliotecas que
+tienen una adaptación a <b>Vala</b>.</li>
+<li>Realmente el compilador de <b>Vala</b> es un <i>traductor</i> a <b>C</b>.</li>
+<li>Se puede parar la <i>compilación</i> en el instante en el que se genera el
+código <b>C</b> y verlo.</li>
+<li>El compilador de vala se llama igual: <i>valac</i>. Lo tenéis instalado en
+la máquina virtual.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4d0db3e">
+<h2 id="org4d0db3e">D</h2>
+<ul>
+<li class="fragment appear">Creado inicialmente por Digital Mars, fabricante de compiladores
+de C/C++.</li>
+<li class="fragment appear">Trata de afrontar las pegas de <b>C++</b> como LOO debido a su
+compatibilidad hacia atrás con <b>C</b>.</li>
+<li class="fragment appear">Hoy en día su desarrollo se hace por parte de una comunidad y se
+cuenta con una <i>fundación</i> que promueve el desarrollo y uso del
+mismo.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org43ee908">
+<h3 id="org43ee908">El lenguaje D</h3>
+<ul>
+<li class="fragment appear">Dispone de clases e interfaces.</li>
+<li class="fragment appear">Fuertemente tipado con herencia simple de clases y múltiple de
+interfaces.</li>
+<li class="fragment appear">Genericidad al estilo de <b>C++</b> (permite metaprogramación).</li>
+<li class="fragment appear">Recolección de basura.</li>
+<li class="fragment appear">Tiene destructores para clases parecidos a los finalizadores de
+Java y destructores similares a los de <b>C++</b> para <i>structs</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf8148e0">
+<h3 id="orgf8148e0">El lenguaje D</h3>
+<ul>
+<li class="fragment appear">Permite tener funciones libres, incluso permite anidar funciones.</li>
+
+<li class="fragment appear">No dispone de espacios de nombres pero sí de módulos: <i>module</i>. Estos
+deben ser importados donde se usan mediante la orden <i>import</i>.</li>
+
+<li class="fragment appear">Aquí dispones de un <a href="http://dlang.org/comparison.html">resumen de todas sus características</a>.</li>
+
+<li class="fragment appear">Existen tres compiladores de D. Todos ellos libres. Los puedes
+descargar de <a href="http://dlang.org/download.html">aquí</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8044f29">
+<h3 id="org8044f29">Ejemplo de código <b>D</b></h3>
+<ul>
+<li><p>
+Haciendo uso de notación funcional:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-C"   ><code trim><span class="linenr"> 1: </span>    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Sort lines</span>
+<span class="linenr"> 2: </span>    import std.stdio, std.array, std.algorithm;
+<span class="linenr"> 3: </span>
+<span class="linenr"> 4: </span>    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">main</span>() {
+<span class="linenr"> 5: </span>        stdin
+<span class="linenr"> 6: </span>             .byLineCopy           <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">No es necesario usar () en la llamada</span>
+<span class="linenr"> 7: </span>             .array                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">si no hay argumentos</span>
+<span class="linenr"> 8: </span>             .sort
+<span class="linenr"> 9: </span>             .each!writeln;
+<span class="linenr">10: </span>     }
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf46e900">
+<h3 id="orgf46e900">Ejemplo de código <b>D</b></h3>
+<ul>
+<li><p>
+Uso de clases:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-C"   ><code trim><span class="linenr"> 1: </span>     import std.stdio;
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span>     <span style="font-weight: bold; text-decoration: underline;">class</span> <span style="font-weight: bold; font-style: italic;">Base</span> {
+<span class="linenr"> 4: </span>        protected <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">y</span> = 8;
+<span class="linenr"> 5: </span>        private <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span> = 9;
+<span class="linenr"> 6: </span>     }
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span>     <span style="font-weight: bold; text-decoration: underline;">class</span> <span style="font-weight: bold; text-decoration: underline;">Derived</span> : Base {
+<span class="linenr"> 9: </span>       public <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">get_n</span> () { <span style="font-weight: bold;">return</span> n; } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">We can access 'n' 'cause Base and</span>
+<span class="linenr">10: </span>                                         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Derived are declared in the same file!</span>
+<span class="linenr">11: </span>       public <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">get_k</span> () { <span style="font-weight: bold;">return</span> k; }
+<span class="linenr">12: </span>
+<span class="linenr">13: </span>       private <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">k</span> = 0;
+<span class="linenr">14: </span>
+<span class="linenr">15: </span>       ~this () {
+<span class="linenr">16: </span>         writeln (<span style="font-style: italic;">"~Derived."</span>);
+<span class="linenr">17: </span>       }
+<span class="linenr">18: </span>     }
+<span class="linenr">19: </span>
+<span class="linenr">20: </span>     <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">main</span> () {
+<span class="linenr">21: </span>        <span style="font-weight: bold; text-decoration: underline;">Derived</span> <span style="font-weight: bold; font-style: italic;">d</span> = new Derived;
+<span class="linenr">22: </span>
+<span class="linenr">23: </span>        writeln (d.get_k);
+<span class="linenr">24: </span>     }
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5a381d2">
+<h2 id="org5a381d2">Python</h2>
+<div class="outline-text-2" id="text-org5a381d2">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org9055c4f">
+<h3 id="org9055c4f">Historia</h3>
+<ul>
+<li class="fragment appear">Creado a finales de los años 80.</li>
+<li class="fragment appear">Su desarrollador inicial fue <a href="https://en.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a>.</li>
+<li class="fragment appear">Toda la documentación sobre el lenguaje la puedes encontrar en
+la web del mismo: <a href="https://www.python.org/">python</a>.</li>
+<li class="fragment appear">Python admite diversos paradigmas de programación, entre ellos el
+<a href="https://docs.python.org/3/tutorial/classes.html">Orientado a Objetos</a>. También soporta el concepto de <a href="https://docs.python.org/3/tutorial/modules.html">módulos</a> como
+mecanismo de división del código fuente en varios archivos.</li>
+<li class="fragment appear">Actualmente hay dos versiones:<a href="https://docs.python.org/2.7/tutorial/">python2</a> y <a href="https://docs.python.org/3.7/tutorial/">python3</a>. Son incompatibles a nivel de sintáxis. Nosotros
+emplearemos la versión <i>3</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdad244e">
+<h3 id="orgdad244e">Python: Clases</h3>
+<ul>
+<li>Se declaran y definen en el mismo archivo.</li>
+<li>Los métodos de instancia deben declarar explícitamente un primer
+parámetro que representa el objeto al que se le envia el
+mensaje. El convenio es llamarlo <code>self</code>.</li>
+<li><p>
+Los objetos se crean con la notacion que ya conocemos de <code>C++</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold; font-style: italic;">myObject</span> = myClass()
+</code></pre>
+</div></li>
+<li><p>
+El constructor invoca el método especial <code>__init__</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+<span class="linenr">2: </span>       <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">data</span> = []  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Obligatorio el uso de self</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org44dcae5">
+<h3 id="org44dcae5">Python: Clases</h3>
+<ul>
+<li><p>
+Debemos emplear <code>self</code> para llamar a otros métodos de la clase:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr"> 1: </span>    <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Bag</span>:
+<span class="linenr"> 2: </span>    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>):
+<span class="linenr"> 3: </span>       <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">data</span> = []
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span>    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">add</span>(<span style="font-weight: bold;">self</span>, x):
+<span class="linenr"> 6: </span>       <span style="font-weight: bold;">self</span>.data.append(x)
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span>    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">addtwice</span>(<span style="font-weight: bold;">self</span>, x):
+<span class="linenr"> 9: </span>       <span style="font-weight: bold;">self</span>.add(x)
+<span class="linenr">10: </span>       <span style="font-weight: bold;">self</span>.add(x)
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org69f7ac8">
+<h3 id="org69f7ac8">Python: Clases</h3>
+<ul>
+<li><p>
+Podemos declarar variables y métodos de clase :
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Complex</span>:
+   <span style="font-weight: bold; font-style: italic;">count</span> = 0
+
+   <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">onemore</span>():
+       Complex.<span style="font-weight: bold; font-style: italic;">count</span> += 1
+
+   <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">__init__</span>(<span style="font-weight: bold;">self</span>, realpart = 0.0, imagpart = 0.0):
+       <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">r</span> = realpart
+       <span style="font-weight: bold;">self</span>.<span style="font-weight: bold; font-style: italic;">i</span> = imagpart
+       Complex.onemore()
+
+   <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">rpart</span>(this):
+       <span style="font-weight: bold;">return</span> this.r
+
+<span style="font-weight: bold; font-style: italic;">x</span> = Complex(3.0, -4.5)
+<span style="font-weight: bold; font-style: italic;">x2</span> = Complex()
+<span style="font-weight: bold;">print</span> (<span style="font-style: italic;">"x.r = "</span>, x.rpart())
+<span style="font-weight: bold;">print</span> (<span style="font-style: italic;">"x2.r = "</span>, x2.rpart())
+<span style="font-weight: bold;">print</span> (<span style="font-style: italic;">"Complex numbers created: "</span>, Complex.count)
+<span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">-------------- Output: --------------------</span>
+</code></pre>
+</div>
+
+<pre class="example">
+x.r =  3.0
+x2.r =  0.0
+Complex numbers created:  2
+</pre></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgae29b55">
+<h3 id="orgae29b55">Python: Clases</h3>
+<ul>
+<li><p>
+Admite herencia simple:
+</p>
+
+<p>
+<code class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">DerivedClassName</span>(BaseClassName): ...</code>
+</p></li>
+
+<li><p>
+Y también múltiple:
+</p>
+
+<p>
+<code class="src src-python"><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">DerivedClassName</span>(Base1, Base2,...,BaseN):...</code>
+</p></li>
+
+<li>Técnicamente no existe la visibilidad privada de identificadores
+definidos en una clase, pero <a href="https://docs.python.org/3/tutorial/classes.html#private-variables">se puede obtener un resultado parecido</a>
+empleando como prefijos/sufijos símbolos de subrayado.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4f5560a">
+<h3 id="org4f5560a">Python: Módulos</h3>
+<ul>
+<li>Los módulos son la manera que Python tiene de permitirnos separar
+el código que escribimos en diversos archivos.</li>
+
+<li>Cada fichero se convierte en un módulo llamado como el archivo
+pero sin la extensión <code>.py</code>.</li>
+
+<li><p>
+Los módulos se <i>importan</i> con la sentencia <i>import</i>:
+</p>
+
+<p>
+<code>import name-of-module</code>
+</p></li>
+
+</ul>
+
+</section>
+<section id="slide-org4f5560a-split">
+
+<ul>
+<li><p>
+Los símbolos importados de un módulo pertenecen al espacio de nombres de ese módulo:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr"> 1: </span>    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Fibonacci numbers module,  file: fibmod.py</span>
+<span class="linenr"> 2: </span>    <span style="font-weight: bold;">def</span> <span style="font-weight: bold;">fib</span>(n):    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">write Fibonacci series up to n</span>
+<span class="linenr"> 3: </span>      <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span> = 0, 1
+<span class="linenr"> 4: </span>      <span style="font-weight: bold;">while</span> a &lt; n:
+<span class="linenr"> 5: </span>        <span style="font-weight: bold;">print</span>(a, end=<span style="font-style: italic;">' '</span>)
+<span class="linenr"> 6: </span>        <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; font-style: italic;">b</span> = b, a+b
+<span class="linenr"> 7: </span>      <span style="font-weight: bold;">print</span>()
+<span class="linenr"> 8: </span>      ....
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span>    <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Main Program, file: main.py</span>
+<span class="linenr">11: </span>    <span style="font-weight: bold;">import</span> fibmod
+<span class="linenr">12: </span>    fibmod.fib(200)
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org01ef05f">
+<h3 id="org01ef05f">Python: Módulos</h3>
+<ul>
+<li><p>
+Se puede hacer visible un símbolo de un módulo importado con la construcción:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold;">from</span> fibmod <span style="font-weight: bold;">import</span> fib
+<span class="linenr">2: </span>    fib(120)
+</code></pre>
+</div></li>
+
+<li class="fragment appear"><p>
+Se admite el uso del carácter '*' como comodín:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold;">from</span> fibmod <span style="font-weight: bold;">import</span> *
+<span class="linenr">2: </span>    fib(120)
+</code></pre>
+</div></li>
+
+<li class="fragment appear"><p>
+Se permite el renombrado:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-python"   ><code trim><span class="linenr">1: </span>    <span style="font-weight: bold;">from</span> fibo <span style="font-weight: bold;">import</span> fib <span style="font-weight: bold;">as</span> fibonacci
+<span class="linenr">2: </span>    fibonacci(120)
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org01ef05f-split">
+
+<ul>
+<li>Los módulos se <i>importan</i> desde el directorio actual o desde los
+directorios definidos en la variable: <i>sys.path</i>.</li>
+
+<li>Esta variable contiene una lista de directorios donde residen los
+módulos estándar que vienen con la instalación de python, p.e. el
+módulo <i>sys</i>.</li>
+
+<li>Para más información sobre módulos consulta el <a href="https://docs.python.org/3/tutorial/modules.html">tutorial</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org78ae005">
+<h3 id="org78ae005">Python: Depuración</h3>
+<ul>
+<li>Para depurar un programa en Python podemos hacer uso del módulo <code>pdb</code>.</li>
+<li class="fragment appear">Este módulo define un depurador interactivo a nivel de código
+fuente. Podemos poner puntos de parada, ejecutar sentencias paso
+paso, movernos por la pila de llamadas, etc&#x2026;</li>
+<li class="fragment appear">Para más información consulta la página web de <a href="https://docs.python.org/3/library/pdb.html">pdb</a>.</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgfe49de3">
+<h2 id="orgfe49de3">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

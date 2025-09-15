@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 5: Clases y objetos.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 5: Clases y objetos.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-03-04 mar 19:40</p>
+</section>
+
+<section>
+<section id="slide-org43d0f54">
+<h2 id="org43d0f54">Concepto de clase en POO.</h2>
+</section>
+</section>
+<section>
+<section id="slide-orgd501f31">
+<h3 id="orgd501f31">Introducción</h3>
+<ul>
+<li class="fragment appear">Ya conocemos lo que es una clase del tema anterior.</li>
+
+<li class="fragment appear">También se puede ver como un patrón o una idea de la cual podemos
+tener realizaciones concretas: <i>los objetos</i>.</li>
+
+<li class="fragment appear">Una clase debería tener una única responsabilidad (<a href="https://es.wikipedia.org/wiki/Single_responsibility_principle">principio de
+responsabilidad única</a>).</li>
+
+<li class="fragment appear">Dado que es una buena idea crear una clase por cada responsabilidad
+detectada, es normal que en un diseño orientado a objetos tengamos
+que usar varias de ellas.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9cd1b8b">
+<h3 id="org9cd1b8b">Forma canónica de una clase.</h3>
+<ul>
+<li>Con esta afirmación nos referimos al conjunto de métodos mínimo
+que debería tener una clase creada por nosotros para que se
+<i>pareciera</i> en su comportamiento lo máximo posible a un tipo de
+datos básico del lenguaje (<i>POD</i>: Plain Old Data).</li>
+
+<li class="fragment appear">También se le llama <i>interfaz mínimo</i> de una clase.</li>
+
+<li class="fragment appear">Es interesante que consultes las conocidas <a href="https://en.cppreference.com/w/cpp/language/rule_of_three">reglas de los 3, los 5
+y 0</a>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org9cd1b8b-split">
+
+<ul>
+<li><p>
+Varía de unos autores a otros, incluso de una clase a otra, pero
+es bastante común uno como el siguiente:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">T</span> {
+<span style="font-weight: bold;">public</span>:
+ <span style="font-weight: bold;">T</span>  ();                         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">1. Const. por defecto</span>
+ <span style="font-weight: bold;">T</span>  (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold; font-style: italic;">t</span>);               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">2. Const. de copia</span>
+ ~<span style="font-weight: bold;">T</span> ();                         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">3. Destructor</span>
+ <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">==</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold; font-style: italic;">t</span>);  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">4. Comparaci&#243;n</span>
+ <span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">=</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold; font-style: italic;">t</span>);     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">5. Asignaci&#243;n</span>
+}
+
+<span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">t1</span>, <span style="font-weight: bold; font-style: italic;">t2</span>;                       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Const. por defecto</span>
+<span style="font-weight: bold; text-decoration: underline;">T</span>* <span style="font-weight: bold; font-style: italic;">t3</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">T</span>(t1);              <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Const. de copia</span>
+
+t1 = t2;                        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Op. de asignaci&#243;n</span>
+...
+<span style="font-weight: bold;">if</span> (t1 == *t3)...               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Op. de comparaci&#243;n</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9cd1b8b-split">
+
+<ul>
+<li>Es muy útil definir el constructor de copia en los casos donde
+hay que distinguir entre copia <i>superficial</i> y copia <i>profunda</i>
+(shallow/deep copy) ya que el constructor de copia que por
+defecto nos proporciona el lenguaje, sólo hace una copia <i>bit a
+bit</i> del objeto origen en el objeto destino.</li>
+
+</ul>
+<ul>
+<li class="fragment appear"><p>
+Al redefinir el operador de asignación en una clase debemos
+prestar especial atención a esta situación:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">t1</span>;
+t1 = t1;
+</code></pre>
+</div></li>
+<li class="fragment appear">¿Por qué el operador de asignación devuelve un dato de tipo <code>T&amp;</code>?</li>
+
+</ul>
+
+</section>
+<section id="slide-org9cd1b8b-split">
+
+<ul>
+<li><p>
+Presta atención, no es lo mismo:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">t1</span>, <span style="font-weight: bold; font-style: italic;">t2</span>;
+t2 = t1;
+</code></pre>
+</div></li>
+<li><p>
+Que&#x2026;
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">t1</span>;
+<span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">t2</span> = t1;  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Equivale a T t2(t1)</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9cd1b8b-split">
+
+<ul>
+<li>Si fuera necesario podemos añadir operaciones de conversión de
+tipo desde objetos de la clase a otros tipos:</li>
+
+</ul>
+
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">T</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">T</span> ();                         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Const. por defecto</span>
+  ...
+  <span style="font-weight: bold;">operator</span> <span style="font-weight: bold; text-decoration: underline;">bool</span> () <span style="font-weight: bold;">const</span>;       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Conversi&#243;n de T -&gt; bool: if (t)...</span>
+  <span style="font-weight: bold;">operator</span> <span style="font-weight: bold; text-decoration: underline;">int</span>  () <span style="font-weight: bold;">const</span>;       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Conversi&#243;n de T -&gt; int: int n = t;</span>
+  ...
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org0bc7b92">
+<h3 id="org0bc7b92">Hablando de conversión de tipos&#x2026;</h3>
+<ul>
+<li><b>C++</b> soporta la sintáxis de <b>C</b> pero introduce (<i>y aconseja el
+uso</i>) una nueva forma de llevarla a cabo.</li>
+
+<li class="fragment appear"><p>
+Disponemos de una serie de operadores nuevos de conversión de
+tipo:
+</p>
+
+<ul>
+<li class="fragment appear"><code>static_cast&lt;new_type&gt;(expression)</code> :
+<ul>
+<li><p>
+Es una conversión de tipo
+hecha en tiempo de compilación.
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span> = <span style="font-weight: bold;">static_cast</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt;(4.3);
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf72dde7-split">
+
+<ul>
+<li><p>
+<code>const_cast&lt;new_type&gt;(expression)</code> :
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {
+  <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">int</span> * <span style="font-weight: bold; font-style: italic;">p</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">int</span>(3);
+  <span style="font-weight: bold; text-decoration: underline;">int</span>* <span style="font-weight: bold; font-style: italic;">q</span>;
+
+  <span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">q = p; &lt;-- Error!</span>
+  q = <span style="font-weight: bold;">const_cast</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>*&gt;(p); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Ok ahora</span>
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf72dde7-split">
+
+<ul>
+<li><p>
+<code>reinterpret_cast&lt;new_type&gt;(expression)</code> :
+</p>
+
+<ul>
+<li>Obligamos al compilador a que nos haga caso.</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> * <span style="font-weight: bold; font-style: italic;">p</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">int</span>(3);
+  <span style="font-weight: bold; text-decoration: underline;">void</span>* <span style="font-weight: bold; font-style: italic;">q</span>;
+
+  q = p; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Ok</span>
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">p = q; // Error</span>
+  p = <span style="font-weight: bold;">reinterpret_cast</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>*&gt;(q); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Ok ahora</span>
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf72dde7-split">
+
+<ul>
+<li><p>
+<code>dynamic_cast&lt;new_type&gt;(expression)</code> :
+</p>
+
+<ul>
+<li>Se usa en tiempo de ejecución en lugar de en tiempo de
+compilación.</li>
+
+</ul>
+
+<ul>
+<li class="fragment appear"><p>
+Comprueba si podemos hacer un <i>downcast</i>.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">B</span> {};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">D</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">B</span> {};
+<span style="font-weight: bold; text-decoration: underline;">D</span>  <span style="font-weight: bold; font-style: italic;">d</span>;              <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Un D</span>
+<span style="font-weight: bold; text-decoration: underline;">B</span>* <span style="font-weight: bold; font-style: italic;">b</span> = &amp;d;         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">upcast, dynamic_cast may be used,</span>
+                  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">but unnecessary</span>
+<span style="font-weight: bold; text-decoration: underline;">D</span>* <span style="font-weight: bold; font-style: italic;">new_d</span> = <span style="font-weight: bold;">dynamic_cast</span>&lt;<span style="font-weight: bold; text-decoration: underline;">D</span>*&gt;(b); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">downcast</span>
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org28e1028">
+<h3 id="org28e1028">Creación de objetos.</h3>
+<ul>
+<li class="fragment appear">Para crear un objeto basta con crear una variable de esa clase,
+con el constructor que queramos de entre los que nos proporciona
+la clase.</li>
+
+<li class="fragment appear">C++ permite crear objetos en:
+<ul>
+<li class="fragment appear"><p>
+el almacenamiento global
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">MyClass</span> <span style="font-weight: bold; font-style: italic;">obj</span>;
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {...}
+</code></pre>
+</div></li>
+<li class="fragment appear"><p>
+en la pila (<i>stack</i>)
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">f</span> () { <span style="font-weight: bold; text-decoration: underline;">MyClass</span> <span style="font-weight: bold; font-style: italic;">obj</span>;... }
+</code></pre>
+</div></li>
+<li class="fragment appear"><p>
+en el almacenamiento dinámico (<i>heap</i>)
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">MyClass</span>* <span style="font-weight: bold; font-style: italic;">objptr</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">MyClass</span>;
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org28e1028-split">
+<ul>
+<li>Tradicionalmente los LOO crean los objetos en el <i>heap</i>. Esto
+tiene ciertas implicaciones:
+<ul>
+<li class="fragment appear"><i>La variable es una referencia al objeto</i>.</li>
+<li class="fragment appear">Por tanto puede referirse a diversos objetos a lo largo de la
+ejecución de una aplicación.</li>
+<li class="fragment appear">Esto contrasta con lo que ocurre cuando creamos objetos
+<i>completos</i> en la pila o almacenamiento global y asignamos uno
+a otro (caso particular: <i>troceado</i> o <i>slicing</i>, ocurre cuando
+asignamos un objeto <i>completo</i> de clase derivada a uno de clase
+base).</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0ac91c0">
+<h3 id="org0ac91c0">Tipos de clases</h3>
+<ul>
+<li>El concepto de <i>clase</i> que hemos visto hasta ahora es el que se
+conoce como <b>clase concreta</b>. Podemos crear <i>instancias</i> de ella
+(<i>objetos</i>), es decir, se puede <i>instanciar</i>.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Existen <i>clases que no se pueden instanciar</i> se llaman
+<b>abstractas</b>. Una <i>clase abstracta</i> en <b>C++</b> es aquella que tiene
+al menos un <i>método abstracto</i>, en otros LOO basta con que se
+etiquete como <code>abstract</code>.</li>
+
+</ul>
+</section>
+<section id="slide-org0ac91c0-split">
+<ul>
+<li><p>
+En <b>C++</b> un <i>método abstracto</i> es aquel que no tiene
+implementación y eso se indica así:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">T</span> {                       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">T es una clase abstracta</span>
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">T</span> ();                            <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Const. por defecto</span>
+
+    <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">doSomething</span> () = 0; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">M&#233;todo abstracto,</span>
+                                     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">debe tener enlace din&#225;mico!</span>
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org0ac91c0-split">
+<ul>
+<li>Si no podemos crear objetos de una <i>clase abstracta</i>, ¿cuál es su
+finalidad?:
+
+<ul>
+<li class="fragment appear">Actuar como <i>clase base</i> de otras que deberán
+proporcionar una implementación para los métodos abstractos.</li>
+
+</ul></li>
+
+</ul>
+<ul>
+<li class="fragment appear">Una clase cuyos métodos son todos <i>abstractos</i> y <b>no</b> tiene
+<i>datos</i>, se conoce como un <b>interface</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org0ac91c0-split">
+
+<dl>
+<dt>Metaclase</dt><dd>Es una clase cuyas instancias son&#x2026; <i>clases</i>!<br />
+<b>C++</b> no tiene metaclases.</dd>
+
+<dt>Clase final</dt><dd>Es una clase de la que no se puede derivar. <b>C++</b> las soporta
+desde <b>C++11</b>.</dd>
+
+</dl>
+
+</section>
+<section id="slide-org0ac91c0-split">
+
+<dl>
+<dt>Local</dt><dd><p>
+En los LOO que las soportan, son aquellas declaradas dentro de
+un función, por tanto sólo se pueden usar allí&#x2026;¿<a href="http://wiki.dlang.org/Voldemort_types">sólo</a>?<br />
+<b>C++</b> permite esto desde <b>C++14</b>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Compilar con --std=c++14 o superior</span>
+<span style="font-weight: bold;">auto</span> <span style="font-weight: bold;">f</span>() {        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Deducci&#243;n del tipo de resultado</span>
+  <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">T</span> {
+    <span style="font-weight: bold;">public</span>:
+      <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>;
+  } <span style="font-weight: bold; font-style: italic;">fT</span>;
+
+  fT.n = 3;
+
+  <span style="font-weight: bold;">return</span> fT;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> ()  {
+   <span style="font-weight: bold;">auto</span> <span style="font-weight: bold; font-style: italic;">n</span> = 2;
+   <span style="font-weight: bold;">auto</span> <span style="font-weight: bold; font-style: italic;">frt</span> = f ();
+
+   <span style="font-weight: bold;">return</span> frt.n;
+}
+</code></pre>
+</div></dd>
+
+</dl>
+
+</section>
+<section id="slide-org0ac91c0-split">
+
+<dl>
+<dt>Interna</dt><dd>Se trata de una clase declarada de forma anidada dentro de
+otra. Según el LOO que usemos, tienen sus peculiaridades.</dd>
+
+<dt>Parcial</dt><dd>Se trata de aquellas clases cuya declaración se puede extender
+a lo largo de varios archivos. <b>C++</b> no las soporta, <b>C#</b> <a href="https://msdn.microsoft.com/library/wa80x488%2528v=vs.110%2529.aspx">sí</a>.</dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-org0c6f0b1">
+<h3 id="org0c6f0b1">Clases y zonas de visibilidad en C++</h3>
+<ul>
+<li class="fragment appear"><b>C++</b> nos proporciona tres zonas de visibilidad para los
+contenidos de una <i>clase</i> o <i>struct</i>:
+<ul>
+<li>public</li>
+<li>private</li>
+<li>protected</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org0c6f0b1-split">
+<ul>
+<li><b>public</b> : Es visible desde el exterior.</li>
+<li><b>private</b> : Sólo es visible desde <i>métodos de instancia</i> o de
+<i>clase</i> de la propia clase.</li>
+<li><b>protected</b> : Sólo es visible desde <i>métodos de instancia</i> o de
+<i>clase</i> de la propia clase y de clases derivadas.</li>
+<li>En una <i>clase</i> la visibilidad por defecto es <i>private</i> y en un
+<i>struct</i> es <i>public</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd85a604">
+<h3 id="orgd85a604">Identificación de clases en un diseño.</h3>
+<ul>
+<li class="fragment appear">Esto es una tarea perteneciente a las fases de análisis y diseño
+<i>orientado a objetos</i>.</li>
+
+<li class="fragment appear">Existen varios modos de hacerlo, nosotros vamos a describir uno
+relativamente sencillo y eficaz:</li>
+
+</ul>
+</section>
+<section id="slide-orgd85a604-split">
+<ol>
+<li>Escribir una descripción del problema en lenguaje natural.</li>
+<li>Subrayar los nombres en un color y los verbos en otro.</li>
+<li>A partir de este momento:
+<ul>
+<li>Los <i>nombres</i> representan objetos (y por tanto <i>posibles
+clases</i>) en nuestro diseño.</li>
+<li>Los <i>verbos</i> representan mensajes que se envían entre los
+objetos (y por tanto posibles <i>métodos de clases</i>).</li>
+
+</ul></li>
+
+</ol>
+
+<p>
+Evidentemente, el resultado obtenido debe revisarse, juzgarse y
+adaptar convenientemente al problema que estemos resolviendo.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org2c9f84a">
+<h2 id="org2c9f84a">Espacios de nombres.</h2>
+<p>
+El concepto de <i>espacio de nombres</i> está relacionado con el de
+<i>ámbito</i>.
+</p>
+
+<ul>
+<li class="fragment appear"><p>
+En cierto modo ya lo habeis usado desde <i>Programación I</i>, p.e.:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">f</span> () { <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>; ...}         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">No hay colisi&#243;n con el nombre de la</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">g</span> () { <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>; ...}         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">variable 'n' igual en ambas funciones</span>
+</code></pre>
+</div>
+<p>
+Cada función tiene su propio ámbito, su propio <i>espacio de
+nombres</i>.
+</p></li>
+
+</ul>
+</section>
+<section id="slide-org2c9f84a-split">
+<ul>
+<li>Una <i>clase</i> o un <i>struct</i> también tienen su propio ámbito y por
+tanto son un <i>espacio de nombres</i>.</li>
+
+<li>Como se puede ver, la finalidad de un <i>espacio de nombres</i> es
+evitar <b>colisiones</b> de identificadores (de variables, funciones,
+clases, etc&#x2026;) idénticos cuando se emplean en un mismo ámbito.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf4f0fd3">
+<h3 id="orgf4f0fd3">Espacios de nombres y C++</h3>
+<ul>
+<li><p>
+<b>C++</b> nos da soporte sintáctico para crearlos, pero aunque el
+lenguaje de programación que usamos no lo tenga, siempre podemos
+emplear un <i>truco</i>&#x2026;
+</p>
+<ul>
+<li class="fragment appear">Usar un prefijo común para todos los identificadores que
+pertenecen a un mismo <i>espacio de nombres</i>.</li>
+
+</ul>
+</section>
+<section id="slide-org5acbc9d-split">
+<ul>
+<li><p>
+Recordad los nombres de las funciones de la práctica 2:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">ListPtr</span>  <span style="font-weight: bold;">listCreate</span>   ();         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Espacio de nombres list</span>
+<span style="font-weight: bold; text-decoration: underline;">Position</span> <span style="font-weight: bold;">listLocate</span>   (<span style="font-weight: bold; text-decoration: underline;">ListPtr</span> <span style="font-weight: bold; font-style: italic;">l</span>, <span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+<span style="font-weight: bold; text-decoration: underline;">NodePtr</span>  <span style="font-weight: bold;">listRetrieve</span> (<span style="font-weight: bold; text-decoration: underline;">ListPtr</span> <span style="font-weight: bold; font-style: italic;">l</span>, <span style="font-weight: bold; text-decoration: underline;">Position</span> <span style="font-weight: bold; font-style: italic;">i</span>);
+...
+TreePtr  treeCreate  ();        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Espacio de nombres tree</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span>     <span style="font-weight: bold;">treeDestroy</span> (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+<span style="font-weight: bold; text-decoration: underline;">NodePtr</span>&amp; <span style="font-weight: bold;">treeRoot</span>    (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+...
+GraphPtr graphCreate   ();      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Espacio de nombres graph</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span>     <span style="font-weight: bold;">graphDestroy</span>  (<span style="font-weight: bold; text-decoration: underline;">GraphPtr</span> <span style="font-weight: bold; font-style: italic;">g</span>);
+<span style="font-weight: bold; text-decoration: underline;">void</span>     <span style="font-weight: bold;">graphMakeNull</span> (<span style="font-weight: bold; text-decoration: underline;">GraphPtr</span> <span style="font-weight: bold; font-style: italic;">g</span>);
+...
+</code></pre>
+</div></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+<p>
+La construcción sintáctica en <b>C++</b> es la siguiente:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">NOMBRE</span> {
+  <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">A</span> {
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">m</span>();
+    ...
+  };
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">n</span>;
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">A</span>::<span style="font-weight: bold;">m</span>() { ... }
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">f</span> () {...}
+  <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">INTERNO</span> {
+    ...
+  }
+} <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&lt;- No lleva ';' al final</span>
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+
+<ul>
+<li>Se parece mucho a una <i>clase</i>&#x2026;pero no tiene parte publica, ni
+privada ni protegida. <i>Todo es visible desde el exterior</i>, pero
+dentro de su ámbito.</li>
+<li>Además, a diferencia de una <i>clase</i>, una vez <i>cerrado</i> puede
+volver a abrirse para seguir añadiéndole más identificadores.</li>
+<li><b>C++</b> introduce un operador nuevo para resolver ámbitos: <b>::</b></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+
+<ul>
+<li><p>
+Unos identificadores como los de la práctica:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">TreePtr</span>  <span style="font-weight: bold;">treeCreate</span>  ();        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Espacio de nombres tree</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span>     <span style="font-weight: bold;">treeDestroy</span> (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+<span style="font-weight: bold; text-decoration: underline;">NodePtr</span>&amp; <span style="font-weight: bold;">treeRoot</span>    (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+<ul>
+<li><p>
+Se definirían y usarían así:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">tree.h</span>
+<span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">tree</span> {
+  ...
+  <span style="font-weight: bold;">struct</span> Tree {
+    <span style="font-weight: bold; text-decoration: underline;">NodePtr</span> <span style="font-weight: bold; font-style: italic;">_root</span>;
+  };
+  <span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">Tree</span>* <span style="font-weight: bold; text-decoration: underline;">TreePtr</span>;
+  ...
+  TreePtr  create  ();
+  <span style="font-weight: bold; text-decoration: underline;">void</span>     <span style="font-weight: bold;">destroy</span> (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+  <span style="font-weight: bold; text-decoration: underline;">NodePtr</span>&amp; <span style="font-weight: bold;">root</span>    (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+}
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgdd9c1ea-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">tree.cc</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"tree.h"</span>
+
+<span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold; text-decoration: underline;">TreePtr</span>  <span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold;">create</span>  () {...}
+<span style="font-weight: bold; text-decoration: underline;">void</span>           <span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold;">destroy</span> (<span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>) {...}
+<span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold; text-decoration: underline;">NodePtr</span>&amp; <span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold;">root</span>    (<span style="font-weight: bold; text-decoration: underline;">tree</span>::<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>) {...}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+<ul>
+<li><p>
+Hay un modo de <i>sacar</i> a la vez de su <i>espacio de nombres</i> todos
+los identificadores que define -como te imaginarás esto puede
+desencadenar colisiones de nombres, <i>úsalo con juicio</i>-:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">tree</span> {...}
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">tree</span>;
+</code></pre>
+</div></li>
+
+</ul>
+</section>
+<section id="slide-orgf4f0fd3-split">
+<ul>
+<li><p>
+También es posible extraer de un <i>espacio de nombres</i> sólo un símbolo:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">cout</span>;
+...
+cout &lt;&lt; <span style="font-style: italic;">"Hola..."</span>;
+</code></pre>
+</div></li>
+<li>Todos los símbolos que define la <i>biblioteca estándar</i> de <b>C++</b> se
+encuentran dentro del espacio de nombres <b>std</b>.</li>
+<li>De ahí que, p.e., usemos: <code>std::string</code>, <code>std::cout</code>, <code>std::endl</code>,
+etc&#x2026;.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+
+<ul>
+<li><p>
+Si en lugar de un <i>espacio de nombres</i> se tratara de una <i>clase</i>,
+sería parecido:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">tree.h</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Tree</span> {
+ <span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">Tree</span>* <span style="font-weight: bold; text-decoration: underline;">TreePtr</span>;
+   ...
+   TreePtr  create  ();
+   <span style="font-weight: bold; text-decoration: underline;">void</span>     <span style="font-weight: bold;">destroy</span> (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+   <span style="font-weight: bold; text-decoration: underline;">NodePtr</span>&amp; <span style="font-weight: bold;">root</span>    (<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>);
+ <span style="font-weight: bold;">private</span>:
+   ...
+};
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">tree.cc</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"tree.h"</span>
+
+<span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold; text-decoration: underline;">TreePtr</span>  <span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold;">create</span>  () {...}
+<span style="font-weight: bold; text-decoration: underline;">void</span>           <span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold;">destroy</span> (<span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>) {...}
+<span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold; text-decoration: underline;">NodePtr</span>&amp; <span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold;">root</span>    (<span style="font-weight: bold; text-decoration: underline;">Tree</span>::<span style="font-weight: bold; text-decoration: underline;">TreePtr</span> <span style="font-weight: bold; font-style: italic;">t</span>) {...}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgf4f0fd3-split">
+
+<ul>
+<li>Podemos emplear los <i>espacios de nombres</i> para tener distintas
+versiones de nuestro código y elegir cual queremos usar
+p.e. mediante opciones dadas al compilador.</li>
+<li>Un ejemplo de lo anterior lo podemos observar en el siguiente
+<a href="https://youtu.be/IcoNGRL-K5c">vídeo</a>. En el se propone una posible mejora en un código inicial y
+para comprobarla se duplica el código. Tanto el código original como
+el duplicado con la mejora se separan en espacios de nombres
+distintos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3c377e7">
+<h2 id="org3c377e7">E/S en C++ bajo el paradigma orientado a objetos.</h2>
+<ul>
+<li>Ya no usamos (aunque podemos) las funciones de E/S de <b>C</b>.</li>
+
+</ul>
+</section>
+<section id="slide-org3c377e7-split">
+<ul>
+<li>Empleamos los <i>streams</i>, tanto de entrada como de
+salida. Disponemos de tres clases para ello:
+<dl>
+<dt class="fragment appear">ifstream :</dt><dd class="fragment appear"><i>streams</i> de entrada.</dd>
+<dt class="fragment appear">ofstream :</dt><dd class="fragment appear"><i>streams</i> de salida.</dd>
+<dt class="fragment appear">fstream  :</dt><dd class="fragment appear"><i>streams</i> de entrada/salida.</dd>
+
+</dl></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orga169ef3">
+<h3 id="orga169ef3">Ejemplo de salida</h3>
+<ul>
+<li class="fragment appear"><p>
+Modo por defecto: sobreescribe contenidos:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;fstream&gt;</span>              <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">cabecera con las declaraciones</span>
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {
+  <span style="font-weight: bold; text-decoration: underline;">ofstream</span> <span style="font-weight: bold; font-style: italic;">outputfile</span>;
+  outputfile.open (<span style="font-style: italic;">"libro.txt"</span>);
+  outputfile &lt;&lt; <span style="font-style: italic;">"Escribimos en el archivo.\n"</span>;
+  outputfile.close();
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div></li>
+
+</ul>
+</section>
+<section id="slide-orga169ef3-split">
+<ul>
+<li><p>
+El método <code>open (filename, mode);</code> permite especificar el modo en
+el que abrimos el archivo: <code>ios::in</code>, <code>ios::out</code>, <code>ios::binary</code>,
+<code>ios::ate</code>, <code>ios::app</code>, <code>ios::trunc</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">ofstream</span> <span style="font-weight: bold; font-style: italic;">data</span>;
+data.open (<span style="font-style: italic;">"data.bin"</span>, <span style="font-weight: bold; text-decoration: underline;">ios</span>::out | <span style="font-weight: bold; text-decoration: underline;">ios</span>::app | <span style="font-weight: bold; text-decoration: underline;">ios</span>::binary);
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc0d5a1d">
+<h3 id="orgc0d5a1d">Otras operaciones con streams</h3>
+<ul>
+<li class="fragment appear">Cierre: <code>theFile.close()</code></li>
+<li class="fragment appear"><p>
+Lectura de lineas:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">line</span>;
+<span style="font-weight: bold; text-decoration: underline;">ifstream</span> <span style="font-weight: bold; font-style: italic;">theFile</span> (<span style="font-style: italic;">"book.txt"</span>);
+<span style="font-weight: bold;">if</span> (theFile.is_open()) {
+    <span style="font-weight: bold;">while</span> ( getline (theFile,line) ) {
+      cout &lt;&lt; line &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+    }
+    theFile.close();
+} <span style="font-weight: bold;">else</span> cout &lt;&lt; <span style="font-style: italic;">"Hubo un problema al abrir el archivo."</span>;
+</code></pre>
+</div></li>
+
+</ul>
+</section>
+<section id="slide-orgc0d5a1d-split">
+<ul>
+<li>Estado:
+<ul>
+<li><code>if (myfile.is_open()) { }</code></li>
+<li><code>bad()</code>, <code>fail()</code>, <code>eof()</code>, <code>good()</code></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org68932b1">
+<h3 id="org68932b1">Archivos binarios</h3>
+<ul>
+<li class="fragment appear"><p>
+Podemos escribir y leer en ellos con <code>read</code> y <code>write</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">char</span>* <span style="font-weight: bold; font-style: italic;">memblock</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">char</span> [size];
+...
+theFile.write ( memory_block, size );
+theFile.read  ( memory_block, size );
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgbb5898c">
+<h3 id="orgbb5898c">cin, cout y cerr</h3>
+<ul>
+<li class="fragment appear">Son <i>streams</i>, de entrada el primero y de salida los dos segundos.</li>
+<li class="fragment appear">Cualquier función que lea o muestre información de la entrada o
+en la salida estándar puede, muy fácilmente, hacerlo en un
+fichero.</li>
+<li class="fragment appear">Basta cambiar <i>cin</i>, <i>cout</i> por la variable de tipo <i>ifstream</i> o
+<i>ofstream</i> que usemos en nuestro código.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org784b079">
+<h3 id="org784b079">Redefinición del operador \(<\) \(<\)</h3>
+<ul>
+<li><p>
+Podemos simplificar el mostrar la información de un objeto en un
+<i>stream</i> de salida redefiniendo como función amiga de su clase este
+operador, p.e.:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> {
+ <span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">Robot</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">bl</span> = 1.0) {
+    theName = n;
+    theBattLevel = bl;
+  }
+
+  <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&lt;&lt;</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold; font-style: italic;">os</span>, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>&amp; <span style="font-weight: bold; font-style: italic;">r</span>);
+
+  <span style="font-weight: bold;">virtual</span> ~<span style="font-weight: bold;">Robot</span>() {}
+
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">theName</span>;
+  <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">theBattLevel</span>;
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org784b079-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">definimos operator&lt;&lt; , se podria hacer dentro de la clase</span>
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&lt;&lt;</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold; font-style: italic;">os</span>, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>&amp; <span style="font-weight: bold; font-style: italic;">r</span>) {
+  os &lt;&lt; <span style="font-style: italic;">"    Name: "</span> &lt;&lt; r.theName
+     &lt;&lt; <span style="font-style: italic;">"\n    BL: "</span> &lt;&lt; r.theBattLevel &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  <span style="font-weight: bold;">return</span> os;    <span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">&lt;-- &#191;por qu&#233; se devuelve este valor?</span>
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">argc</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> *<span style="font-weight: bold; font-style: italic;">argv</span>[])
+{
+  <span style="font-weight: bold; text-decoration: underline;">Robot</span> <span style="font-weight: bold; font-style: italic;">r1</span> = Robot(<span style="font-style: italic;">"R1"</span>, 0.75);
+  <span style="font-weight: bold; text-decoration: underline;">Robot</span> <span style="font-weight: bold; font-style: italic;">r2</span> = Robot(<span style="font-style: italic;">"R2"</span>, 0.2);
+  <span style="font-weight: bold; text-decoration: underline;">Robot</span> <span style="font-weight: bold; font-style: italic;">r3</span> = Robot(<span style="font-style: italic;">"R3"</span>, 0.5);
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; r1 &lt;&lt; r2;
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; r3;
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org2cf4216">
+<h2 id="org2cf4216">Ejecución de una aplicación escrita con un LOO.</h2>
+<ul>
+<li><p>
+De todo lo descrito hasta ahora es <i>sencillo</i> intuir que la
+ejecución de una aplicación escrita con un LOO y siguiendo los
+principios de la POO consiste en:
+</p>
+</section>
+<section id="slide-orgefe3f04-split">
+<ol>
+<li>Crear en la función <code>main</code> los objetos iniciales de las clases
+pertinentes de nuestro diseño.</li>
+<li>Uno de ellos será el objeto <i>iniciador</i> de la ejecución, por lo
+que en la función <code>main</code> le enviaremos un <i>mensaje</i> que
+desencadene el inicio de la aplicación.</li>
+
+</ol>
+</section>
+<section id="slide-orgefe3f04-split">
+<ol>
+<li>Este objeto <i>iniciador</i> se encargará de enviar mensajes a
+diferentes objetos, los cuales, a su vez, enviarán mensajes a
+otros objetos&#x2026;y así sucesivamente.</li>
+<li>El resultado final de todo este paso de mensajes es la
+<i>ejecución</i> de nuestra aplicación.</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7b4d1b0">
+<h2 id="org7b4d1b0">Ponte a prueba&#x2026;</h2>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Design Patterns: Elements of Reusable Object-Oriented Software</span>
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; text-decoration: underline;">Coord</span>;
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold;">namespace</span> <span style="font-weight: bold; text-decoration: underline;">std</span>;
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Point</span> {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">static</span> <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span> <span style="font-weight: bold; font-style: italic;">Zero</span>;       <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Point (0, 0);</span>
+
+   <span style="font-weight: bold;">Point</span> (<span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">x</span> = 0.0, <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">y</span> = 0.0);
+
+   <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold;">X</span> () <span style="font-weight: bold;">const</span>;  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">X</span> (<span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+   <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold;">Y</span> () <span style="font-weight: bold;">const</span>;  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Y</span> (<span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">y</span>);
+
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">Point</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">+</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">Point</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">-</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">Point</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">*</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">Point</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">/</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org7b4d1b0-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim>   <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">+=</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">-=</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">*=</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">/=</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+
+   <span style="font-weight: bold; text-decoration: underline;">Point</span>  <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">-</span> ();
+
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">==</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">!=</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&lt;&lt;</span> (<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp;, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">istream</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&gt;&gt;</span> (<span style="font-weight: bold; text-decoration: underline;">istream</span>&amp;, <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org7b4d1b0-split">
+
+<ul>
+<li>Las variables de clase (<i>static</i>) requieren que se les reserve
+memoria definiéndolas fuera de la clase en un único punto del
+código, como si fueran una variable global, p.e.:<br />
+<code>const Point Point::zero = Point(0,0);</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc7081f4">
+<h2 id="orgc7081f4">&#x2026;una vez más!</h2>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Design Patterns: Elements of Reusable Object-Oriented Software</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Rect</span> {
+<span style="font-weight: bold;">public</span>:
+   <span style="font-weight: bold;">static</span> <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Rect</span> <span style="font-weight: bold; font-style: italic;">Zero</span>;        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Rect (Point (0, 0), Point (0, 0));</span>
+
+   <span style="font-weight: bold;">Rect</span> (<span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">y</span>, <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">w</span>, <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold; font-style: italic;">h</span>);
+   <span style="font-weight: bold;">Rect</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold; font-style: italic;">origin</span>, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold; font-style: italic;">extent</span>);
+
+   <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold;">Width</span>  () <span style="font-weight: bold;">const</span>; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Width</span>  (<span style="font-weight: bold; text-decoration: underline;">Coord</span>);
+   <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold;">Height</span> () <span style="font-weight: bold;">const</span>; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Height</span> (<span style="font-weight: bold; text-decoration: underline;">Coord</span>);
+   <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold;">Left</span>   () <span style="font-weight: bold;">const</span>; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Left</span>   (<span style="font-weight: bold; text-decoration: underline;">Coord</span>);
+   <span style="font-weight: bold; text-decoration: underline;">Coord</span> <span style="font-weight: bold;">Bottom</span> () <span style="font-weight: bold;">const</span>; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Bottom</span> (<span style="font-weight: bold; text-decoration: underline;">Coord</span>);
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgc7081f4-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim>   <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold;">Origin</span> () <span style="font-weight: bold;">const</span>; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Origin</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp; <span style="font-weight: bold;">Extent</span> () <span style="font-weight: bold;">const</span>; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Extent</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">MoveTo</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+   <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">MoveBy</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;);
+
+   <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">IsEmpty</span>  () <span style="font-weight: bold;">const</span>;
+   <span style="font-weight: bold; text-decoration: underline;">bool</span> <span style="font-weight: bold;">Contains</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Point</span>&amp;) <span style="font-weight: bold;">const</span>;
+};
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org0a4ba04">
+<h2 id="org0a4ba04">¿Quieres probar con variables y métodos de clase?</h2>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim>  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">show_vehicle_clount_address</span>();
+
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">brand</span>;
+  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">uint32_t</span> <span style="font-weight: bold; font-style: italic;">vehicle_count</span>;
+};
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">-- Vehicle methods: ----------------------------------------------------</span>
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Reserve space for class variable.</span>
+<span style="font-weight: bold; text-decoration: underline;">uint32_t</span> <span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::<span style="font-weight: bold; font-style: italic;">vehicle_count</span> = 0;
+
+<span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::<span style="font-weight: bold;">Vehicle</span>(<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">string</span>&amp; <span style="font-weight: bold; font-style: italic;">br</span>) {
+  brand = br;
+  vehicle_count++;
+
+  cout &lt;&lt; <span style="font-style: italic;">"Created vehicle: "</span> &lt;&lt; brand &lt;&lt; <span style="font-style: italic;">" ["</span> &lt;&lt; <span style="font-weight: bold;">this</span> &lt;&lt; <span style="font-style: italic;">"]\n"</span>;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::~<span style="font-weight: bold;">Vehicle</span>() {
+  cout &lt;&lt; <span style="font-style: italic;">"Destroyed vehicle: "</span> &lt;&lt; brand &lt;&lt; <span style="font-style: italic;">" ["</span> &lt;&lt; <span style="font-weight: bold;">this</span> &lt;&lt; <span style="font-style: italic;">"]\n"</span>;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">uint32_t</span> <span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::<span style="font-weight: bold;">get_number_of_vehicles</span>() {
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Prueba a descomentar esta linea:</span>
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">cout &lt;&lt; "Asking number of vehicles for this = " &lt;&lt; this &lt;&lt; '\n';</span>
+  <span style="font-weight: bold;">return</span> vehicle_count;
+}
+
+<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">string</span> &amp;<span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::<span style="font-weight: bold;">brand_name</span>() {
+  cout &lt;&lt; <span style="font-style: italic;">"Asking for brand-name of ["</span> &lt;&lt; <span style="font-weight: bold;">this</span> &lt;&lt; <span style="font-style: italic;">"]\n"</span>;
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">return brand;</span>
+  <span style="font-weight: bold; font-style: italic;">//     </span><span style="font-weight: bold; font-style: italic;">^^^^^ is a shorthand for:</span>
+  <span style="font-weight: bold;">return</span> <span style="font-weight: bold;">this</span>-&gt;brand;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::<span style="font-weight: bold;">set_brand_name</span>(<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">string</span> &amp;<span style="font-weight: bold; font-style: italic;">brand</span>) {
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">this-&gt; is mandatory here.</span>
+  <span style="font-weight: bold;">this</span>-&gt;brand = brand;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::<span style="font-weight: bold;">show_vehicle_clount_address</span>() {
+  cout &lt;&lt; <span style="font-style: italic;">"For vehicle "</span> &lt;&lt; <span style="font-weight: bold;">this</span>-&gt;brand
+  &lt;&lt; <span style="font-style: italic;">" its vehicle_count address is @: ["</span>
+  &lt;&lt; &amp;<span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::vehicle_count &lt;&lt; <span style="font-style: italic;">"]\n"</span>;
+}
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">-- Main: ---------------------------------------------------------------</span>
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">argc</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> *<span style="font-weight: bold; font-style: italic;">argv</span>[])
+{
+  <span style="font-weight: bold; text-decoration: underline;">Vehicle</span> <span style="font-weight: bold; font-style: italic;">s</span>(<span style="font-style: italic;">"Seat"</span>), <span style="font-weight: bold; font-style: italic;">a</span>(<span style="font-style: italic;">"Audi"</span>), <span style="font-weight: bold; font-style: italic;">m</span>(<span style="font-style: italic;">"Mercedes"</span>);
+
+  cout &lt;&lt; <span style="font-style: italic;">"\nTotal vehicles created-a: "</span>
+  &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">Vehicle</span>::get_number_of_vehicles()
+  &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Works too in C++!</span>
+  cout &lt;&lt; <span style="font-style: italic;">"Total vehicles created-b: "</span>
+  &lt;&lt; s.get_number_of_vehicles()
+  &lt;&lt; <span style="font-style: italic;">"\n\n"</span>;
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Getting brands:</span>
+  cout &lt;&lt; <span style="font-style: italic;">"s: "</span> &lt;&lt; s.brand_name () &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  cout &lt;&lt; <span style="font-style: italic;">"a: "</span> &lt;&lt; a.brand_name () &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  cout &lt;&lt; <span style="font-style: italic;">"m: "</span> &lt;&lt; m.brand_name () &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  cout &lt;&lt; <span style="font-style: italic;">"\n"</span>;
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Change seat's brand:</span>
+  s.set_brand_name(<span style="font-style: italic;">"Cupra"</span>);
+  cout &lt;&lt; <span style="font-style: italic;">"Changed seat's brand to: "</span> &lt;&lt; s.brand_name () &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  cout &lt;&lt; <span style="font-style: italic;">"\n"</span>;
+
+  cout &lt;&lt; <span style="font-style: italic;">"Show vehicle_counter static-var address-of each vehicle:\n"</span>;
+  s.show_vehicle_clount_address();
+  a.show_vehicle_clount_address();
+  m.show_vehicle_clount_address();
+  cout &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7f81f06">
+<h2 id="org7f81f06">Amistades&#x2026;¿peligrosas?</h2>
+<div class="outline-text-2" id="text-org7f81f06">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org79d337b">
+<h3 id="org79d337b">Las funciones <i>amigas</i> de una clase:</h3>
+<ul>
+<li class="fragment appear">No son métodos de la clase.</li>
+<li class="fragment appear">Son <i>funciones libres</i> o métodos de otras clases.</li>
+<li class="fragment appear">En ambos casos tienen derecho de acceso a la parte privada o
+protegida de la clase de la que son <i>amigas</i>.</li>
+<li class="fragment appear">Por tanto, elige bien a qué funciones/métodos les <i>otorgas</i> el
+calificativo de <i>amigas</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org79d337b-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">X</span> {
+ <span style="font-weight: bold;">private</span>:
+    <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span>;
+
+    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Declaraci&#243;n de amistad</span>
+    <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">friendSetA</span>(<span style="font-weight: bold; text-decoration: underline;">X</span>&amp; <span style="font-weight: bold; font-style: italic;">xr</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span>);
+ <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Es un m&#233;todo de instancia</span>
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">memberSet</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span>) { a = i; }
+};
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Es amiga de la clase X</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Por eso puede acceder a 'a'.</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">friendSetA</span>(<span style="font-weight: bold; text-decoration: underline;">X</span>&amp; <span style="font-weight: bold; font-style: italic;">xr</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span>) {
+  xr.a = i;
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org8de0371">
+<h3 id="org8de0371">En relación con la amistad, ten en cuenta que:</h3>
+<ul>
+<li class="fragment appear">La amistad <b>no se hereda</b>: <i>los amigos de una clase base no son
+amigos de una clase derivada</i>.</li>
+<li class="fragment appear">La amistad <b>no es transitiva</b>: <i>los amigos de mis amigos no son mis
+amigos</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orge386cf9">
+<h2 id="orge386cf9">La biblioteca estándar de C++</h2>
+<div class="outline-text-2" id="text-orge386cf9">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org36c4da7">
+<h3 id="org36c4da7">¿Qué es?</h3>
+<ul>
+<li class="fragment appear">Se trata de un conjunto de estructuras de datos y algoritmos
+predefinidos que <i>vienen</i> de manera estándar junto al compilador del
+lenguaje.</li>
+<li class="fragment appear">Estos elementos que proporciona están definidos en archivos de
+cabecera. No es necesario enlazar con un archivo binario para su uso
+en la gran mayoría de casos.</li>
+<li class="fragment appear">Para evitar colisiones de nombres todos los identificadores se
+encuentran bajo el <i>espacio de nombres</i> <b><code>std</code></b>.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orga204a56">
+<h3 id="orga204a56">¿Cómo funciona?</h3>
+<ul>
+<li class="fragment appear">La biblioteca estándar emplea el paradigma de programación conocido
+como <i>genericidad</i>, el cual veremos en el <b>tema 8</b>.</li>
+<li class="fragment appear">Para poder usar los elementos que nos proporciona debemos incluir
+<i>normalmente</i> un solo archivo de cabecera, p.e.:
+<ul>
+<li><code>&lt;array&gt;</code>, <code>&lt;vector&gt;</code>, <code>&lt;queue&gt;</code>, etc&#x2026;</li>
+<li><code>&lt;algorithm&gt;</code></li>
+
+</ul></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgbffa8b7">
+<h3 id="orgbffa8b7">Para saber más sobre la biblioteca estándar</h3>
+<ul>
+<li class="fragment appear">Echa un vistazo a este <a href="https://youtu.be/6OoSgY6NVVk">vídeo</a> para saber algo más sobre alguno los
+<i>contenedores</i> empleados más habitualmente.</li>
+<li class="fragment appear">Y si con la biblioteca estándar no tienes suficiente, mira todo lo
+que ofrece <a href="https://www.boost.org/">boost.</a></li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org005b294">
+<h2 id="org005b294">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

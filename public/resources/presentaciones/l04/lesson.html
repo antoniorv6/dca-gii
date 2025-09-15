@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 4: El paradigma orientado a objetos.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 4: El paradigma orientado a objetos.</h1><p class="subtitle">Características básicas de los lenguajes orientados a objetos.</p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-02-25 mar 18:36</p>
+</section>
+
+
+<section>
+<section id="slide-orgc56b96c">
+<h2 id="orgc56b96c">Presentación</h2>
+<ul>
+<li class="fragment appear">En este tema vamos a tratar de aclarar el significado del término
+<i>Orientado a objetos</i>.</li>
+<li class="fragment appear">En realidad es un <i>paradigma</i> que busca dos beneficios muy
+concretos aplicados al <i>software</i> que creamos:
+<ul>
+<li>Reusabilidad</li>
+<li>Extensibilidad</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-orgc56b96c-split">
+<ul>
+<li>Aunque nosotros nos centraremos en la parte de programación, está
+también muy ligado a las fases de <i>análisis</i> y <i>diseño</i>.</li>
+<li>Nos referiremos al término <i>Programación Orientada a Objetos</i> por
+su abreviatura en castellano: <b>POO</b> - <b>OOP</b> en inglés -.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf65658c">
+<h2 id="orgf65658c">Historia</h2>
+<ul>
+<li class="fragment appear">Los distintos elementos individuales que posteriormente
+conformaron lo que se conoce como <b>POO</b> aparecen con el desarrollo
+del lenguaje <a href="https://es.wikipedia.org/wiki/Simula">Simula-67</a>.</li>
+<li class="fragment appear">Posteriormente se amplia con el desarrollo por parte de <a href="https://es.wikipedia.org/wiki/Xerox">Xerox</a> del
+lenguaje/entorno de computación <a href="https://es.wikipedia.org/wiki/Smalltalk">SmallTalk</a> junto con un hardware novedoso:
+<a href="https://www.youtube.com/watch?v=2u70CgBr-OI">mira este vídeo</a>.</li>
+<li class="fragment appear">Y <a href="https://youtu.be/Cn4vC80Pv6Q">estos</a> <a href="https://youtu.be/ODZBL80JPqw">otros</a> donde se explica más detalladamente el funcionamiento de este
+<i>novedoso</i> interfaz de usuario.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf65658c-split">
+
+<h2>Historia</h2>
+
+<ul>
+<li>La idea clave detrás de la <b>POO</b> es la de poder simular en un
+computador de manera sencilla modelos de la realidad.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Para ello usamos en nuestro programa los <i>mismos términos</i> que
+empleamos al describir la realidad.</li>
+<li class="fragment appear">Es por eso que aparecen aplicados a los lenguajes de programación
+palabras como :
+<ul>
+<li>Clases, Objetos.</li>
+<li>Paso de mensajes.</li>
+<li>Herencia.</li>
+<li>Enlace dinámico, etc&#x2026;</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9cb4455">
+<h2 id="org9cb4455">Elementos básicos de la POO</h2>
+<div class="outline-text-2" id="text-org9cb4455">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org7cbc698">
+<h3 id="org7cbc698">Clases</h3>
+<ul>
+<li class="fragment appear">Son la descripción de uno o más objetos en base a una serie de
+atributos y servicios.</li>
+
+<li class="fragment appear">A estos atributos se les llama también ‘variables de instancia’ y
+‘variables de clase’, mientras que a los servicios se les llama
+‘métodos’.</li>
+
+</ul>
+
+</section>
+<section id="slide-org7cbc698-split">
+
+<h3>Clases</h3>
+
+<ul>
+<li>Una clase es la 'esencia' del objeto. En ocasiones se describe
+como un "<i>conjunto de objetos que comparten una estructura y
+comportamiento comunes</i>".</li>
+
+<li>Una clase debe tener una ‘parte’ no visible desde el exterior y
+una parte visible que es la encargada de acceder a esta parte no
+visible. En la parte no visible se suelen situar las variables de
+instancia y/o clase, mientras que en la visible se colocan los
+métodos de instancia y/o clase.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org56f892c">
+<h3 id="org56f892c">Objetos</h3>
+<ul>
+<li>Los objetos en el mundo real son aquellas 'cosas'&#x2026;
+<ul>
+<li class="fragment appear">Que son tangibles y/o visibles.</li>
+<li class="fragment appear">Que pueden ser comprendidas mentalmente.</li>
+<li class="fragment appear">A las que va dirigido el pensamiento o la acción.</li>
+
+</ul></li>
+
+<li><p>
+Mientras que cuando los vemos desde el prisma del desarrollo de
+software, los objetos son:
+</p>
+
+</section>
+<section id="slide-orgffb1392-split">
+
+<ul>
+<li>Todo aquello que modela algo real y por tanto ocupa un espacio
+y un tiempo.</li>
+
+<li>Aquellas entidades reales o abstractas con un papel bien
+definido en el dominio del problema.</li>
+
+<li>Toda entidad que en nuestro diseño de una aplicación presenta
+un <b>estado</b>, un <b>comportamiento</b> y una <b>identidad</b> propios.</li>
+
+</ul></li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org346cdcf">
+<h3 id="org346cdcf">Características de un objeto</h3>
+<ul>
+<li class="fragment appear">La <b>identidad</b> de un objeto es la propiedad que lo distingue de
+otros, incluso pertenecientes a su misma clase. Suele ser un
+nombre único de variable. Es distinta a la <b>igualdad</b>.</li>
+
+<li class="fragment appear">El <b>estado</b> de un objeto representa todas las propiedades,
+normalmente estáticas, del objeto además de los valores actuales,
+normalmente dinámicos, de cada una de estas propiedades.</li>
+
+</ul>
+
+</section>
+<section id="slide-org346cdcf-split">
+
+<ul>
+<li>El <b>comportamiento</b> de un objeto es el modo en que éste actúa y
+reacciona (ante <i>mensajes</i> recibidos), hablando en términos de
+cambios en su estado y envío de mensajes a otros objetos.</li>
+
+<li>Los <b>mensajes</b> son las acciones que un objeto realiza sobre
+otro. A la manera concreta que un objeto responde a un mensaje
+enviado por otro, se le llama <b>método</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc9f0f7f">
+<h3 id="orgc9f0f7f">Tipos de operaciones sobre un objeto</h3>
+<ul>
+<li class="fragment appear">Modificadoras (<i>setters</i> )</li>
+<li class="fragment appear">Selectoras (<i>getters</i> )</li>
+<li class="fragment appear">Iteradoras</li>
+<li class="fragment appear">Constructoras</li>
+<li class="fragment appear">Destructoras</li>
+
+</ul>
+
+</section>
+<section id="slide-orgc9f0f7f-split">
+
+<h3>Tipos de operaciones sobre un objeto</h3>
+
+<ul>
+<li class="fragment appear">Estas operaciones pueden formar parte de una clase o estar fuera
+de cualquiera de ellas.</li>
+
+<li class="fragment appear">Si una de ellas pertenece a una <i>clase</i> se le llama <b>método</b>,
+mientras que si no lo hace se le llama simplemente <i>Función</i> o
+también <b>subprograma o función libre</b>.</li>
+
+<li class="fragment appear">Al conjunto de métodos y ‘subprogramas libres’ asociados con un
+objeto se le llama protocolo.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org23cf02c">
+<h3 id="org23cf02c">¿Qué es un Lenguaje Orientado a Objetos?</h3>
+<p>
+Aquel que dispone de las siguientes características:
+</p>
+
+<ul>
+<li class="fragment appear">Herencia</li>
+<li class="fragment appear">Enlace Dinámico</li>
+<li class="fragment appear">Paso de Mensajes</li>
+<li class="fragment appear">Encapsulación</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd925edd">
+<h3 id="orgd925edd">Herencia</h3>
+<ul>
+<li class="fragment appear">Mecanismo que permite expresar la similitud entre clases.</li>
+
+<li class="fragment appear">¿Cómo?: Podemos crear nuevas clases a partir de otra u otras ya
+existentes.</li>
+
+<li class="fragment appear">A la clase nueva creada se le llama <b>clase derivada</b> y a la clase
+de la cual <i>heredamos</i> se le llama <b>clase base</b>. También se les
+suele llamar <i>subclase</i> y <i>superclase</i> respectivamente.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>De este modo incorporamos la estructura y el comportamiento de la
+clase <i>pre-existente</i> a la nueva que estamos creando.</li>
+
+<li>Dicho de otro modo: la clase derivada ‘comparte’ las variables de
+clase y de instancia, así como los métodos de clase y de instancia
+de su(s) superclase(s).</li>
+
+<li>La herencia reduce el número de cosas que hemos de ‘decir’ sobre
+una nueva clase que creamos si tenemos la precaución de hacer que
+herede de una clase parecida a ella.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>Las variables declaradas en una clase que se <i>duplican</i> o son
+propias de cada objeto creado de esa clase se llaman <b>variables de
+instancia</b>.</li>
+
+</ul>
+
+<ul>
+<li>Las variables declaradas en una clase que se <i>comparten</i> por todos
+los objetos de una misma clase se llaman <b>variables de clase</b>.</li>
+
+<li>Los métodos declarados en una clase que pueden acceder a las
+<i>variables de instancia</i> de un objeto se llaman <b>métodos de
+instancia</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>Los métodos declarados en una clase que pueden acceder a las
+<i>variables de clase</i> de una clase se llaman <b>métodos de clase</b>.</li>
+
+<li>Tendremos <b>herencia simple</b> si heredamos sólo de una clase y
+<b>herencia múltiple</b> si heredamos de más de una.</li>
+
+</ul>
+
+<ul>
+<li>La <i>herencia múltiple</i> puede plantear problemas como el de la
+<i><a href="https://youtu.be/vZPkYvsqQxQ">herencia repetida</a></i>. <b>C++</b> es uno de los pocos LOO que soporta
+herencia múltiple de clases.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>Los lenguajes que no permiten herencia múltiple de clases
+introducen un concepto nuevo, el <b>interfaz</b> (<i>no confundir con el
+interfaz de una clase</i>).</li>
+
+<li>Un <b>interfaz</b> es similar a una clase, pero <b>no tiene datos, sólo
+métodos</b>. Generalmente estos métodos son <i>abstractos</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>La relación de herencia se debe utilizar (junto con otras) para
+reflejar relaciones entre objetos del <i>mundo real</i> de la manera
+más fiel posible.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Los tipos de relaciones más habituales que podemos encontrar entre
+objetos en el <i>mundo real</i> son:<br /></li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li><b>Es un</b> (<i>IsA</i>) : <i>Un robot <b>es un</b> autómata</i>.</li>
+<li><b>Tiene un</b> (<i>HasA</i>) : <i>Un robot <b>tiene un</b> sensor</i>.</li>
+<li><b>Usa un</b> (<i>Uses</i>) : <i>Un robot <b>usa un</b> cargador de baterías</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>La relación <b>Es un</b> introduce el <a href="https://www.wikiwand.com/es/Principio_de_sustituci%C3%B3n_de_Liskov">principio de sustitución</a>.</li>
+
+<li>La relación <b>Tiene un</b> introduce el concepto de <a href="https://www.wikiwand.com/es/Objeto_(programaci%C3%B3n)#Composici%C3%B3n">composición</a> entre
+objetos.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>Los métodos heredados se pueden usar directamente o también se
+pueden reescribir en la clase derivada.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">En este caso podemos hacerlo de dos modos:
+<ul>
+<li class="fragment appear"><b>Reemplazándolos</b> completamente.</li>
+<li class="fragment appear"><b>Refinándolos</b>, para ello en algún punto del método reescrito en
+la clase derivada invocamos al método heredado de la clase base.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgd925edd-split">
+
+<h3>Herencia</h3>
+
+<ul>
+<li>Es posible que a un método de una clase no tenga sentido
+proporcionarle una implementación. En este caso se puede dejar sin
+ella, pero <i>convenientemente anotado</i>, y se le llama <b>método
+abstracto</b>.</li>
+
+<li>Cuando una <i>clase</i> tiene al menos un <b>método abstracto</b>
+automáticamente pasa a ser una <b>clase abstracta</b>.</li>
+
+<li>Una <b>clase abstracta</b> no puede tener instancias.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgfe19bba">
+<h3 id="orgfe19bba">Enlace Dinámico</h3>
+<ul>
+<li>En <b>programación I</b> os han explicado lo que es el enlazador:
+<i><b>ld</b></i>.</li>
+<li class="fragment appear"><p>
+¿Qué es entonces el <b>tiempo de enlace</b>?:<br />
+</p>
+<blockquote  class="fragment (appear)">
+<p>
+Es el instante de tiempo en el que se determina o identifica el
+trozo de código, p.e. una función que ha de ser llamada tras el
+envío de un mensaje, o el significado de una ‘construcción’
+especial en memoria, p.e. el tipo exacto de una variable o un
+dato.
+</p>
+</blockquote></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li>En POO existen al menos dos atributos que se ven directamente
+afectados por el <i>tiempo de enlace</i>:
+<ul>
+<li class="fragment appear">El <b>tipo</b> del dato al que se refiere un identificador.</li>
+<li class="fragment appear">El <b>método</b> con el que se responde a un mensaje.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li>Para hablar sobre el tipo de un identificador debemos distinguir
+entre:<br />
+<ul>
+<li class="fragment appear"><b>Identificador:</b> Es sólo un nombre.</li>
+<li class="fragment appear"><b>Valor:</b> El contenido de la memoria asociada a un
+identificador.</li>
+<li class="fragment appear"><b>Tipo:</b> Depende del lenguaje con el que trabajemos. En unos
+casos irá asociado a una variable y significará una cosa,
+mientras que en otros irá asociado a un valor y significará
+otra.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li>Los lenguajes en los que el tipo de toda expresión se conoce en
+tiempo de compilación se llaman <b>fuertemente tipados</b> (<i>LFT</i>).</li>
+<li class="fragment appear">En los <i>LFT</i>, p.e. el concepto de <b>tipo</b> va ligado al de
+variable, es decir, los tipos se asocian con un identificador
+mediante sentencias explícitas: <code>int n;</code></li>
+<li class="fragment appear">En los <i>LFT</i> el <i>tipo</i> sirve para dar idea de los posibles
+valores que puede tomar una variable.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li><b>C++-11</b> permite declarar variables de tipo <code>auto</code>, en las cuales el
+compilador <i>infiere</i> el tipo a partir de la expresión de
+inicialización de la variable: <code>auto n = 3;</code></li>
+<li>Por completitud, los lenguajes donde el tipo no se asocia a un
+identificador sino a un valor, se llaman <i>débilmente tipados</i> (<i>LDT</i>).</li>
+<li>Ejemplos de lenguajes
+<ul>
+<li><b>débilmente tipados</b>: <code>python</code>, <code>smalltalk</code>, <code>perl</code>, etc&#x2026;</li>
+<li><b>fuertemente tipados</b>: <code>C</code>, <code>C++</code>, <code>Java</code>, <code>C#</code>, <code>D</code>, etc&#x2026;</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li><p>
+Si retomamos el concepto del principio de sustitución y una
+declaración de clases con herencia como esta:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span> {
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">compute</span> () {...}
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span> {...}; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Es Un</span>
+                                     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Un robot es un automata.</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li><p>
+El principio de sustitución nos dice que en cualquier lugar de
+nuestro código donde podamos usar un dato de clase o tipo
+<code>Automata</code>, podremos usar uno de clase <code>Robot</code>, p.e.:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">Robot</span>* <span style="font-weight: bold; font-style: italic;">r</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>;
+r-&gt;compute ();
+<span style="font-weight: bold; text-decoration: underline;">Automaton</span>* <span style="font-weight: bold; font-style: italic;">aa</span>[100];
+aa[0] = r;
+aa[1] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span>;
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li>La decisión del tipo de objeto con el que se va a trabajar no se
+puede saber hasta el mismo instante de la ejecución.</li>
+<li>A esto es a lo que llamamos <i>enlace dinámico</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li>Pero el <i>enlace dinámico</i> no afecta solo a la decisión sobre el
+tipo real del objeto al que se refiere una variable.</li>
+
+<li><p>
+Tiene consecuencias, p.e., con el código a invocar (<i>método</i>) en
+respuesta a un mensaje recibido.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span> {
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">compute</span> () {...} <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compute tiene ahora enlace din&#225;mico (virtual)</span>
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span> {
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">compute</span> () {...}         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Se redefine en clases derivadas</span>
+                                  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">no es necesario virtual, ya se sabe.</span>
+};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">ChessPlayer</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span> {
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">compute</span> () {...}
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li><p>
+¿Que crees que pasará con este código?
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold; text-decoration: underline;">Automaton</span>* <span style="font-weight: bold; font-style: italic;">aa</span>[10];
+aa[0] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span>; aa[1] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">ChessPlayer</span>;
+aa[2] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>;     aa[3] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Automaton</span>;
+...
+<span style="font-weight: bold;">for</span> (<span style="font-weight: bold;">auto</span> <span style="font-weight: bold; font-style: italic;">ai</span> = 0; ai &lt; 10; ai++) aa[ai]-&gt;compute();
+</code></pre>
+</div></li>
+<li class="fragment appear">¿Y si es el usuario el que elige el tipo de automáta en tiempo de
+ejecución desde un menú?</li>
+
+</ul>
+
+</section>
+<section id="slide-orgfe19bba-split">
+
+<h3>Enlace Dinámico</h3>
+
+<ul>
+<li>¿Si tan bueno es el <i>enlace dinámico</i> por qué no está habilitado por
+defecto en C++?</li>
+<li>De hecho algunos lenguajes orientados a objetos sí que lo hacen: Smalltalk,
+Java, C#, D, etc&#x2026;</li>
+<li>La respuesta está en la eficiencia en tiempo de ejecución. Piensa a qué
+puede deberse esto.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb403d13">
+<h3 id="orgb403d13">Paso de mensajes</h3>
+<ul>
+<li class="fragment appear">Cuando trabajamos con un objeto instancia de una clase que tiene una
+parte visible y otra no-visible desde el exterior de la misma, las
+funciones <i>normales</i> (externas a una clase) no tienen capacidad para
+acceder a la parte no-visible de la clase.</li>
+
+<li class="fragment appear">Sólo las operaciones definidas dentro de la <i>clase</i> pueden acceder a
+las variables de instancia o de clase.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgb403d13-split">
+
+<h3>Paso de mensajes</h3>
+
+<ul>
+<li>Por tanto debemos invocar una de estas operaciones definidas en la
+clase sobre un determinado objeto: <code>obj.operation()</code> (<i>envío del
+mensaje</i>).</li>
+
+<li><b>C++</b> permite levantar esta restricción mediante las llamadas
+<i>funciones amigas</i>. En otros lenguajes se puede hacer de otras formas.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgb403d13-split">
+
+<h3>Paso de mensajes</h3>
+
+<ul>
+<li>Tradicionalmente en la POO se denomina a esta acción <i>enviar un
+<b>mensaje</b></i> a un objeto, p.e.: <code>robot.avanzarLineaRecta(20);</code></li>
+
+<li>Del mismo modo, el código que ejecuta el objeto en respuesta a
+este mensaje se le llama <i><b>método</b></i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgb403d13-split">
+
+<h3>Paso de mensajes</h3>
+
+<ul>
+<li>Un <i>mensaje</i> no es exactamente igual a una <i>función libre</i>:
+<ul>
+<li class="fragment appear">Siempre tendrá un parámetro más. Normalmente es un parámetro
+<i>oculto</i>.</li>
+<li class="fragment appear">Si el nombre de una <i>función</i> tiene una relación <b>1:1</b> con el código a
+ejecutar al ser llamada, en el caso de un <i>mensaje</i> esta relación es
+<i>1:N</i>. Piensa a qué puede ser debido esto.</li>
+<li class="fragment appear">En <b>C++</b> este parámetro oculto se llama <b>this</b>.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org467fbd0">
+<h3 id="org467fbd0">Encapsulación</h3>
+<ul>
+<li class="fragment appear">Es la característica que nos permite agrupar bajo una misma
+entidad los datos y las funciones que trabajan con esos datos.</li>
+
+<li class="fragment appear">Es un mecanismo más de <i>abstracción</i>. <br />
+Hasta ahora conoceis dos:
+
+<ol>
+<li><i>División en funciones</i></li>
+<li><i>Tipos Abstractos de Datos</i>.</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-org467fbd0-split">
+
+<h3>Encapsulación</h3>
+
+<ul>
+<li>Permite establecer zonas de visibilidad desde el exterior al
+interior de esta entidad.</li>
+
+<li>¿Qué ganamos al unir bajo una misma entidad datos y funciones?:
+
+<ul>
+<li>La independencia del código que usa esta <i>entidad</i> de los cambios
+que pueda haber en su representación interna.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org467fbd0-split">
+
+<h3>Encapsulación</h3>
+
+<ul>
+<li>Normalmente los <i>datos</i> suelen estar en la parte <i>no-visible</i>
+mientras que las funciones o métodos están en la parte
+<i>visible</i>. De este modo reforzamos el punto anterior.</li>
+
+<li>A esta parte <i>visible</i> se le conoce como el <b>interfaz</b> de la clase
+o también <i>parte pública</i>. A la parte <i>no-visible</i> se le llama
+<b>implementación</b> o también <i>parte privada</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org467fbd0-split">
+
+<h3>Encapsulación</h3>
+
+<ul>
+<li>En los LOO la <i>entidad</i> que aporta la capacidad de
+<i>encapsulación</i> es la <b>clase</b>.</li>
+
+<li>En los LOO a una variable cuyo tipo sea una <i>clase</i> se le llama
+<b>objeto</b>. También nos podemos referir a ella como una <b>instancia
+de la clase</b> o simplemente <b>instancia</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org467fbd0-split">
+
+<h3>Encapsulación</h3>
+
+<ul>
+<li>A las funciones definidas dentro de una clase se les llama
+<b>métodos</b>.</li>
+
+<li>Al igual que con las <i>variables</i>, existen <b>métodos de clase</b> y
+<b>métodos de instancia</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org467fbd0-split">
+
+<h3>Encapsulación</h3>
+
+<ul>
+<li>Un <i>método de instancia</i> definido en una clase se invoca a través
+del operador "\(\bullet\)", o del operador "<b>\(\to\)</b>" (si la variable
+que representa al objeto es un puntero):
+<ol>
+<li class="fragment appear"><code>object.method (parameters)</code></li>
+<li class="fragment appear"><code>objectPtr-&gt;method (parameters)</code></li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-org467fbd0-split">
+
+<h3>Encapsulación</h3>
+
+<ul>
+<li>En lenguajes como <code>Java</code>, <code>C#</code>, <code>D</code>, etc&#x2026; sólo se emplea la forma
+<code>object.method (parameters)</code>.</li>
+
+<li>En el caso de un <i>método de clase</i>, si, p.e., el identificador <code>DashBoard</code>
+representa un nombre de una clase, usar un método de clase con ese
+identificador lo haríamos así: <code>DashBoard::classMethod (parameters)</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgce4fce7">
+<h3 id="orgce4fce7">C++ como lenguaje orientado a objetos.</h3>
+<ul>
+<li class="fragment appear"><b>C++</b> es un <i>LOO</i>, es decir, soporta:
+<ul>
+<li class="fragment appear">Herencia</li>
+<li class="fragment appear">Enlace Dinámico</li>
+<li class="fragment appear">Paso de Mensajes</li>
+<li class="fragment appear">Encapsulación</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgce4fce7-split">
+
+<h3>C++ como lenguaje orientado a objetos.</h3>
+
+<ul>
+<li>Entre los temas del 5 al 9 iremos estudiando en detalle estos
+conceptos y algún que otro más (<i>excepciones, genericidad</i>), así
+como de que manera se incorporan en <b>C++</b>:
+<ul>
+<li class="fragment appear"><b>Tema 5</b>: <i>Clases y objetos</i>.</li>
+<li class="fragment appear"><b>Tema 7</b>: <i>Herencia, polimorfismo y enlace dinámico</i>.</li>
+<li class="fragment appear"><b>Tema 8</b>: <i>Genericidad</i>.</li>
+<li class="fragment appear"><b>Tema 9</b>: <i>Excepciones</i>.</li>
+
+</ul></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgc83643f">
+<h3 id="orgc83643f">Ejemplo de enlace dinámico en C++. Comparativa con C.</h3>
+<div class="outline-text-3" id="text-orgc83643f">
+</div>
+</section>
+<section id="slide-orga50f4e6">
+<h4 id="orga50f4e6">Código C++</h4>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Copyright (C) 2020-2023  Programacion-II</span>
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">This program is free software: you can redistribute it and/or modify</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">it under the terms of the GNU General Public License as published by</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">the Free Software Foundation, either version 3 of the License, or</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">(at your option) any later version.</span>
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">This program is distributed in the hope that it will be useful,</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">GNU General Public License for more details.</span>
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">You should have received a copy of the GNU General Public License</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">along with this program.  If not, see <a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">&lt;http://www.gnu.org/licenses/&gt;.</a></span><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">
+
+</a><span style="font-weight: bold;"><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">#include</a></span><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint"> </a><span style="font-style: italic;"><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">&lt;iostream&gt;</a></span><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">
+</a><span style="font-weight: bold;"><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">#include</a></span><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint"> </a><span style="font-style: italic;"><a href="http://www.gnu.org/licenses/&gt;.
+
+#include &lt;iostream&gt;
+#include &lt;cstdint">&lt;cstdint&gt;</a></span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">FiguraGeometrica</span>() {
+    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">std::cout &lt;&lt; "Hola, soy una FG tambien\n";</span>
+
+    inc_count();
+  }
+
+  <span style="font-weight: bold;">virtual</span> ~<span style="font-weight: bold;">FiguraGeometrica</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"FiguraGeometrica::DESTRUCTOR\n"</span>; }
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Prueba a usar esta definici&#243;n de dibujar en lugar de la que hay</span>
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">mas adelante. Si se produce alg&#250;n error de compilaci&#243;n trata de</span>
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">resolverlo.</span>
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">virtual void dibujar() = 0;</span>
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">FiguraGeometrica::dibujar tiene enlace din&#225;mico</span>
+  <span style="font-weight: bold;">virtual</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">dibujar</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"FiguraGeometrica::dibujar\n"</span>; };
+
+  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">uint32_t</span> <span style="font-weight: bold;">get_count</span>() { <span style="font-weight: bold;">return</span> count; }
+  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">inc_count</span>() { count++; }
+
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">static uint32_t count;  // Probar a inicializar aqui.</span>
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">O de este otro mode en C++17 o superior</span>
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">inline static uint32_t count = 0;</span>
+};
+
+<span style="font-weight: bold; text-decoration: underline;">uint32_t</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span>::<span style="font-weight: bold; font-style: italic;">count</span> = 0;
+
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometricaPtr</span> = FiguraGeometrica*;
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Circulo</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">Circulo</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Hola, soy un circulo\n"</span>; }
+
+  <span style="font-weight: bold;">virtual</span> ~<span style="font-weight: bold;">Circulo</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Circulo::DESTRUCTOR\n"</span>; }
+
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">dibujar</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Circulo::dibujar\n"</span>; }
+};
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Rectangulo</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">Rectangulo</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Hola, soy un rectangulo\n"</span>; };
+
+  <span style="font-weight: bold;">virtual</span> ~<span style="font-weight: bold;">Rectangulo</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Rectangulo::DESTRUCTOR\n"</span>; }
+
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">dibujar</span>() { <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"Rectangulo::dibujar\n"</span>; }
+};
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Comprueba lo sencillo que es a&#241;adir una nueva clase al</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">dise&#241;o. Comparalo con lo que tendrias que hacer para a&#241;adir una</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">nueva clase en la versi&#243;n de C no orientada a objetos.</span>
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">class Triangulo : public FiguraGeometrica {</span>
+<span style="font-weight: bold; font-style: italic;">//     </span><span style="font-weight: bold; font-style: italic;">public:</span>
+<span style="font-weight: bold; font-style: italic;">//         </span><span style="font-weight: bold; font-style: italic;">Triangulo() {</span>
+<span style="font-weight: bold; font-style: italic;">//             </span><span style="font-weight: bold; font-style: italic;">std::cout &lt;&lt; "Hola, soy un triangulo\n";</span>
+<span style="font-weight: bold; font-style: italic;">//         </span><span style="font-weight: bold; font-style: italic;">};</span>
+
+<span style="font-weight: bold; font-style: italic;">//         </span><span style="font-weight: bold; font-style: italic;">virtual ~Triangulo() {</span>
+<span style="font-weight: bold; font-style: italic;">//             </span><span style="font-weight: bold; font-style: italic;">std::cout &lt;&lt; "Triangulo::DESTRUCTOR\n";</span>
+<span style="font-weight: bold; font-style: italic;">//         </span><span style="font-weight: bold; font-style: italic;">}</span>
+
+<span style="font-weight: bold; font-style: italic;">//         </span><span style="font-weight: bold; font-style: italic;">void dibujar() {</span>
+<span style="font-weight: bold; font-style: italic;">//             </span><span style="font-weight: bold; font-style: italic;">std::cout &lt;&lt; "Triangulo::dibujar\n";</span>
+<span style="font-weight: bold; font-style: italic;">//         </span><span style="font-weight: bold; font-style: italic;">}</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">};</span>
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {
+
+  <span style="font-weight: bold; text-decoration: underline;">FiguraGeometricaPtr</span> <span style="font-weight: bold; font-style: italic;">vfg</span>[5] = {<span style="font-weight: bold; text-decoration: underline;">nullptr</span>,<span style="font-weight: bold; text-decoration: underline;">nullptr</span>,<span style="font-weight: bold; text-decoration: underline;">nullptr</span>,<span style="font-weight: bold; text-decoration: underline;">nullptr</span>,<span style="font-weight: bold; text-decoration: underline;">nullptr</span>};
+
+  vfg[0] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Circulo</span>;
+  vfg[1] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Circulo</span>;
+  vfg[2] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Rectangulo</span>;
+  vfg[3] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Rectangulo</span>;
+
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">En vfg[4] guardamos una FiguraGeometrica o un Triangulo.</span>
+  vfg[4] = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span>;
+  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">vfg[4] = new Triangulo;</span>
+
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">f</span> = 0; f &lt; 5; f++) {
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"vfg["</span> &lt;&lt; f &lt;&lt; <span style="font-style: italic;">"]: "</span>;
+    vfg[f]-&gt;dibujar();
+  }
+
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">f</span> = 0; f &lt; 5; f++) {
+    <span style="font-weight: bold;">delete</span> vfg[f];
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"total de FG creadas: "</span> &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span>::get_count() &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div>
+</section>
+<section id="slide-orgfccb225">
+<h4 id="orgfccb225">Código C</h4>
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; font-style: italic;">/*</span>
+<span style="font-weight: bold; font-style: italic;"> * Copyright (C) 2020-2022  Programacion-II</span>
+<span style="font-weight: bold; font-style: italic;"> *</span>
+<span style="font-weight: bold; font-style: italic;"> * This program is free software: you can redistribute it and/or modify</span>
+<span style="font-weight: bold; font-style: italic;"> * it under the terms of the GNU General Public License as published by</span>
+<span style="font-weight: bold; font-style: italic;"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span style="font-weight: bold; font-style: italic;"> * (at your option) any later version.</span>
+<span style="font-weight: bold; font-style: italic;"> *</span>
+<span style="font-weight: bold; font-style: italic;"> * This program is distributed in the hope that it will be useful,</span>
+<span style="font-weight: bold; font-style: italic;"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="font-weight: bold; font-style: italic;"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span style="font-weight: bold; font-style: italic;"> * GNU General Public License for more details.</span>
+<span style="font-weight: bold; font-style: italic;"> *</span>
+<span style="font-weight: bold; font-style: italic;"> * You should have received a copy of the GNU General Public License</span>
+<span style="font-weight: bold; font-style: italic;"> * along with this program.  If not, see <a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">&lt;http://www.gnu.org/licenses/&gt;.</a></span><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">
+</a><span style="font-weight: bold; font-style: italic;"><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h"> */</a></span><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">
+
+</a><span style="font-weight: bold;"><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">#include</a></span><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h"> </a><span style="font-style: italic;"><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">&lt;stdio.h&gt;</a></span><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">
+</a><span style="font-weight: bold;"><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">#include</a></span><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h"> </a><span style="font-style: italic;"><a href="http://www.gnu.org/licenses/&gt;.
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h">&lt;stdlib.h&gt;</a></span>
+
+<span style="font-weight: bold; font-style: italic;">/*</span>
+<span style="font-weight: bold; font-style: italic;"> * Trata de a&#241;adir una 'clase' Triangulo a este ejemplo. Compara todos</span>
+<span style="font-weight: bold; font-style: italic;"> * los pasos a realizar con los que tendrias que hacer en la versi&#243;n</span>
+<span style="font-weight: bold; font-style: italic;"> * orientada a objetos en C++</span>
+<span style="font-weight: bold; font-style: italic;"> */</span>
+
+<span style="font-weight: bold;">enum</span> <span style="font-weight: bold; text-decoration: underline;">TipoFigura</span> { <span style="font-weight: bold; font-style: italic;">FG</span>, <span style="font-weight: bold; font-style: italic;">CIRCULO</span>, <span style="font-weight: bold; font-style: italic;">RECTANGULO</span> };
+
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span> {
+    <span style="font-weight: bold;">enum</span> <span style="font-weight: bold; text-decoration: underline;">TipoFigura</span> <span style="font-weight: bold; font-style: italic;">t</span>;
+} <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span>;
+
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Circulo</span> {
+    <span style="font-weight: bold;">enum</span> <span style="font-weight: bold; text-decoration: underline;">TipoFigura</span> <span style="font-weight: bold; font-style: italic;">t</span>;
+} <span style="font-weight: bold; text-decoration: underline;">Circulo</span>;
+
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Rectangulo</span> {
+    <span style="font-weight: bold;">enum</span> <span style="font-weight: bold; text-decoration: underline;">TipoFigura</span> <span style="font-weight: bold; font-style: italic;">t</span>;
+} <span style="font-weight: bold; text-decoration: underline;">Rectangulo</span>;
+
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">FiguraGeometrica</span>* <span style="font-weight: bold; text-decoration: underline;">FiguraGeometricaPtr</span>;
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">Circulo</span>* <span style="font-weight: bold; text-decoration: underline;">CirculoPtr</span>;
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">Rectangulo</span>* <span style="font-weight: bold; text-decoration: underline;">RectanguloPtr</span>;
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">FiguraGeometrica_dibujar</span>(<span style="font-weight: bold; text-decoration: underline;">FiguraGeometricaPtr</span> <span style="font-weight: bold; font-style: italic;">this</span>) {
+    printf(<span style="font-style: italic;">"FiguraGeometrica::dibujar\n"</span>);
+}
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Circulo_dibujar</span>(<span style="font-weight: bold; text-decoration: underline;">CirculoPtr</span> <span style="font-weight: bold; font-style: italic;">this</span>) {
+    printf(<span style="font-style: italic;">"Circulo::dibujar\n"</span>);
+}
+
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">Rectangulo_dibujar</span>(<span style="font-weight: bold; text-decoration: underline;">RectanguloPtr</span> <span style="font-weight: bold; font-style: italic;">this</span>) {
+    printf(<span style="font-style: italic;">"Rectangulo::dibujar\n"</span>);
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">argc</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> *<span style="font-weight: bold; font-style: italic;">argv</span>[]) {
+    <span style="font-weight: bold; text-decoration: underline;">FiguraGeometricaPtr</span> <span style="font-weight: bold; font-style: italic;">vfg</span>[5] = {<span style="font-weight: bold; text-decoration: underline;">NULL</span>, <span style="font-weight: bold; text-decoration: underline;">NULL</span>, <span style="font-weight: bold; text-decoration: underline;">NULL</span>, <span style="font-weight: bold; text-decoration: underline;">NULL</span>, <span style="font-weight: bold; text-decoration: underline;">NULL</span>};
+
+    vfg[0] = malloc (<span style="font-weight: bold;">sizeof</span> (Circulo));
+    vfg[0]-&gt;t = CIRCULO;
+
+    vfg[1] = malloc (<span style="font-weight: bold;">sizeof</span> (Circulo));
+    vfg[1]-&gt;t = CIRCULO;
+
+    vfg[2] = malloc (<span style="font-weight: bold;">sizeof</span> (Rectangulo));
+    vfg[2]-&gt;t = RECTANGULO;
+
+    vfg[3] = malloc (<span style="font-weight: bold;">sizeof</span> (Rectangulo));
+    vfg[3]-&gt;t = RECTANGULO;
+
+    vfg[4] = malloc (<span style="font-weight: bold;">sizeof</span> (Circulo));
+    vfg[4]-&gt;t = CIRCULO;
+
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">f</span> = 0; f &lt; 5; f++) {
+        <span style="font-weight: bold;">switch</span> (vfg[f]-&gt;t) {
+            <span style="font-weight: bold;">case</span> FG:
+                FiguraGeometrica_dibujar(vfg[f]);
+              <span style="font-weight: bold;">break</span>;
+            <span style="font-weight: bold;">case</span> CIRCULO:
+                Circulo_dibujar((<span style="font-weight: bold; text-decoration: underline;">CirculoPtr</span>) vfg[f]);
+                <span style="font-weight: bold;">break</span>;
+            <span style="font-weight: bold;">case</span> RECTANGULO:
+                Rectangulo_dibujar((<span style="font-weight: bold; text-decoration: underline;">RectanguloPtr</span>) vfg[f]);
+                <span style="font-weight: bold;">break</span>;
+        }
+    }
+
+    <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">f</span> = 0; f &lt; 5; f++) {
+        free(vfg[f]);
+    }
+
+    <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgc19d13a">
+<h2 id="orgc19d13a">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

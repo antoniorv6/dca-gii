@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 9: EXCEPCIONES. PATRÓN RAII.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 9: EXCEPCIONES. PATRÓN RAII.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-05-14 mié 00:19</p>
+</section>
+
+<section>
+<section id="slide-org167ca4d">
+<h2 id="org167ca4d">Definicion.</h2>
+<ul>
+<li>Las <i>excepciones</i> se emplean en situaciones <i>excepcionales</i> que se
+producen en tiempo de ejecución y que no se pueden conocer en tiempo
+de compilación, cuando estamos desarrollando nuestra aplicación o
+biblioteca.</li>
+
+</ul>
+
+</section>
+<section id="slide-org167ca4d-split">
+
+<ul>
+<li>Por tanto no se deben confundir con <i>errores en la lógica</i> de
+nuestro código, estos son <i>otra cosa totalmente distinta</i>.</li>
+
+</ul>
+
+<blockquote  class="fragment (appear)">
+<p>
+Simply put, an Error is a bug in the application. An Exception is a
+bug in the input to the application. The former is not recoverable,
+the latter is.
+</p>
+
+<p>
+&#x2013; Walter Bright, D Language creator.
+</p>
+</blockquote>
+
+</section>
+</section>
+<section>
+<section id="slide-org24a90ee">
+<h2 id="org24a90ee">Tratamiento clásico de los errores (asertos).</h2>
+<div class="outline-text-2" id="text-org24a90ee">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1af38b3">
+<h3 id="org1af38b3">Errores en la lógica del código.</h3>
+<ul>
+<li>La detección de errores de lógica en nuestro código, consiste generalmente en el uso de <code>assert</code>.</li>
+
+<li class="fragment appear"><code>assert(condition)</code> es una macro que evalúa un predicado, si este es
+<code>cierto</code>, el código sigue ejecutándose, pero si es <code>falso</code> se aborta
+la ejecución de la aplicación inmediatamente en ese punto,
+informándonos de <i>dónde</i> ha fallado la aserción y por qué motivo.</li>
+
+</ul>
+
+</section>
+<section id="slide-org1af38b3-split">
+
+<ul>
+<li><p>
+Para hacer uso de <code>assert</code> desde <b>C++</b> incluiremos la cabecera
+<code>cassert</code>.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cassert&gt;</span>
+
+<span style="font-weight: bold; text-decoration: underline;">double</span> <span style="font-weight: bold;">fastSqrt</span> (<span style="font-weight: bold; text-decoration: underline;">double</span> <span style="font-weight: bold; font-style: italic;">x</span>) {
+    assert(x &gt;= 0.0 );
+    ...
+    assert(x == (result*result));
+    <span style="font-weight: bold;">return</span> result;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org52f52b8">
+<h3 id="org52f52b8">Pero todo esto se puede hacer con sentencias <code>if</code>, ¿no?</h3>
+<ul>
+<li><p>
+Por ejemplo, así:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+
+<span style="font-weight: bold; text-decoration: underline;">double</span> <span style="font-weight: bold;">fastSqrt</span> (<span style="font-weight: bold; text-decoration: underline;">double</span> <span style="font-weight: bold; font-style: italic;">x</span>) {
+    <span style="font-weight: bold;">if</span> (<span style="font-weight: bold;">not</span> (x &gt;= 0.0) ) ... ;
+    ...
+    <span style="font-weight: bold;">if</span> (<span style="font-weight: bold;">not</span> (x == (result*result)) ... ;
+    <span style="font-weight: bold;">return</span> result;
+}
+</code></pre>
+</div></li>
+
+<li class="fragment appear">¿Dónde está la ventaja entonces de <code>assert</code>?</li>
+
+<li class="fragment appear">Podemos deshabilitar fácilmente el chequeo de asertos en código
+libre de errores de lógica definiendo al compilar la macro <code>NDEBUG</code>,
+p.e. así: <code>g++ -DNDEBUG example.cc</code>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org037de72">
+<h2 id="org037de72">Tratamiento de errores mediante el uso de excepciones.</h2>
+<ul>
+<li>Son la alternativa al tratamiento de errores consistente en devolver
+un simple código de error (valor numérico).</li>
+
+<li class="fragment appear">Aportan, por tanto, más información al punto de nuestro código donde
+se recibe el error.</li>
+
+</ul>
+
+</section>
+<section id="slide-org037de72-split">
+
+<ul>
+<li>Pero, sobre todo en el paradigma de POO, donde podemos tener varios
+objetos <i>vivos</i> en el punto donde se produce el error y que por
+tanto deberían desaparecer liberando toda la memoria que pudieran
+tener reservada, nos permite automatizar este proceso.</li>
+
+<li>Para ello nos permiten deshacer la pila de llamadas, invocando los
+destructores de los objetos implicados; y ya sabemos lo que
+podemos/debemos hacer en el destructor de un objeto cuando se
+invoca.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org52b5390">
+<h2 id="org52b5390">Sintáxis empleada.</h2>
+<ul>
+<li><b>C++</b> (y lenguajes como <i>Java</i>, <i>C#</i>, <i>Vala</i>, <i>D</i>, etc&#x2026;) emplean
+una sintáxis similar.</li>
+
+<li class="fragment appear">En <b>C++</b> se emplean las palabras reservadas:
+<ul>
+<li><code>try</code></li>
+<li><code>throw</code></li>
+<li><code>catch</code></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org52b5390-split">
+
+<ul>
+<li><p>
+Un ejemplo muy sencillo:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+
+<span style="font-weight: bold; text-decoration: underline;">double</span> <span style="font-weight: bold;">f</span>(<span style="font-weight: bold; text-decoration: underline;">double</span> <span style="font-weight: bold; font-style: italic;">d</span>) {
+  <span style="font-weight: bold;">if</span> (d &gt; 1e7)
+      <span style="font-weight: bold;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::overflow_error(<span style="font-style: italic;">"too big"</span>);
+  <span style="font-weight: bold;">else</span>
+      <span style="font-weight: bold;">return</span> d;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  <span style="font-weight: bold;">try</span> {
+      <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; f(1e10) &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  } <span style="font-weight: bold;">catch</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">overflow_error</span>&amp; <span style="font-weight: bold; font-style: italic;">e</span>) {
+      <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; e.what() &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  }
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9b9c7a5">
+<h2 id="org9b9c7a5">Características especiales de las excepciones en C++.</h2>
+<ul>
+<li>Se permite lanzar excepciones de tipos <i>base</i> del lenguaje, p.e.,
+<code>char</code>, <code>int</code>, etc, pero también datos más complejos como objetos.</li>
+<li class="fragment appear">Se puede indicar la lista de excepciones que puede lanzar una
+función en <b>C++</b> pre <i>C++14</i>: <code>void f() throw(int);</code></li>
+<li class="fragment appear">Si una función no lanza ninguna se indica así:
+<ul>
+<li>en <b>C++</b> pre <i>C++11</i>: <code>void f() throw();</code></li>
+<li>en <i>C++11</i> o posterior así: <code>void f() noexcept;</code> o <code>void f() noexcept(true);</code></li>
+
+</ul></li>
+<li class="fragment appear">Aquí tienes más información sobre <a href="https://en.cppreference.com/w/cpp/language/noexcept_spec">noexcept</a>.</li>
+
+</ul>
+
+</section>
+<section id="slide-org9b9c7a5-split">
+
+<ul>
+<li>Si se lanza una excepción no especificada en la lista de posibles
+excepciones, se llama a <code>std::unexpected()</code>.</li>
+
+<li class="fragment appear">Por defecto <code>unexpected</code> llama a <code>std::terminate</code> y el programa acaba.</li>
+
+<li class="fragment appear"><p>
+Se puede cambiar la función a la que llama, p.e.:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;exception&gt;</span>      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">std::set_unexpected</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">myunexpected</span> () {
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::cerr &lt;&lt; <span style="font-style: italic;">"unexpected called\n"</span>;
+}
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() {
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::set_unexpected(myunexpected);
+    ...
+}
+</code></pre>
+</div></li>
+
+<li class="fragment appear">Si una función no especifica una lista vacía de excepciones o
+<code>noexcept</code>, se asume que puede lanzar cualquier excepción.</li>
+
+</ul>
+
+</section>
+<section id="slide-org9b9c7a5-split">
+
+<ul>
+<li><p>
+A un bloque <i>try</i> le podemos asociar varios bloques <i>catch</i>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> (<span style="font-weight: bold; text-decoration: underline;">void</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::set_unexpected (myunexpected);
+  <span style="font-weight: bold;">try</span> {
+    myfunction();
+  }
+  <span style="font-weight: bold;">catch</span> (<span style="font-weight: bold; text-decoration: underline;">int</span>) { <span style="font-weight: bold; text-decoration: underline;">std</span>::cerr &lt;&lt; <span style="font-style: italic;">"caught int\n"</span>; }
+  <span style="font-weight: bold;">catch</span> (...) { <span style="font-weight: bold; text-decoration: underline;">std</span>::cerr &lt;&lt; <span style="font-style: italic;">"caught some other exception type\n"</span>; }
+  <span style="font-weight: bold;">return</span> 0;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9b9c7a5-split">
+
+<ul>
+<li><p>
+<b>IMPORTANTE</b>: Los bloques catch se evalúan por orden, por tanto si el
+tipo de un <i>catch</i> concuerda con el tipo de la excepción lanzada,
+entonces se trata en ese <i>catch</i>.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">ExceptionBase</span> {...};
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">ExceptionDerived</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">ExceptionBase</span> {...};
+...
+<span style="font-weight: bold;">try</span> {
+   f ();                        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">throws ExceptionDerived</span>
+}
+<span style="font-weight: bold;">catch</span> (ExceptionBase&amp; eb) {...} <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&lt;-- se captura aqu&#237;</span>
+<span style="font-weight: bold;">catch</span> (ExceptionDerived&amp; ed) {...}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9b9c7a5-split">
+
+<ul>
+<li>Los bloques <i>catch</i> con elipsis (&#x2026;): <code>catch (...)</code><br />
+capturan cualquier tipo de excepción, por eso se ponen al final.</li>
+
+<li class="fragment appear"><p>
+Una excepción se puede relanzar:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">try</span> {
+  f ();                        <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">throws ExceptionDerived</span>
+}
+<span style="font-weight: bold;">catch</span> (ExceptionBase&amp; eb) { <span style="font-weight: bold;">throw</span>; } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&lt;-- se relanza aqu&#237;</span>
+
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org6100c89">
+<h2 id="org6100c89">Jerarquía de clases de excepciones.</h2>
+<ul>
+<li class="fragment appear"><b>C++</b> nos proporciona una serie de clases predefinidas que sirven
+para representar tipos de error en nuestro código.</li>
+
+<li class="fragment appear">Debemos incluir la cabecera <code>stdexcept</code> (la cual incluye a
+<code>exception</code>).</li>
+
+<li class="fragment appear">De este modo tenemos acceso a las clases <code>exception</code> y derivadas de
+ella como <code>logic_error</code>, <code>length_error</code>, etc&#x2026;</li>
+
+</ul>
+
+</section>
+<section id="slide-org6100c89-split">
+
+<ul>
+<li>Todas ellas tienen un constructor a partir de una cadena, p.e.:<br />
+<code>runtime_error( const std::string&amp; what_arg );</code>.</li>
+
+<li class="fragment appear">En esta cadena podemos aprovechar para poner una descripción del
+error.</li>
+
+<li class="fragment appear">Esta cadena puede ser consultada con el método heredado de la clase
+<code>exception</code>:<br />
+<code>virtual const char* what() const noexcept;</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8256fc1">
+<h2 id="org8256fc1">Patrón RAII.</h2>
+<ul>
+<li class="fragment appear">Inventado por <a href="http://www.stroustrup.com/">Bjarne Stroustrup</a> (creador de C++).</li>
+
+<li class="fragment appear">RAII: Resource Acquisition Is Initialization</li>
+
+<li class="fragment appear">Los recursos (memoria, ficheros, etc&#x2026;) que usa un objeto se crean
+cuando este se inicializa (constructor) y se destruyen cuando el
+objeto desaparece (destructor).</li>
+
+</ul>
+
+</section>
+<section id="slide-org8256fc1-split">
+
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">file</span> {                    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">https://es.wikipedia.org/wiki/RAII</span>
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">file</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">char</span>* <span style="font-weight: bold; font-style: italic;">filename</span>) : file_ (<span style="font-weight: bold; text-decoration: underline;">std</span>::fopen(filename, <span style="font-style: italic;">"w+"</span>)) {
+      <span style="font-weight: bold;">if</span> (!file_) {
+          <span style="font-weight: bold;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::runtime_error (<span style="font-style: italic;">"Error al abrir un archivo."</span>);
+      }
+  }
+
+  ~<span style="font-weight: bold;">file</span>() {
+      <span style="font-weight: bold;">if</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::fclose(file_)) {
+          <span style="font-weight: bold;">throw</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::runtime_error (<span style="font-style: italic;">"Error al cerrar un archivo."</span>);
+      }
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">write</span> (<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">char</span>* <span style="font-weight: bold; font-style: italic;">str</span>) {...}
+}
+</code></pre>
+</div>
+</section>
+<section id="slide-org8256fc1-split">
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">main</span> () {
+   <span style="font-weight: bold; font-style: italic;">////////////////////////////////////////////////////////</span>
+   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Abrimos el archivo, estamos adquiriendo un recurso //</span>
+   <span style="font-weight: bold; font-style: italic;">////////////////////////////////////////////////////////</span>
+   <span style="font-weight: bold; text-decoration: underline;">file</span> <span style="font-weight: bold; font-style: italic;">logfile</span> (<span style="font-style: italic;">"registro_de_incidencias.txt"</span>);
+
+   logfile.write (<span style="font-style: italic;">"&#161;Hola, registro!"</span>);
+} <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&lt;- Al salir de &#225;mbito, en el destructor de logfile se cierra el fichero</span>
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd4faf52">
+<h3 id="orgd4faf52">Patrón RAII y punteros inteligentes.</h3>
+<ul>
+<li>El uso del patrón RAII ha dado lugar a la introducción en <b>C++</b> de
+los llamados <a href="http://en.cppreference.com/w/cpp/memory">punteros inteligentes</a> o <i>smart pointers</i>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd4faf52-split">
+
+<ul>
+<li><p>
+Ya no será necesario ocuparse de la liberación de memoria reservada
+dinámicamente, juzga tú mismo:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-cpp"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compilar con C++11</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;memory&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+
+ <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span> () {                   <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Compila y ejecuta con valgrind, no</span>
+                                 <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">creeras lo que ven tus ojos...</span>
+   <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">unique_ptr</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>[]&gt; <span style="font-weight: bold; font-style: italic;">pe</span> (<span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">int</span>[1024]);
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">compara con una l&#237;nea como esta:</span>
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">int* pe = new int[1024];</span>
+
+   <span style="font-weight: bold;">return</span> 0;
+ }
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org479e115">
+<h3 id="org479e115">Patrón RAII y excepciones.</h3>
+<ul>
+<li>Si echas un vistazo a cómo otros LOO implementan el tratamiento de
+excepciones, verás que se parece mucho al de C++ (java, C#, Vala,
+D).</li>
+
+</ul>
+
+<ul>
+<li class="fragment appear">En casi todos ellos observarás que aparece una palabra reservada
+nueva: <code>finally</code>.</li>
+
+<li class="fragment appear">La introdujo <a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html">Java</a> al no ser posible implementar de forma correcta el
+patrón RAII en este lenguaje ya que las variables que representan
+objetos siempre son <i>referencias</i> y no objetos completos.</li>
+
+</ul>
+
+</section>
+<section id="slide-org479e115-split">
+
+<ul>
+<li><p>
+Los bloques <i>finally</i> se ejecutan siempre, tanto si se sale del
+bloque <i>try</i> de forma correcta o por que se ha lanzado una excepción
+y hemos entrado en un <i>catch</i>.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-java"   ><code trim><span style="font-weight: bold;">try</span> { ... }
+<span style="font-weight: bold;">catch</span> (et1) {...}
+<span style="font-weight: bold;">catch</span> (et2) {...}
+<span style="font-weight: bold;">finally</span> { ... }
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgfded946">
+<h2 id="orgfded946">¿Existe algún otro modo de tratar los errores?</h2>
+<ul>
+<li class="fragment appear">Sí, claro. Determinados lenguajes de programación han elegido un
+modelo diferente de tratamiento de errores.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgfded946-split">
+
+<ul>
+<li>Veamos el caso de <a href="https://www.rust-lang.org/">Rust</a>.</li>
+
+<li><p>
+En <i>Rust</i> existe este enumerado:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-rust"   ><code trim>enum Result&lt;T,E&gt; {
+  Ok(T),     // Constructor de Result&lt;T&gt; a partir de un tipo T, resultado correcto
+  Err(E),    // Constructor de Result&lt;E&gt; a partir de un tipo E, error
+}
+</code></pre>
+</div></li>
+
+<li>Podemos ver <code>Ok(T)</code> y <code>Err(E)</code> como sendas funciones que crean un
+dato de tipo <code>Result</code> a partir de un dato de tipo:
+<ul>
+<li><code>T</code> si <i>hay resultado</i>, <code>T</code> es el tipo del resultado</li>
+<li><code>E</code> si <i>se produce</i> un error, <code>E</code> es el tipo del error</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8d5e709">
+<h3 id="org8d5e709">Ejemplo de tratamiento de errores en Rust</h3>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim>fn mayor_o_menor_0 (n: i32) -&gt; Result&lt;bool, &amp;'static str&gt; {
+    if n &lt; 0 || n &gt; 0 {
+        Ok(true)
+    } else {
+        Err("n es 0")
+    }
+}
+
+fn main() {
+    let r = mayor_o_menor_0(0);
+
+    assert!(r.is_err())
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org8cf9d29">
+<h3 id="org8cf9d29">Puedes ampliar tus conocimientos sobre este tema consultando este <a href="http://joeduffyblog.com/2016/02/07/the-error-model/">artículo</a>.</h3>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org752f461">
+<h2 id="org752f461">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

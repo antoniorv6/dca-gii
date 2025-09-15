@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>Tema 0: Presentación de la asignatura.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Tema 0: Presentación de la asignatura.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-01-28 mar 23:40</p>
+</section>
+
+<section>
+<section id="slide-org7ccfba6">
+<h2 id="org7ccfba6">Profesorado</h2>
+<p>
+<a href="http://www.dlsi.ua.es/">Departamento de Lenguajes y Sistemas Informáticos (DLSI)</a>.
+</p>
+<ul>
+<li>Teoría
+<ul>
+<li><a href="https://www.sigua.ua.es/index.html?id=0204PB134">Francisco José Castellanos Regalado</a>.</li>
+
+</ul></li>
+<li>Prácticas
+<ul>
+<li><a href="https://www.sigua.ua.es/index.html?id=0039P2045">Antonio M. Corbí Bellot</a>.</li>
+<li><a href="https://www.sigua.ua.es/index.html?id=0039PS047">Alejandro Reina Reina</a>.</li>
+
+</ul></li>
+<li>Tutorías: 
+<ul>
+<li><a href="https://cvnet.cpd.ua.es/uacloud/home/Portal">UA-Cloud</a> o presenciales (con reserva previa desde
+<a href="https://cvnet.cpd.ua.es/uacloud/home/Portal">UA-Cloud</a>).</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf7528cc">
+<h2 id="orgf7528cc">Contexto</h2>
+<ul>
+<li>Primer curso: <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodasi=33704&amp;wlengua=es">Programación I</a> , primer semestre</li>
+<li><p>
+Primer curso: <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">Programación II</a> , segundo semestre.
+</p>
+
+<blockquote >
+<p>
+La asignatura dispone de <a href="https://www.dlsi.ua.es//asignaturas/p2ir/">página web</a> propia. <b>Es recomendable que la
+consultes habitualmente</b>.
+</p>
+</blockquote></li>
+<li>Tercer curso: <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33723&amp;wlengua=es">Algoritmia</a></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgab74fcc">
+<h2 id="orgab74fcc">Evaluación</h2>
+<ul>
+<li>La asignatura consta de dos bloques:
+<ul>
+<li>Teoría</li>
+<li>Prácticas.</li>
+
+</ul></li>
+<li>Cada uno de ellos tiene un peso del 50% en la nota final.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org12434d7">
+<h3 id="org12434d7">Primer periodo de evaluación (C3)</h3>
+<ul>
+<li>Para promediar teoría y prácticas es necesario obtener como mínimo
+un 4.0 en ambos bloques.</li>
+<li>Para superar la asignatura, la nota final debe ser igual o superior
+a 5.0.</li>
+
+</ul>
+</section>
+<section id="slide-org12434d7-split">
+
+<h3>Primer periodo de evaluación (C3)</h3>
+<ul>
+<li>El <i>bloque de teoría</i> consta de un único examen final.</li>
+<li><p>
+Es un examen tipo test del tipo <i>elegir la única respuesta posible
+entre cuatro alternativas</i>.
+</p>
+
+<p>
+Tres respuestas erróneas anulan una correcta.
+</p>
+
+<p>
+Es conveniente hacerlo a lápiz ya que puedes corregir respuestas
+previas que hayas marcado y quieras cambiar.
+</p></li>
+
+</ul>
+</section>
+<section id="slide-org12434d7-split">
+
+<h3>Primer periodo de evaluación (C3)</h3>
+<ul>
+<li>El <i>bloque de prácticas</i> consta de:
+<ol>
+<li>Evaluación continua (4 prácticas) con un peso del 20% sobre la
+nota final.</li>
+<li>Un examen práctico final realizado en el laboratorio y con un
+peso del 30% sobre la nota final. Los ejercicios de los que
+constará serán similares a los realizados en las prácticas
+hechas durante el curso.</li>
+
+</ol></li>
+<li>La <b>asistencia</b> a las sesiones <b>prácticas</b> es <b>obligatoria</b>. Se permite un
+máximo de 4 faltas.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgc3979f7">
+<h3 id="orgc3979f7">Segundo período de evaluación (C4)</h3>
+<ul>
+<li>Si no se supera el primer período de evaluación entonces en la
+<i>convocatoria C4</i>:
+<ol>
+<li>Se <b>deberá presentar</b> obligatoriamente al examen final de teoría y
+o prácticas del bloque al que no se haya llegado a una nota
+mínima de 4.0 en la <i>convocatoria C3</i>.</li>
+<li>Se <b>puede presentar opcionalmente</b> al examen final de teoría y o
+prácticas del bloque en el que tenga una 4.0 &lt;= nota &lt; 5.0 en la
+<i>convocatoria C3</i>. La nota nueva sustituirá a la anterior.</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+<section id="slide-orgc3979f7-split">
+
+<h3>Segundo período de evaluación (C4)</h3>
+<ul>
+<li>El examen de prácticas será un examen práctico realizado en el
+laboratorio, su contenido será del mismo estilo que en la
+<i>convocatoria de junio</i>. <b>En esta convocatoria la nota de este examen
+será la nota total del bloque de prácticas</b>, es decir, el 50% de la
+nota final.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3357e39">
+<h3 id="org3357e39">Sistema de evaluación que se aplicará en la convocatoria de diciembre</h3>
+<ul>
+<li>Se realizará un examen de teoría y uno de prácticas, ambos similares
+a los de la <i>convocatoria de julio</i>.</li>
+<li>Para promediar teoría y prácticas es necesario obtener como mínimo
+un 4.0 en ambos bloques.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgac41628">
+<h3 id="orgac41628">Importante</h3>
+<ol>
+<li>En cualquier apartado puntuable de la asignatura una calificación de
+<b><b>3.99 no es un 4.0</b></b>.</li>
+<li>No se admiten entregas de prácticas fuera de plazo o por otro cauce
+que no sea el indicado en el enunciado. Si esto ocurriera esa
+entrega será ignorada, tenlo en cuenta.</li>
+<li>La publicación de notas se realiza en la <a href="https://www.dlsi.ua.es/alumnes/index.cgi?id=cas">web del DLSI</a>.</li>
+<li>Si necesitas revisar cualquier práctica de la asignatura debes
+reservar una tutoría presencial desde la aplicación de UA Cloud.</li>
+
+</ol>
+
+</section>
+<section id="slide-orgac41628-split">
+
+<h3>Importante</h3>
+<ol>
+<li value="5"><p>
+La corrección de las prácticas se realiza con la versión del
+compilador de <code>C++</code> que tenéis instalada en los laboratorios de la
+EPS.
+</p>
+
+<p>
+Tenlo en cuenta dado que:
+</p></li>
+
+</ol>
+</section>
+<section id="slide-orgac41628-split">
+
+<h3>Importante</h3>
+<ol>
+<li><p>
+<code>C++</code> es un lenguaje diferente a <code>C</code>.
+</p>
+
+<p>
+Cambios en la versión del compilador y/o en la de la biblioteca
+estándar de <code>C++</code> pueden hacer que tu código no compile o funcione
+de manera diferente a como lo haría con la versión del
+compilador de la EPS.
+</p></li>
+
+</ol>
+
+</section>
+<section id="slide-orgac41628-split">
+
+<h3>Importante</h3>
+<ol>
+<li value="2"><p>
+En la asignatura empleamos la versión de <code>C++</code> de 2017, más conocida
+como <a href="https://en.wikipedia.org/wiki/C%2B%2B17">C++17</a> y más concretamente la que implementa el compilador
+instalado en los laboratorios de la EPS.
+</p>
+
+<p>
+Una forma sencilla de tenerlo instalado es usando una <i>máquina
+virtual</i> de <a href="https://www.virtualbox.org">VirtualBox</a>. Para ello, debes crear una imagen <a href="https://en.wikipedia.org/wiki/VirtualBox#VirtualBox%5FDisk%5FImage">VDI</a> de la instalación
+de Ubuntu en la EPS (Ubuntu 24.04). Hay mucha documentación referida a las máquinas virtuales, por ejemplo <a href="https://osl.ugr.es/2020/09/29/como-instalar-ubuntu-en-virtual-box/">aquí</a>.
+</p></li>
+
+</ol>
+
+</section>
+<section id="slide-orgac41628-split">
+
+<h3>Importante</h3>
+<ol>
+<li value="6">En la asignatura se realiza un <i>control de copias</i> con cada
+entrega de prácticas.</li>
+<li>Una práctica copiada supondrá tener una nota de <b>cero</b> en la misma
+para todos los alumnos implicados. Además, se informará a las
+direcciones del DLSI y de la EPS de ello para que se tomen las
+medidas disciplinarias oportunas.</li>
+
+</ol>
+
+</section>
+<section id="slide-orgac41628-split">
+
+<h3>Importante</h3>
+<ol>
+<li value="8"><p>
+Es conveniente que leas el <a href="https://www.boua.ua.es/pdf.asp?pdf=3498.pdf">Reglamento para la evaluación de
+los aprendizajes</a> de la UA, p.e en el artículo 14 donde se habla de
+<i>Realización fraudulenta de pruebas de evaluación</i>, punto 1:
+</p>
+
+<blockquote >
+<p>
+Durante la prueba, el alumnado está obligado a observar las normas
+sobre autenticidad del ejercicio y privacidad del mismo.
+</p>
+</blockquote></li>
+
+</ol>
+
+</section>
+<section id="slide-orgac41628-split">
+
+<h3>Importante</h3>
+<ol>
+<li value="9">Fíjate que:
+<ol>
+<li>Copiar una práctica de otra persona total o parcialmente incumple
+el 14.1 (autenticidad).</li>
+<li>Difundir una práctica (para que otros se la copien o se
+inspiren), también incumple el 14.1 (privacidad)</li>
+
+</ol></li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-org59fddf0">
+<h2 id="org59fddf0">Teoría</h2>
+<p>
+El temario de la asignatura es el siguiente:
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orge99e508">
+<h3 id="orge99e508">TEMA 1: Organización de la memoria. Tipos abstractos de datos.</h3>
+<ul>
+<li>El lenguaje de programación <b>C++</b> ( <b>C++98</b>, <b>C++11</b>, <b>C++14</b>, <b>C++17</b>, <b>C++20</b>
+y <b>C++23</b> ).</li>
+<li>Gestión y uso de memoria basada en la pila ( <span class="underline">stack</span> ), en
+almacenamiento global y en almacenamiento dinámico.</li>
+<li>Introducción a los Tipos Abstractos de Datos (<i>TAD</i>).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4f8bc3b">
+<h3 id="org4f8bc3b">TEMA 2: Tipos abstractos de datos: Listas (simples, dobles), Pilas, Colas.</h3>
+<ul>
+<li>Definición.</li>
+<li>Operaciones básicas.</li>
+<li>Diferentes implementaciones.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd441d54">
+<h3 id="orgd441d54">TEMA 3: Tipos abstractos de datos: Árboles, Grafos.</h3>
+<ul>
+<li>Definición.</li>
+<li>Operaciones básicas.</li>
+<li>Diferentes implementaciones.</li>
+<li>Tipos de árboles. Tipos de grafos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgac3220e">
+<h3 id="orgac3220e">TEMA 4: El paradigma orientado a objetos. Características básicas de los lenguajes orientados a objetos.</h3>
+<ul>
+<li>Presentación y justificación del modelo de programación orientada a
+objetos.</li>
+<li>Requisitos para que un lenguaje se considere orientado a objetos.</li>
+<li><b>C++</b> como lenguaje orientado a objetos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7b0bd90">
+<h3 id="org7b0bd90">TEMA 5: Clases y objetos. Espacios de nombres.</h3>
+<ul>
+<li>Definición del concepto de <i>clase</i> y del concepto de <i>objeto</i>.</li>
+<li>Diferentes tipos de clases (<i>abstractas</i>, <i>metaclases</i>,
+<i>interfaces</i>, etc…).</li>
+<li>Concepto de <i>espacio de nombres</i>. Agrupación de símbolos en espacios
+de nombres.</li>
+<li>Variables de clase, de instancia. Métodos de clase, de instancia.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0391d34">
+<h3 id="org0391d34">TEMA 6: Programación dirigida por eventos.</h3>
+<ul>
+<li>¿Qué es un evento? ¿Cómo se producen?</li>
+<li>Cómo cambia nuestro estilo de programación.</li>
+<li>Cómo realizarla tanto desde <b>C</b> como desde <b>C++</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org20466ee">
+<h3 id="org20466ee">TEMA 7: Relaciones entre objetos. Herencia. Polimorfismo. Enlace dinámico.</h3>
+<ul>
+<li>Tipos de relaciones entre objetos en ausencia de herencia (uso,
+composición).</li>
+<li>Concepto de <i>herencia</i> entre clases.</li>
+<li>Herencia de implementación y herencia de interfaz.</li>
+<li>Relación <b>Es un</b> entre objetos. Concepto de polimorfismo.</li>
+
+</ul>
+</section>
+<section id="slide-org20466ee-split">
+
+<h3>TEMA 7: Relaciones entre objetos. Herencia. Polimorfismo. Enlace dinámico.</h3>
+<ul>
+<li>Tipos de herencia (simple, múltiple).</li>
+<li>Implicaciones de la herencia entre clases y la relación <b>Es un</b>
+entre objetos.</li>
+<li>Qué es el <i>enlace dinámico</i>. Ventajas e inconvenientes.</li>
+<li>Cómo influye en el diseño de lenguajes orientados a objetos
+(virtual, final).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc133cbc">
+<h3 id="orgc133cbc">TEMA 8: Genericidad.</h3>
+<ul>
+<li>Concepto de Genericidad. Características y usos.</li>
+<li>La genericidad como otro tipo de polimorfismo.</li>
+<li>Metaprogramación: ejecución de código en tiempo de compilación.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgbc1ee4c">
+<h3 id="orgbc1ee4c">TEMA 9: Excepciones. Patrón <i>RAII</i>.</h3>
+<ul>
+<li>Tratamiento de errores bajo el paradigma orientado a objetos.</li>
+<li>Qué es una excepción, Jerarquía de clases de excepciones.</li>
+<li>Cómo influye en el diseño de lenguajes orientados a objetos (<code>try</code>,
+<code>throw</code>, <code>catch</code>, <code>finally</code>).</li>
+<li>Patrón de diseño <i>RAII</i> y tratamiento de excepciones.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdae6328">
+<h3 id="orgdae6328">TEMA 10: Estudio de diversos lenguajes de programación orientados a objetos.</h3>
+<ul>
+<li>Cómo implementan diferentes lenguajes de programación las
+características explicadas hasta ahora. <b>Java</b>, <b>C#</b>, <b>D</b>, <b>Python</b>, etc&#x2026;</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc8a5e9e">
+<h3 id="orgc8a5e9e">TEMA 11: POO con lenguajes no orientados a objetos.</h3>
+<ul>
+<li>Usando sólo el lenguaje <b>C</b> simularemos la herencia de clases, paso de
+mensajes, enlace dinámico y variables de clase.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf183dd9">
+<h3 id="orgf183dd9">TEMA 12: Pruebas unitarias.</h3>
+<ul>
+<li>Aprenderemos a pasar tests de forma sistemática a nuestro
+código. Automatización con el uso de <a href="https://cmake.org/Wiki/CMake/Testing_With_CTest">CTest</a> (<a href="https://cmake.org/">CMake</a>).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4f017fc">
+<h2 id="org4f017fc">Prácticas</h2>
+<ul>
+<li>En la parte de evaluación continua tenemos <i>cuatro prácticas
+individuales</i>:
+<ul>
+<li><b>Práctica 1:</b> Ejercicios de repaso de Programación-I.</li>
+<li><b>Práctica 2:</b> Implementación y uso de TADs.</li>
+<li><b>Práctica 3:</b> Programación Dirigida por Eventos.</li>
+<li><b>Práctica 4:</b> Programación Orientada a Objetos.</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org4f017fc-split">
+
+<h2>Prácticas</h2>
+<p>
+Disponemos también de una <b>Práctica 0</b> la cual nos sirve como práctica
+de iniciación en la asignatura.
+</p>
+
+<p>
+<b>No cuenta</b> para la nota final.
+</p>
+<ul>
+<li>Además de un examen individual de prácticas en el laboratorio. Este
+examen se hace el mismo día del examen de teoría.</li>
+
+</ul>
+</section>
+<section id="slide-org4f017fc-split">
+
+<h2>Prácticas</h2>
+<ul>
+<li><p>
+A partir del curso 2022/2023 la asignatura va a proporcionaros
+<i>docencia complementaria</i> al inicio de algunas clases de prácticas.
+</p>
+
+<p>
+Se trata de que conozcáis y sepáis usar algunas herramientas
+adicionales que os serán muy útiles a la hora de programar:
+</p></li>
+
+</ul>
+</section>
+<section id="slide-org4f017fc-split">
+
+<h2>Prácticas</h2>
+<ol>
+<li><p>
+<a href="https://www.gnu.org/software/make/">Make</a> / <code>Makefiles</code>, el depurador <a href="https://www.gnu.org/software/gdb/">gdb</a> y la herramienta de análisis
+en tiempo de ejecución <a href="http://valgrind.org/">valgrind</a>.
+</p>
+
+<p>
+Estas tres herramientas ya las veníamos explicando desde hace
+algunos cursos.
+</p></li>
+<li>Trabajo con el S.O. desde un terminal: <a href="https://www.gnu.org/software/bash/">Bash</a> shell script</li>
+<li><a href="https://www.doxygen.nl">Doxygen</a> para generar la documentación de tu código a partir de
+ciertos comentarios puestos en él.</li>
+
+</ol>
+
+</section>
+<section id="slide-org4f017fc-split">
+
+<h2>Prácticas</h2>
+<ol>
+<li value="4"><a href="https://git-scm.com">Git</a> para realizar control de versiones. Solo veremos el uso
+local del mismo.</li>
+
+<li><a href="https://github.com/ocornut/imgui">Dear ImGui</a> para crear aplicaciones con <i>Interfaz Gráfico de
+Usuario</i>. Esta parte depende de que hayamos visto lo
+correspondiente a Programación Orientada a Objetos.</li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-org8f78d17">
+<h3 id="org8f78d17">Entrega de prácticas</h3>
+<ul>
+<li>Se realizará en <a href="https://pracdlsi.dlsi.ua.es/index.cgi">https://pracdlsi.dlsi.ua.es</a> y en el plazo de
+tiempo allí establecido.</li>
+<li class="fragment appear">Se pueden realizar tantas entregas como se quiera, sólo se corregirá
+la última.</li>
+<li class="fragment appear">Es necesario seguir estrictamente las instrucciones de los
+enunciados de las prácticas (especialmente en lo referente al
+formato de la salida).</li>
+<li class="fragment appear">Ten en cuenta lo anterior pues <b>No se admitirán entregas por otro
+<i>conducto</i> y/o fuera de plazo</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd42b66c">
+<h3 id="orgd42b66c">Corrección de las prácticas</h3>
+<ul>
+<li class="fragment roll-in"><b>Será automática</b>. La <i>no compilación</i> o <i>no enlace</i> del código
+implicará una nota de 0.0, los errores en tiempo de ejecución que
+causen una finalización anómala de la práctica (<code>violación de
+   segmento, división por cero, etc...</code>) implicarán una nota de 0.0.</li>
+<li class="fragment roll-in">Para revisar la corrección de tus prácticas reserva una tutoría
+presencial desde la app de UA-Cloud.</li>
+<li class="fragment roll-in"><b>No se debe entregar</b> un programa principal. Ya lo proporcionará el
+programa corrector correspondiente de la práctica.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd42b66c-split">
+
+<h3>Corrección de las prácticas</h3>
+<ul>
+<li><b>Importante:</b> Debeis respetar:
+<ul>
+<li class="fragment highlight-red">Nombres de tipos, de funciones, de estructuras, etc&#x2026;</li>
+<li class="fragment highlight-red">La <i>signatura</i> de funciones.</li>
+<li class="fragment highlight-red">Nombres de carpetas donde se encuentren los archivos de código
+fuente.</li>
+<li class="fragment highlight-red">Uso de mayúsculas/minúsculas en nombres de archivos.</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgd42b66c-split">
+
+<h3>Corrección de las prácticas</h3>
+<ul>
+<li><b>Recordad</b>, <i>no es lo mismo</i> que una función muestre un resultado por
+pantalla ( <code>printf</code>, <code>cout</code> ) que lo devuelva.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org29d72ee">
+<h2 id="org29d72ee">Planificación semanal</h2>
+<div class="org-center">
+
+<div id="orga5c183b" class="figure">
+<p><img src="./images/pt.png" alt="pt.png" />
+</p>
+<p><span class="figure-number">Figura 1: </span>Planificación de la teoría.</p>
+</div>
+</div>
+
+<div class="org-center">
+
+<div id="orgab0bc21" class="figure">
+<p><img src="./images/pp.png" alt="pp.png" />
+</p>
+<p><span class="figure-number">Figura 2: </span>Planificación de las prácticas.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org7d8182f">
+<h2 id="org7d8182f">Consejos</h2>
+<ul>
+<li><p>
+La asignatura no es difícil pero sí tiene muchos conceptos nuevos;
+<i>estudia día a día</i>.
+</p>
+
+<p>
+Para que te sirva como referencia&#x2026; <b>por cada hora de clase</b>
+deberías dedicarle alrededor de <b>hora y media de estudio en casa</b>.
+</p></li>
+<li>Aprovecha las tutorías, realiza tantas como necesites, 
+pero antes de preguntar, intenta hacer un esfuerzo por solucionarlo primero.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

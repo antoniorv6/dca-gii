@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const practices = (await getCollection('examenPracticasC3')).sort((a, b) => {
+        const getOrderValue = slug => {
+            // Reglas especiales para ordenar "intro" primero
+            if (slug === 'intro') return -1;
+
+            // Extrae números si existen; si no, devuelve un valor alto para textos alfabéticos
+            const match = slug.match(/\d+/);
+            return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+        };
+
+        // Calcula los valores de orden para cada slug
+        const orderA = getOrderValue(a.slug);
+        const orderB = getOrderValue(b.slug);
+        if (orderA !== orderB) return orderA - orderB;
+
+        // Si tienen el mismo número (o ninguno), compara alfabéticamente
+        return a.slug.localeCompare(b.slug);
+    });
+
+    console.log(practices.map(p => p.slug)); // Muestra los slugs en la consola
+    
+    // Render each practice to get its headings
+    const paths = await Promise.all(
+        practices.map(async (practice) => {
+            const { headings } = await practice.render();
+            return {
+                params: { id: practice.slug },
+                props: { 
+                    practice,
+                    headings 
+                }
+            };
+        })
+    );
+    
+    return paths;
+}
+
+const practices = (await getCollection('examenPracticasC3')).sort((a, b) => {
+    const getOrderValue = slug => {
+        // Reglas especiales para ordenar "intro" primero
+        if (slug === 'intro') return -1;
+
+        // Extrae números si existen; si no, devuelve un valor alto para textos alfabéticos
+        const match = slug.match(/\d+/);
+        return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
+    };
+
+    // Calcula los valores de orden para cada slug
+    const orderA = getOrderValue(a.slug);
+    const orderB = getOrderValue(b.slug);
+    if (orderA !== orderB) return orderA - orderB;
+
+    // Si tienen el mismo número (o ninguno), compara alfabéticamente
+    return a.slug.localeCompare(b.slug);
+});
+
+const { practice, headings } = Astro.props;
+const { Content } = await practice.render();
+
+const sidebar = practices.map(practice => ({
+    label: practice.data.title,  // Uses the title from frontmatter
+    link: `/examenPracticasC3/${practice.slug}` // Creates the link using the file slug
+}));
+---
+
+<Layout>
+    <StarlightPage 
+        frontmatter={{
+            title: practice.data.title,
+        }} 
+        headings={headings}
+        sidebar={sidebar}
+    >
+        <Content />
+    </StarlightPage>
+</Layout>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 12: PRUEBAS UNITARIAS.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 12: PRUEBAS UNITARIAS.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-05-21 mié 00:40</p>
+</section>
+
+<section>
+<section id="slide-orgae5f321">
+<h2 id="orgae5f321">¿Tan importante es pasar tests a nuestro código?</h2>
+<div class="outline-text-2" id="text-orgae5f321">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org5cd9525">
+<h3 id="org5cd9525">Unos consejos útiles:</h3>
+<ul>
+<li><p>
+Ten siempre este libro a mano: <a href="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition">The Pragmatic Programmer</a> ya que
+está lleno de buenos consejos:
+</p>
+<blockquote  class="fragment (appear)">
+<p>
+``Test Your Software, or Your Users Will.  Test ruthlessly. Don’t
+ make your users find bugs for you.''
+</p>
+</blockquote>
+<blockquote  class="fragment (appear)">
+<p>
+ ``Test early. Test Often. Test Automatically.  Tests that run with
+every build are much more effective than test plans that sit on a
+shelf.''
+</p>
+</blockquote></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7108491">
+<h3 id="org7108491">Pero&#x2026;¿esto se usa en proyectos reales?</h3>
+<ul>
+<li class="fragment appear"><p>
+Sí, y mucho&#x2026;<a href="http://www.sqlite.org/testing.html">juzga tu mismo/a</a>:
+</p>
+<blockquote  class="fragment (appear)">
+<p>
+As of version 3.16.2 (2016-01-06), the <a href="http://www.sqlite.org">SQLite</a> library consists of
+approximately 122.9 KSLOC of C code. (KSLOC means thousands of
+"Source Lines Of Code" or, in other words, lines of code
+excluding blank lines and comments.) By comparison, the project
+has 745 times as much test code and test scripts - 91596.1 KSLOC.
+</p>
+</blockquote></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0be5526">
+<h3 id="org0be5526">¿Para qué sirve el paso de tests?</h3>
+<ul>
+<li class="fragment appear"><p>
+El propósito del paso de tests es demostrar que en nuestro
+software existen fallos, no que está libre de ellos:
+</p>
+<blockquote  class="fragment (appear)">
+<p>
+``Program testing can be used to show the presence of bugs, but
+ never to show their absence!''  &#x2013; Edsger Dijkstra
+</p>
+</blockquote></li>
+
+<li class="fragment appear">Por tanto el paso de tests a nuestro software es una técnica para
+hacer que falle&#x2026;no para ver lo maravilloso que es.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf7e0653">
+<h3 id="orgf7e0653">Conjuntos de entradas</h3>
+<ul>
+<li class="fragment appear">Comprobar un programa consiste en ver si su comportamiento es
+correcto para <i>cualquier posible entrada</i> que pueda tener y <b>dado
+que esto es imposible</b>, debemos comprobarlo para todas aquellas
+entradas que tengan una probabilidad razonable de hacer que falle
+( <span class="underline">si es que tiene un fallo</span> ).</li>
+
+<li class="fragment appear">A este conjunto de entradas es a lo que llamamos un "<b>Test
+Suite</b>".</li>
+
+<li class="fragment appear">Se debe procurar que no le lleven al programa mucho tiempo en su
+ejecución.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf7e0653-split">
+
+<ul>
+<li>La única manera que tenemos de asegurar que nuestro software no
+tiene fallos es probarlo con todas las posibles conjuntos de
+entrada que pueda tener.</li>
+
+<li class="fragment appear">Esto es prácticamente imposible&#x2026;así que hay que emplear algunas
+heurísticas para obtener el <i>test suite</i>.</li>
+
+<li class="fragment appear">Una forma de conseguir acercarnos al <i>test suite</i> perfecto sería
+haciendo una <b>partición</b> del conjunto de datos de entrada en
+subconjuntos de manera que cada elemento del conjunto original
+perteneciera exactamente a uno de estos subconjuntos.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org752f401">
+<h3 id="org752f401">Conjuntos de entradas: un ejemplo.</h3>
+<ul>
+<li class="fragment appear">Queremos testear la función: <code>bool es_mayor (int x, int y)</code>.</li>
+
+<li class="fragment appear">Una posible partición del conjunto de datos de entrada podría
+ser:
+<ul>
+<li><b>x</b> <i>positivo</i>, <b>y</b> <i>positivo</i></li>
+<li><b>x</b> <i>negativo</i>, <b>y</b> <i>negativo</i></li>
+<li><b>x</b> <i>positivo</i>, <b>y</b> <i>negativo</i></li>
+<li><b>x</b> <i>negativo</i>, <b>y</b> <i>positivo</i></li>
+<li><code>x == 0, y == 0</code></li>
+<li><code>x == 0, y != 0</code></li>
+<li><code>x != 0, y == 0</code></li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org752f401-split">
+
+<ul>
+<li>Si ahora comprobamos la función anterior con una entrada de, al
+menos, uno de estos subconjuntos tendremos una probabilidad
+razonable de que <i>si hay un fallo</i> entonces aparecerá&#x2026;</li>
+
+</ul>
+
+<p class="fragment (appear)">
+<b>Pero no una certeza completa!</b>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org232123e">
+<h2 id="org232123e">Tipos de tests</h2>
+<div class="outline-text-2" id="text-org232123e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4504a14">
+<h3 id="org4504a14">BlackBox</h3>
+<ul>
+<li class="fragment appear">Se crean sin mirar (<i>sin conocer</i>) el código a testear. Se basan
+en la especificación de lo que debe hacer el código.</li>
+
+<li class="fragment appear">Permiten que programadores del código y de los tests sean
+distintos.</li>
+
+<li class="fragment appear">Son robustos respecto a cambios en la implementación del código a
+testear.</li>
+
+<li class="fragment appear">Son los <i>tipos de tests que habitualmente se pasan a las
+prácticas</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org4148525">
+<h3 id="org4148525">WhiteBox o GlassBox</h3>
+<ul>
+<li class="fragment appear">Se tiene acceso al código a testear.</li>
+
+<li class="fragment appear">Complementan a los anteriores y son más fáciles de crear que
+aquellos.</li>
+
+<li class="fragment appear">Al tener acceso al código debemos fijarnos al construir los tests
+en las sentencias <b>if-then-else</b>, <b>bucles</b>, <b>try-catch</b> presentes
+en el código a testear.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5e30d67">
+<h2 id="org5e30d67">¿Qué testear?</h2>
+<p>
+En base a la granularidad de lo que comprueban podemos hablar de:
+</p>
+<dl>
+<dt class="fragment appear">Tests unitarios:</dt><dd class="fragment appear">Están destinados a módulos individuales, p.e. <span class="underline">clases</span> o
+  <span class="underline">funciones</span>.</dd>
+
+<dt class="fragment appear">Tests de integración:</dt><dd class="fragment appear">Evalúan cómo se ejecutan una serie de módulos cuando interactúan.</dd>
+
+<dt class="fragment appear">Tests del sistema:</dt><dd class="fragment appear">Evalúan todo el sistema al completo.</dd>
+
+</dl>
+
+</section>
+<section id="slide-org5e30d67-split">
+
+<dl>
+<dt>Otros tests:</dt><dd><ul>
+<li>Agotamiento de recursos. Errores y recuperación.</li>
+<li>Rendimiento</li>
+<li>Usabilidad. Son un tipo de tests diferentes a los anteriores.</li>
+
+</ul></dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-org8ff41b9">
+<h2 id="org8ff41b9">¿Cómo testear?</h2>
+<dl>
+<dt class="fragment appear">Tests de regresión:</dt><dd class="fragment appear">El nuevo código no debe estropear lo que ya funcionaba.</dd>
+
+<dt class="fragment appear">Tests de datos:</dt><dd class="fragment appear">Datos reales y sintéticos&#x2026; <i>¿alguien dijo 30 de febrero?</i></dd>
+
+<dt class="fragment appear">Tests del Interfaz de Usuario:</dt><dd class="fragment appear">GUI</dd>
+
+</dl>
+
+</section>
+<section id="slide-org8ff41b9-split">
+
+<dl>
+<dt>Tests <i>de los tests</i>:</dt><dd><p>
+¡La alarma tiene que sonar cuando debe hacerlo!.
+</p>
+
+<blockquote >
+<p>
+``Use saboteurs to Test Your Testing'' &#x2013; Pragmatic Programmer,
+Tip 64
+</p>
+</blockquote></dd>
+
+<dt>Tests minuciosos:</dt><dd></dd>
+
+</dl>
+
+
+<div class="org-src-container">
+
+<pre  class="src src-c"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">test</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">a</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">b</span>) { <span style="font-weight: bold;">return</span> a / (a+b); }
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org67095f6">
+<h2 id="org67095f6">Cúando testear</h2>
+<ul>
+<li class="fragment appear">Nunca dejarlo para el final, menos aún cerca de un <span class="underline">deadline</span>.</li>
+
+<li class="fragment appear">Debería hacerse automáticamente&#x2026;incluída la interpretación de los
+datos.</li>
+
+<li class="fragment appear">Suele ser habitual convertir el paso de los tests en un objetivo de
+<i>make</i>: <i>make test</i>.</li>
+
+<li class="fragment appear">No todos los tests se pueden pasar tan seguidamente ( <span class="underline">stress tests</span>
+), pero esto se puede tener en cuenta y automatizar.</li>
+
+<li class="fragment appear">Una cosa más: Si alguien detecta un fallo&#x2026;debería ser la última
+persona que lo detecta &#x2026;inmediatamente deberíamos tener un test
+para capturarlo.</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org4528ad8">
+<h2 id="org4528ad8">Cobertura de un test.</h2>
+<ul>
+<li class="fragment appear">Se trata de una medida empleada con tests tipo <i>WhiteBox</i>.</li>
+
+<li class="fragment appear">Trata de estimar cuánta funcionalidad del código se ha testeado.</li>
+
+<li class="fragment appear">Suele <span class="underline">medir</span> el porcentaje de instrucciones testeadas (
+<span class="underline">Instruction coverage</span> ) y el porcentaje de ramas del código usadas
+( <span class="underline">Branch coverage</span> ).</li>
+
+<li class="fragment appear">Para tests tipo <i>BlackBox</i> se suele medir el porcentaje de la
+especificación testeado ( <span class="underline">Specification coverage</span> ).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc2cbbb8">
+<h2 id="orgc2cbbb8">Test drivers. Conducting tests.</h2>
+<ul>
+<li class="fragment appear">Hoy en día los procesos de testeo están <i>automatizados</i>&#x2026;</li>
+<li class="fragment appear">Los tests se pasan empleando <i>test drivers</i>, los cuales:
+<ol>
+<li class="fragment appear">Preparan el entorno para invocar el programa o unidad a testear.</li>
+<li class="fragment appear">Invocan el programa o unidad a testear con un conjunto de datos
+de entrada.</li>
+<li class="fragment appear">Guardan los resultados de esta ejecución.</li>
+<li class="fragment appear">Comprueban la validez de estos resultados.</li>
+<li class="fragment appear">Preparan el informe apropiado.</li>
+
+</ol></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgac5771e">
+<h3 id="orgac5771e">Test drivers: xUnit</h3>
+<ul>
+<li class="fragment appear">Es el termino empleado para describir una serie de herramientas de
+test que se comportan de manera similar.</li>
+
+<li class="fragment appear">Tienen su origen en <a href="https://en.wikipedia.org/wiki/SUnit">SUnit</a> creado por <a href="https://en.wikipedia.org/wiki/Kent_Beck">Kent Beck</a> para <a href="https://en.wikipedia.org/wiki/Smalltalk">Smalltalk</a>.</li>
+<li class="fragment appear">Posteriormente `SUnit` se portó a Java bajo el nombre <a href="https://en.wikipedia.org/wiki/JUnit">JUnit</a>.</li>
+<li class="fragment appear">Disponemos de versiones de xUnit para ``.Net'' (<a href="http://www.nunit.org/">NUnit</a>), ``C++''
+(<a href="http://cppunit.sourceforge.net/">cppunit</a>, <a href="http://cxxtest.com/">cxxtest</a>), ``D'' (<a href="https://code.dlang.org/packages/dunit">DUnit</a>), etc&#x2026;</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org15f418d">
+<h3 id="org15f418d">xUnit: Conceptos básicos</h3>
+<dl>
+<dt class="fragment appear">Test runner:</dt><dd class="fragment appear">El encargado de ejecutar los tests y proporcionar los
+resultados.</dd>
+
+<dt class="fragment appear">Test case:</dt><dd class="fragment appear">Cada uno de los tests pasados al software.</dd>
+
+<dt class="fragment appear">Test fixtures:</dt><dd class="fragment appear">También llamado <span class="underline">test context</span>, garantiza las
+precondiciones necesarias para ejecutar un test y
+que el estado se restaura al original tras
+ejecutar el test.</dd>
+
+</dl>
+
+</section>
+<section id="slide-org15f418d-split">
+
+<dl>
+<dt>Test suites:</dt><dd>Conjunto de tests que comparten el mismo
+<i>fixture</i>. El orden de los tests no debería importar.</dd>
+
+<dt>Test execution:</dt><dd>Es la ejecución de cada uno de los tests
+individuales.</dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-org455224e">
+<h2 id="org455224e">Caso de uso: cxxtest</h2>
+<ul>
+<li class="fragment appear">Es un entorno de testeo tipo xUnit para C++.</li>
+
+<li class="fragment appear">Trata de ser <a href="http://cxxtest.com/guide.html">similar</a> a JUnit.</li>
+
+<li class="fragment appear">CxxTest soporta el <i>descubrimiento</i> de tests&#x2026;no es necesario
+registrar los tests.</li>
+
+<li class="fragment appear">Los tests se definen en archivos de cabecera <b>.h</b> que se procesan
+con la aplicación <b>cxxtestgen</b>, la cual genera los ficheros fuente
+<b>.cc</b> necesarios para el <span class="underline">test runner</span>.</li>
+
+<li class="fragment appear">No necesita enlazarse con ninguna biblioteca adicional.</li>
+
+</ul>
+
+</section>
+<section id="slide-org455224e-split">
+
+<ul>
+<li><p>
+En el <i>makefile</i> correspondiente pondríamos una regla como esta:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-makefile"   ><code trim><span style="font-weight: bold;">poo-p1-test.cc</span> : poo-p1-test.h
+  cxxtestgen --error-printer -o <span style="font-weight: bold;">$</span><span style="font-weight: bold; text-decoration: underline;">@</span> $<span style="font-weight: bold; text-decoration: underline;">^</span>
+</code></pre>
+</div></li>
+
+<li>Y el archivo de cabecera <i>poo-p1-test.h</i> podría ser algo así:</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orge9a426f">
+<h3 id="orge9a426f">Entrada para cxxtest</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">File: poo-p1-test.h</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cxxtest/TestSuite.h&gt;</span>
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">PuntoTestSuite</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; text-decoration: underline;">TestSuite</span>
+{
+<span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">testConstructores</span>( <span style="font-weight: bold; text-decoration: underline;">void</span> ) {
+        <span style="font-weight: bold; text-decoration: underline;">Punto</span> <span style="font-weight: bold; font-style: italic;">p0</span>;               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">1 //</span>
+        TS_ASSERT_EQUALS ( p0.getX (), 0.0 );
+        TS_ASSERT_EQUALS ( p0.getY (), 0.0 );
+
+        <span style="font-weight: bold; text-decoration: underline;">Punto</span> <span style="font-weight: bold; font-style: italic;">p1</span> (p0);          <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">2 //</span>
+        TS_ASSERT_EQUALS ( p1.getX (), 0.0 );
+        TS_ASSERT_EQUALS ( p1.getY (), 0.0 );
+    }
+
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">testAccesores</span> (<span style="font-weight: bold; text-decoration: underline;">void</span>) {
+        <span style="font-weight: bold; text-decoration: underline;">Punto</span> <span style="font-weight: bold; font-style: italic;">p0</span>;
+
+        p0.setX (2.3);
+        TS_ASSERT_EQUALS ( p0.getX (), 2.3 );
+        TS_ASSERT_EQUALS ( p0.getX (), p0.getLong () );
+
+        p0.setY (4.2);
+        TS_ASSERT_EQUALS ( p0.getY (), 4.2 );
+        TS_ASSERT_EQUALS ( p0.getY (), p0.getLat () );
+    }
+};
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org2291b61">
+<h3 id="org2291b61">Salida de cxxtest</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">File: poo-p1-test.cc</span>
+<span style="font-weight: bold; font-style: italic;">/* </span><span style="font-weight: bold; font-style: italic;">Generated file, do not edit</span><span style="font-weight: bold; font-style: italic;"> */</span>
+<span style="font-weight: bold;">#if</span><span style="font-weight: bold;">n</span><span style="font-weight: bold;">def</span> CXXTEST_RUNNING
+<span style="font-weight: bold;">#define</span> <span style="font-weight: bold; font-style: italic;">CXXTEST_RUNNING</span>
+<span style="font-weight: bold;">#endif</span>
+
+<span style="font-weight: bold;">#define</span> <span style="font-weight: bold; font-style: italic;">_CXXTEST_HAVE_STD</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cxxtest/TestListener.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cxxtest/TestTracker.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cxxtest/TestRunner.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cxxtest/RealDescriptions.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;cxxtest/ErrorPrinter.h&gt;</span>
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>() { <span style="font-weight: bold;">return</span> <span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::ErrorPrinter().run();  } <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Main program</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"poo-p1-test.h"</span>
+
+<span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">PuntoTestSuite</span> <span style="font-weight: bold; font-style: italic;">suite_PuntoTestSuite</span>;
+
+<span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; text-decoration: underline;">List</span> <span style="font-weight: bold; font-style: italic;">Tests_PuntoTestSuite</span> = { 0, 0 };
+<span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; text-decoration: underline;">StaticSuiteDescription</span> <span style="font-weight: bold; font-style: italic;">suiteDescription_PuntoTestSuite</span>(
+    <span style="font-style: italic;">"poo-p1-test.h"</span>, 33, <span style="font-style: italic;">"PuntoTestSuite"</span>,
+    suite_PuntoTestSuite, Tests_PuntoTestSuite );
+</code></pre>
+</div>
+</section>
+<section id="slide-org2291b61-split">
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim>...
+<span style="font-weight: bold;">static</span> <span style="font-weight: bold;">class</span> TestDescription_PuntoTestSuite_testConstructores :
+<span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; text-decoration: underline;">RealTestDescription</span> {
+<span style="font-weight: bold;">public</span>:
+ <span style="font-weight: bold;">TestDescription_PuntoTestSuite_testConstructores</span>():<span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; font-style: italic;">RealTestDescription</span>(
+     Tests_PuntoTestSuite, suiteDescription_PuntoTestSuite,
+     36, <span style="font-style: italic;">"testConstructores"</span> ) {}
+
+ <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">runTest</span>() { suite_PuntoTestSuite.testConstructores(); }
+} testDescription_PuntoTestSuite_testConstructores;
+
+<span style="font-weight: bold;">static</span> <span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">TestDescription_PuntoTestSuite_testAccesores</span> :
+       <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; text-decoration: underline;">RealTestDescription</span> {
+<span style="font-weight: bold;">public</span>:
+ <span style="font-weight: bold;">TestDescription_PuntoTestSuite_testAccesores</span>():<span style="font-weight: bold; text-decoration: underline;">CxxTest</span>::<span style="font-weight: bold; font-style: italic;">RealTestDescription</span>(
+     Tests_PuntoTestSuite, suiteDescription_PuntoTestSuite,
+     50, <span style="font-style: italic;">"testAccesores"</span> ) {}
+
+ <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">runTest</span>() { suite_PuntoTestSuite.testAccesores(); }
+} testDescription_PuntoTestSuite_testAccesores;
+...
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgff3a0b2">
+<h3 id="orgff3a0b2">Test drivers: boost::test</h3>
+<ul>
+<li class="fragment appear">Es una de las bibliotecas de <a href="http://www.boost.org">Boost</a>.</li>
+
+<li class="fragment appear">Aquí tienes su documentación: <a href="http://www.boost.org/doc/libs/release/libs/test/doc/html/index.html">boost::test</a></li>
+
+<li class="fragment appear">Veamos un ejemplo de uso.</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org0aa8207">
+<h3 id="org0aa8207">Entrada para boost::test</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#define</span> <span style="font-weight: bold; font-style: italic;">BOOST_TEST_MODULE</span> poo-p1 test
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/test/unit_test.hpp&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;boost/test/output_test_stream.hpp&gt;</span>
+
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;sstream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;Punto.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;Posicion.h&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;Aplicacion.h&gt;</span>
+<span style="font-weight: bold;">using</span> <span style="font-weight: bold; text-decoration: underline;">boost</span>::<span style="font-weight: bold; text-decoration: underline;">test_tools</span>::<span style="font-weight: bold; text-decoration: underline;">output_test_stream</span>;
+BOOST_AUTO_TEST_SUITE ( punto_ts ) <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Inicio del test suite</span>
+
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">F</span> {
+  <span style="font-weight: bold;">F</span>() {
+    BOOST_TEST_MESSAGE( <span style="font-style: italic;">" setup fixture"</span> );
+    p0 = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Punto</span>;
+    p1 = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Punto</span>(*p0);
+  }
+
+  ~<span style="font-weight: bold;">F</span>() {
+    <span style="font-weight: bold;">delete</span> p0; p0 = <span style="font-weight: bold; text-decoration: underline;">NULL</span>;
+    <span style="font-weight: bold;">delete</span> p1; p1 = <span style="font-weight: bold; text-decoration: underline;">NULL</span>;
+    BOOST_TEST_MESSAGE( <span style="font-style: italic;">" teardown fixture"</span> );
+  }
+
+  <span style="font-weight: bold; text-decoration: underline;">Punto</span>* <span style="font-weight: bold; font-style: italic;">p0</span>;  <span style="font-weight: bold; text-decoration: underline;">Punto</span>* <span style="font-weight: bold; font-style: italic;">p1</span>;
+};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org0aa8207-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">BOOST_FIXTURE_TEST_CASE</span>( constructores_fxt, F )
+{
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">1 //</span>
+  BOOST_CHECK_EQUAL ( p0-&gt;getX (), 0.0 );
+  BOOST_CHECK_EQUAL ( p0-&gt;getY (), 0.0 );
+
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">2 //</span>
+  BOOST_CHECK_EQUAL ( p1-&gt;getX (), 0.0 );
+  BOOST_CHECK_EQUAL ( p1-&gt;getY (), 0.0 );
+
+  p0-&gt;setX (2.3);
+  BOOST_CHECK_EQUAL ( p0-&gt;getX (), 2.3 );
+  p0-&gt;setY (4.2);
+  BOOST_CHECK_EQUAL ( p0-&gt;getY (), 4.2 );
+}
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org0aa8207-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">BOOST_AUTO_TEST_CASE</span>( constructores )
+{
+  <span style="font-weight: bold; text-decoration: underline;">Punto</span> <span style="font-weight: bold; font-style: italic;">p0</span>;                     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">1 //</span>
+  BOOST_CHECK_EQUAL ( p0.getX (), 0.0 );
+  BOOST_CHECK_EQUAL ( p0.getY (), 0.0 );
+
+  <span style="font-weight: bold; text-decoration: underline;">Punto</span> <span style="font-weight: bold; font-style: italic;">p1</span> (p0);                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">2 //</span>
+  BOOST_CHECK_EQUAL ( p1.getX (), 0.0 );
+  BOOST_CHECK_EQUAL ( p1.getY (), 0.0 );
+
+  p0.setX (2.3);
+  BOOST_CHECK_EQUAL ( p0.getX (), 2.3 );
+  p0.setY (4.2);
+  BOOST_CHECK_EQUAL ( p0.getY (), 4.2 );
+}
+BOOST_AUTO_TEST_SUITE_END ()    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Fin del test suite</span>
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org513b688">
+<h2 id="org513b688">CMake, CTest: automatizar el paso de tests</h2>
+<ul>
+<li class="fragment appear"><a href="https://cmake.org/">CMake</a>, para proyectos grandes o multiplataforma.</li>
+
+<li class="fragment appear">Mediante una herramienta adicional, <a href="https://gitlab.kitware.com/cmake/community/wikis/doc/ctest/Testing-With-CTest">CTest</a>, la cual se integra con
+CMake, podemos automatizar el paso de tests a nuestro software.</li>
+
+</ul>
+
+</section>
+<section id="slide-org513b688-split">
+
+<ul>
+<li>Para ello añadimos la llamada a <code>enable_testing()</code> en el archivo
+<i>CMakeLists.txt</i> del directorio donde vayamos a generar los tests y
+aquellos ejecutables que sean un <span class="underline">test</span> se le indican a <b>CMake</b>
+mediante la orden <code>add_test(...)</code>.</li>
+
+<li>Ten en cuenta que el ejecutable de un test lo tendrás que generar
+primero usando <code>add_executable (...)</code>.</li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org887d6b2">
+<h2 id="org887d6b2">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

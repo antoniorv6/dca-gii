@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 2: Tipos Abstractos de Datos</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 2: Tipos Abstractos de Datos</h1><p class="subtitle">Listas, Pilas, Colas.</p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-02-04 mar 00:33</p>
+</section>
+
+
+
+<section>
+<section id="slide-org7a59f5b">
+<h2 id="org7a59f5b">Presentación</h2>
+<ul>
+<li class="fragment appear">Son una serie de TADs considerados fundamentales.</li>
+<li class="fragment appear">Las listas son secuencias de elementos.</li>
+<li class="fragment appear">Pueden ser implementadas de distinto modo.</li>
+<li class="fragment appear">Pilas y colas son un tipo <i>especial</i> de listas</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0ae4499">
+<h2 id="org0ae4499">Listas</h2>
+<ul>
+<li class="fragment appear">Son flexibles, pueden <i>crecer</i> y <i>decrecer</i>.</li>
+<li class="fragment appear">Podemos acceder a cualquier posición dentro de la lista.</li>
+<li class="fragment appear">Podemos insertar y borrar elementos de cualquier posición.</li>
+<li class="fragment appear">Pueden ser concatenadas o divididas (<i>sublistas</i> ).</li>
+<li class="fragment appear">Una lista se suele representar como una sucesión de elementos
+separados por comas: \(a_1, a_2, ..., a_n : n >= 0\).</li>
+
+</ul>
+</section>
+<section id="slide-org0ae4499-split">
+
+<h2>Listas</h2>
+<ul>
+<li>Matemáticamente una lista es una secuencia de cero o más
+elementos.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Si tiene \(0\) elementos se llama <i>lista vacía</i>.</li>
+<li class="fragment appear">\(a_1\) es el primer elemento (<i>cabeza</i> ) y \(a_n\) el último (<i>cola</i>
+).</li>
+<li class="fragment appear">Decimos que \(a_i\) precede a \(a_{i+1}\) y \(a_i\) sucede a \(a_{i-1}\) y
+que \(a_i\) ocupa la posición <i>i-ésima</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org5b9c632">
+<h2 id="org5b9c632">Listas. Operaciones básicas</h2>
+<ul>
+<li class="fragment appear"><b>Insert</b> (L, x, i) : añade el elemento <i>x</i> a la lista <i>L</i> en la
+posición <i>i</i>. Implica reorganizar los elementos de la lista.</li>
+<li class="fragment appear"><b>Append</b> (L, x) : añade el elemento <i>x</i> al final de la lista
+<i>L</i>. Si se ha podido hacer devuelve el valor booleano <i>true</i> y si
+no <i>false</i>.</li>
+<li class="fragment appear"><b>Retrieve</b> (L, i) : Devuelve el elemento en la posición <i>iésima</i> o
+<b>null</b> si no existe.</li>
+
+</ul>
+</section>
+<section id="slide-org5b9c632-split">
+
+<h2>Listas. Operaciones básicas</h2>
+<ul>
+<li><b>Delete</b> (L, i) : Elimina el elemento de la posición <i>iésima</i>. Si
+se ha podido hacer devuelve el valor booleano <i>true</i> y si no
+<i>false</i>. Implica reorganizar los elementos de la lista.</li>
+
+</ul>
+<ul>
+<li class="fragment appear"><b>Length</b> (L) : Devuelve \(|L|\), la longitud de <i>L</i>.</li>
+<li class="fragment appear"><b>Reset</b> (L) : Hace que la posición actual sea igual la <i>cabeza</i> de
+la lista y devuelve el valor 1, si la lista está vacía devuelve 0.</li>
+
+</ul>
+</section>
+<section id="slide-org5b9c632-split">
+
+<h2>Listas. Operaciones básicas</h2>
+<ul>
+<li><b>Current</b> (L) : Devuelve la posición <i>actual</i> en la lista <i>L</i>.</li>
+<li><b>Next</b> (L) : Incrementa y devuelve la posición actual en la lista
+<i>L</i>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org04e3434">
+<h2 id="org04e3434">Listas. Implementación</h2>
+<ul>
+<li class="fragment appear">Aprovechamos el uso de un <i>LOO</i> como es <code>C++</code>.</li>
+<li class="fragment appear">Usaremos todos los términos en inglés.</li>
+
+</ul>
+</section>
+<section id="slide-org04e3434-split">
+
+<h2>Listas. Implementación</h2>
+<ul>
+<li><p>
+Cada TAD será una clase, p.e.:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">char</span> <span style="font-weight: bold; text-decoration: underline;">Element</span>;           <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Hasta que veamos genericidad</span>
+                                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">usaremos estos typedef.</span>
+<span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">int</span>  <span style="font-weight: bold; text-decoration: underline;">Position</span>;
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">List</span> {
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">insert</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>, <span style="font-weight: bold; text-decoration: underline;">Position</span> <span style="font-weight: bold; font-style: italic;">i</span>); <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">D&#243;nde est&#225; el primer</span>
+                                         <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">par&#225;metro 'L'?</span>
+    ...
+};
+
+<span style="font-weight: bold; text-decoration: underline;">List</span> <span style="font-weight: bold; font-style: italic;">l</span>;
+l.insert (<span style="font-style: italic;">'a'</span>, 1);
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org04e3434-split">
+
+<h2>Listas. Implementación</h2>
+
+<ul>
+<li>Diversas opciones para la representación interna.</li>
+<li class="fragment appear">Puede ser un vector (<i>array</i> ).</li>
+<li class="fragment appear"><p>
+Puede ser una serie de elementos en la cual cada uno sabe sólo
+cuál es su siguiente (<i>simplemente enlazada</i> ):
+</p>
+
+<div class="org-center">
+
+<div id="org3135564" class="figure">
+<p><img src="./images/sllg.png" alt="sllg.png" />
+</p>
+<p><span class="figure-number">Figura 1: </span>Lista simplemente enlazada.</p>
+</div>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org04e3434-split">
+
+<h2>Listas. Implementación</h2>
+<ul>
+<li><p>
+O también su anterior (<i>doblemente enlazada</i> ):
+</p>
+
+<div class="org-center">
+
+<div id="org29f6f2f" class="figure">
+<p><img src="./images/dllg.png" alt="dllg.png" />
+</p>
+<p><span class="figure-number">Figura 2: </span>Lista doblemente enlazada.</p>
+</div>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org52a52f8">
+<h2 id="org52a52f8">Pilas</h2>
+<ul>
+<li class="fragment appear">Una <i>pila</i> es un tipo especial de lista.</li>
+<li class="fragment appear">Sigue unas normas estrictas en lo referente a la inserción y
+extracción de elementos.</li>
+<li class="fragment appear">Es una estructura <b>LIFO</b> (<i>Last In, First Out</i> ).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd679c3f">
+<h2 id="orgd679c3f">Pilas. Operaciones básicas</h2>
+<ul>
+<li class="fragment appear"><b>Push</b> (S, x) : Inserta x en S.</li>
+<li class="fragment appear"><b>Top</b> (S) : Devuelve el último dato insertado en S
+(cabeza). Aplicada sobre una pila vacía lanzará una excepción de
+tipo EmptyStackException.</li>
+
+</ul>
+</section>
+<section id="slide-orgd679c3f-split">
+
+<h2>Pilas. Operaciones básicas</h2>
+<ul>
+<li><b>Pop</b> (S) : Elimina el último dato insertado en S (cabeza). En la
+práctica lo devuelve antes de eliminarlo. Aplicada sobre una pila
+vacía lanzará una excepción de tipo EmptyStackException.</li>
+<li><b>Empty</b> (S) : Devuelve <i>true</i> si la pila no tiene elementos.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgd679c3f-split">
+
+<p>
+Ejemplo, apilamos A, B, C y desapilamos.
+</p>
+<div class="org-center">
+
+<div id="org65a0b22" class="figure">
+<p><img src="./images/stack.png" alt="stack.png" />
+</p>
+<p><span class="figure-number">Figura 3: </span>Apilar.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org0f57a49">
+<h2 id="org0f57a49">Pilas. Implementación</h2>
+<ul>
+<li class="fragment appear">Hemos dicho que son una <i>Lista</i> pero con ciertas restricciones.</li>
+<li class="fragment appear">Podemos aprovechar el concepto de <i>herencia</i> de la POO.</li>
+<li class="fragment appear"><p>
+¿Sería válida esta implementación de la clase <code>Pila</code>?:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Stack</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">List</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">push</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+...
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org0f57a49-split">
+
+<h2>Pilas. Implementación</h2>
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">List</span>* <span style="font-weight: bold; font-style: italic;">myList</span> = <span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Stack</span>();
+myList-&gt;insert(0, value);  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&#191;Permitido? No deber&#237;a en una pila.</span>
+
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org0f57a49-split">
+
+<h2>Pilas. Implementación</h2>
+
+<ul>
+<li><p>
+¿Y esta?:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"list.h"</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Stack</span> : <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">List</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">push</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+...
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org0f57a49-split">
+
+<h2>Pilas. Implementación</h2>
+
+<ul>
+<li><p>
+¿O esta otra?:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"list.h"</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Stack</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">push</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+...
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">List</span> <span style="font-weight: bold; font-style: italic;">_l</span>;
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9f8619f">
+<h2 id="org9f8619f">Colas</h2>
+<ul>
+<li class="fragment appear">Una <i>cola</i> es un tipo especial de lista.</li>
+<li class="fragment appear">Sigue unas normas estrictas en lo referente a la inserción y
+extracción de elementos.</li>
+<li class="fragment appear">Es una estructura <b>FIFO</b> (<i>First In, First Out</i> ).</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgba2608b">
+<h2 id="orgba2608b">Colas. Operaciones básicas</h2>
+<ul>
+<li class="fragment appear"><b>Enqueue</b> (Q, x) : Inserta x en Q.</li>
+<li class="fragment appear"><b>Head</b> (Q) : Devuelve el dato que más tiempo lleva en Q
+(cabeza). Aplicada sobre una cola vacía lanzará una excepción de
+tipo EmptyQueueException.</li>
+
+</ul>
+</section>
+<section id="slide-orgba2608b-split">
+
+<h2>Colas. Operaciones básicas</h2>
+<ul>
+<li><b>Dequeue</b> (Q) : Elimina el dato que más tiempo lleva en Q
+(cabeza). Aplicada sobre una cola vacía lanzará una excepción de
+tipo EmptyQueueException.</li>
+<li><p>
+<b>Empty</b> (Q) : Devuelve <i>true</i> si la cola no tiene elementos.
+</p>
+
+<p>
+Por completitud, al dato que <b>menos tiempo</b> lleva en la <i>cola</i> se
+le llama <code>cola</code> (del inglés <i>tail</i> ).
+</p></li>
+
+</ul>
+
+</section>
+<section id="slide-orgba2608b-split">
+
+<h2>Colas. Operaciones básicas</h2>
+
+<p>
+Ejemplo, encolamos A, B, C y desencolamos.
+</p>
+<div class="org-center">
+
+<div id="org54d8273" class="figure">
+<p><img src="./images/queue.png" alt="queue.png" />
+</p>
+<p><span class="figure-number">Figura 4: </span>Encolar.</p>
+</div>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd017b70">
+<h2 id="orgd017b70">Colas. Implementación</h2>
+<ul>
+<li class="fragment appear">Hemos dicho que son una <i>Lista</i> pero con ciertas restricciones.</li>
+<li class="fragment appear">Podemos aprovechar el concepto de <i>herencia</i> de la POO.</li>
+<li class="fragment appear"><p>
+¿Sería válida esta implementación de la clase <code>Cola</code>?:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Queue</span> : <span style="font-weight: bold;">public</span> <span style="font-weight: bold; text-decoration: underline;">List</span> {     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Herencia p&#250;blica.</span>
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">enqueue</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+...
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgd017b70-split">
+
+<h2>Colas. Implementación</h2>
+
+<ul>
+<li><p>
+¿Y esta?:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"list.h"</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Queue</span> : <span style="font-weight: bold;">private</span> <span style="font-weight: bold; text-decoration: underline;">List</span> {    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Herencia privada</span>
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">enqueue</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+...
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-orgd017b70-split">
+
+<h2>Colas. Implementación</h2>
+
+<ul>
+<li><p>
+¿O esta otra?:
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">"list.h"</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Queue</span> {
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">enqueue</span> (<span style="font-weight: bold; text-decoration: underline;">Element</span> <span style="font-weight: bold; font-style: italic;">x</span>);
+...
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">List</span> <span style="font-weight: bold; font-style: italic;">_l</span>;                      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Composici&#243;n</span>
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+
+</section>
+</section>
+<section>
+<section id="slide-org616fe26">
+<h2 id="org616fe26">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.38.1"
+   width="15cm"
+   height="10cm"
+   sodipodi:docname="dclase3.svg"
+   sodipodi:docbase="/home/acorbi/Documents/Asignaturas/PEI/temas-pei-0.1.7pre5/Temas/Tema_7"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient646">
+      <stop
+         style="stop-color:#000;stop-opacity:1;"
+         offset="0"
+         id="stop647" />
+      <stop
+         style="stop-color:#fff;stop-opacity:1;"
+         offset="1"
+         id="stop648" />
+    </linearGradient>
+    <radialGradient
+       xlink:href="#linearGradient646"
+       id="radialGradient649" />
+    <linearGradient
+       xlink:href="#linearGradient646"
+       id="linearGradient650"
+       x1="-0.00000000"
+       y1="0.00000000"
+       x2="1.00000000"
+       y2="0.00000000" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.2279853"
+     inkscape:cx="175.87887"
+     inkscape:cy="139.10523"
+     inkscape:window-width="989"
+     inkscape:window-height="626"
+     inkscape:window-x="238"
+     inkscape:window-y="228"
+     showgrid="true" />
+  <rect
+     style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.01241pt;"
+     id="rect1556"
+     width="536.44775"
+     height="361.36426"
+     x="-2.0682214"
+     y="-2.3812085" />
+  <rect
+     style="font-size:12.000000;fill:#0000ff;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.8146147pt;"
+     id="rect790"
+     width="224.73203"
+     height="177.36000"
+     x="295.58484"
+     y="37.797671" />
+  <rect
+     style="font-size:12.000000;fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.67336335pt;"
+     id="rect791"
+     width="224.26920"
+     height="24.472643"
+     x="295.30731"
+     y="35.986956" />
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-weight:normal;stroke-width:1pt;font-family:Arial;font-style:normal;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="374.50476"
+     y="51.278937"
+     id="text792"
+     sodipodi:linespacing="100%"><tspan
+       x="374.50476"
+       y="51.278938"
+       sodipodi:role="line"
+       id="tspan1148">CircleClass</tspan></text>
+  <rect
+     style="font-size:12.000000;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff7100;stroke-width:3.6664891;"
+     id="rect816"
+     width="206.08749"
+     height="25.562914"
+     x="305.47818"
+     y="97.009555" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:12.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="311.47452"
+     y="112.89356"
+     id="text817"
+     sodipodi:linespacing="100%"><tspan
+       x="311.47452"
+       y="112.89356"
+       sodipodi:role="line"
+       id="tspan859">move= Shape_move</tspan></text>
+  <rect
+     style="font-size:12.000000;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff7100;stroke-width:3.6668053;"
+     id="rect820"
+     width="206.12303"
+     height="25.562914"
+     x="305.62057"
+     y="125.51154" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:12.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="311.52933"
+     y="141.39554"
+     id="text821"
+     sodipodi:linespacing="100%"><tspan
+       x="311.52933"
+       y="141.39554"
+       sodipodi:role="line"
+       id="tspan861">select= Circle_select</tspan></text>
+  <rect
+     style="font-size:12.000000;fill:#ff341c;fill-rule:evenodd;stroke:#7ceb46;stroke-width:3.5101912;"
+     id="rect655"
+     width="205.23592"
+     height="23.527058"
+     x="305.23383"
+     y="67.577327" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:18.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="373.55771"
+     y="85.500079"
+     id="text656"
+     sodipodi:linespacing="100%"><tspan
+       x="373.55771"
+       y="85.500076"
+       sodipodi:role="line"
+       id="tspan1170">&quot;Circle&quot;</tspan></text>
+  <rect
+     style="font-size:12.000000;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff7100;stroke-width:3.6668556;"
+     id="rect1152"
+     width="206.12868"
+     height="25.562914"
+     x="305.47864"
+     y="153.70244" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:12.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="311.47452"
+     y="169.58644"
+     id="text1153"
+     sodipodi:linespacing="100%"><tspan
+       x="311.47452"
+       y="169.58644"
+       sodipodi:role="line"
+       id="tspan863">ungroup= Shape_ungroup</tspan></text>
+  <rect
+     style="font-size:12.000000;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff7100;stroke-width:3.6664891;"
+     id="rect1156"
+     width="206.08749"
+     height="25.562914"
+     x="305.65646"
+     y="182.20442" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:12.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="311.52933"
+     y="198.08841"
+     id="text1157"
+     sodipodi:linespacing="100%"><tspan
+       x="311.52933"
+       y="198.08841"
+       sodipodi:role="line"
+       id="tspan865">draw= Circle_draw</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:italic;font-weight:normal;font-size:18.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="249.60385"
+     y="21.720586"
+     id="text1172"
+     sodipodi:linespacing="100%"><tspan
+       x="249.60385"
+       y="21.720587"
+       sodipodi:role="line"
+       id="tspan1175">Descriptor de Clase: clase Circle</tspan></text>
+  <rect
+     style="font-size:12;fill:#0000ff;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.20249pt;"
+     id="rect1177"
+     width="148.27539"
+     height="118.04449"
+     x="14.076230"
+     y="39.209916" />
+  <rect
+     style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.547519pt;"
+     id="rect1178"
+     width="148.27539"
+     height="24.472643"
+     x="14.076258"
+     y="37.770314" />
+  <text
+     xml:space="preserve"
+     style="font-size:12;font-weight:normal;stroke-width:1pt;font-family:Arial;font-style:normal;text-anchor:start;writing-mode:lr;"
+     x="69.132896"
+     y="53.062299"
+     id="text1179"
+     sodipodi:linespacing="100%"><tspan
+       x="69.132896"
+       y="53.062298"
+       sodipodi:role="line"
+       id="tspan812">Circle</tspan></text>
+  <rect
+     style="font-size:12;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.31907pt;"
+     id="rect803"
+     width="63.340946"
+     height="19.455349"
+     x="20.910868"
+     y="127.76138" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="36.655548"
+     y="141.60952"
+     id="text804"
+     sodipodi:linespacing="100%"><tspan
+       x="36.655548"
+       y="141.60953"
+       sodipodi:role="line"
+       id="tspan814">Radio</tspan></text>
+  <rect
+     style="font-size:12;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff7100;stroke-width:2.03267;"
+     id="rect1186"
+     width="63.340946"
+     height="25.562914"
+     x="22.566727"
+     y="98.792913" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="30.418840"
+     y="114.67690"
+     id="text1187"><tspan
+       id="tspan818">X_centro</tspan></text>
+  <rect
+     style="font-size:12;fill:#ffe2ff;fill-rule:evenodd;stroke:#ff7100;stroke-width:2.03267;"
+     id="rect1190"
+     width="63.340946"
+     height="25.562914"
+     x="88.786819"
+     y="98.792913" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="96.638924"
+     y="114.67690"
+     id="text1191"
+     sodipodi:linespacing="100%"><tspan
+       x="96.638924"
+       y="114.67690"
+       sodipodi:role="line"
+       id="tspan822">Y_centro</tspan></text>
+  <rect
+     style="font-size:12;fill:#ffef1c;fill-rule:evenodd;stroke:#ff1e00;stroke-width:2.74418;fill-opacity:1;stroke-opacity:1;"
+     id="rect1194"
+     width="125.43452"
+     height="23.527058"
+     x="23.361788"
+     y="69.360669" />
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:normal;font-size:12.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="32.265859"
+     y="84.229645"
+     id="text1195"
+     sodipodi:linespacing="100%"><tspan
+       x="32.265858"
+       y="84.229645"
+       sodipodi:role="line"
+       id="tspan952">CircleClass* dc</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Arial;font-style:normal;font-weight:bold;font-size:14.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;font-stretch:normal;font-variant:normal;"
+     x="12.696823"
+     y="162.11858"
+     id="text1198"
+     sodipodi:linespacing="100%"
+     transform="scale(1.092184,1.092184)"><tspan
+       x="12.696823"
+       y="162.11858"
+       sodipodi:role="line"
+       id="tspan1201">Circle* C1 = Circle_create(...);</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.63925858pt;"
+     d="M 139.04158,80.805677 L 296.92453,80.805677"
+     id="path1203" />
+  <polygon
+     sodipodi:type="star"
+     style="fill:#ffff00;fill-opacity:1.0000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-opacity:1.0000000;"
+     id="polygon1204"
+     sodipodi:sides="3"
+     sodipodi:cx="284.31446"
+     sodipodi:cy="17.472036"
+     sodipodi:r1="9.0188607"
+     sodipodi:r2="4.5094304"
+     sodipodi:arg1="2.0701430"
+     sodipodi:arg2="3.1173406"
+     inkscape:flatsided="true"
+     points="279.99576,25.389654 279.61695,9.7731222 293.33067,17.253331 279.99576,25.389654 "
+     transform="translate(0.475839,62.67774)" />
+  <path
+     sodipodi:type="arc"
+     style="fill:#ff0000;fill-opacity:0.38582677;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-opacity:1.0000000;"
+     id="path1318"
+     sodipodi:cx="93.140366"
+     sodipodi:cy="142.09280"
+     sodipodi:rx="12.724093"
+     sodipodi:ry="10.688239"
+     d="M 105.86446 142.09280 A 12.724093 10.688239 0 1 0 80.416272,142.09280 A 12.724093 10.688239 0 1 0 105.86446 142.09280 z"
+     transform="translate(-6.752373,29.32199)" />
+</svg>

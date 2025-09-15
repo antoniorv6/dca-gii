@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>TEMA 8: Genericidad.</title>
+<meta name="author" content="Programación-II, Universidad de Alicante, 2024-25"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/theme/white.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="../presentation.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">TEMA 8: Genericidad.</h1><p class="subtitle"></p>
+<h2 class="author">Programación-II, Universidad de Alicante, 2024-25</h2><p class="date">Created: 2025-04-16 mié 00:33</p>
+</section>
+
+<section>
+<section id="slide-orgc244e6e">
+<h2 id="orgc244e6e">Genericidad</h2>
+<ul>
+<li class="fragment appear">La <i>genericidad</i> <b>no</b> es una propiedad esencial para que un
+lenguaje sea considerado OO.</li>
+
+<li class="fragment appear">Podríamos decir que la <i>genericidad</i> es otro tipo de polimorfismo.</li>
+
+<li class="fragment appear"><p>
+Recordad lo que decíamos en las primeras prácticas cuando
+hablabamos de <code>List</code> y <code>Stack</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">typedef</span> <span style="font-weight: bold; text-decoration: underline;">char</span> <span style="font-weight: bold; text-decoration: underline;">Element</span>; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Hasta que veamos genericidad usaremos este typedef.</span>
+</code></pre>
+</div>
+
+<p>
+<code>Element</code> era el tipo de los elementos almacenados en <i>listas</i> y
+<i>pilas</i>.
+</p></li>
+
+</ul>
+
+
+</section>
+<section id="slide-orgc244e6e-split">
+<ul>
+<li>Estaría bien disponer de una característica del lenguaje que nos
+permitiera hacer esto no solo para un tipo, sino para todos los
+tipos que queramos.</li>
+
+<li class="fragment appear">De este modo podríamos crear simultáneamente <i>listas y/o pilas de
+caracteres</i>, <i>de enteros</i>, <i>de droides</i>, etc&#x2026;</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org935ba68">
+<h2 id="org935ba68">Genericidad y C++</h2>
+<ul>
+<li class="fragment appear"><b>C++</b> la incorpora mediante el concepto de <i>plantilla</i>
+(<i>template</i>) y nos permite aplicar la idea tanto a clases como a
+funciones.</li>
+<li class="fragment appear">Un <i>template</i> o plantilla es un mecanismo que permite al
+programador usar tipos como parámetros para una clase o una
+función.</li>
+
+</ul>
+
+</section>
+<section id="slide-org935ba68-split">
+
+<ul>
+<li><p>
+Imaginad que
+queremos crear una función que intercambie dos datos del mismo
+tipo, p.e. enteros, cadenas o droides:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">[1]                        // [2]</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">swap</span> (<span style="font-weight: bold; text-decoration: underline;">int</span>&amp; <span style="font-weight: bold; font-style: italic;">a</span> , <span style="font-weight: bold; text-decoration: underline;">int</span>&amp; <span style="font-weight: bold; font-style: italic;">b</span>) { | <span style="font-weight: bold; text-decoration: underline;">void</span> swap (<span style="font-weight: bold; text-decoration: underline;">string</span>&amp; <span style="font-weight: bold; font-style: italic;">a</span> , <span style="font-weight: bold; text-decoration: underline;">string</span>&amp; <span style="font-weight: bold; font-style: italic;">b</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">t</span> = a;                  |   string t = a;
+      a = b;                  |          a = b;
+      b = t;                  |          b = t;
+}                             | }
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">[3]</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">swap</span> (<span style="font-weight: bold; text-decoration: underline;">Droid</span>&amp; <span style="font-weight: bold; font-style: italic;">a</span> , <span style="font-weight: bold; text-decoration: underline;">Droid</span>&amp; <span style="font-weight: bold; font-style: italic;">b</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">Droid</span> <span style="font-weight: bold; font-style: italic;">t</span> = a;
+        a = b;
+        b = t;
+}
+</code></pre>
+</div></li>
+<li class="fragment appear">¿Cómo son todas las funciones anteriores?</li>
+<li class="fragment appear">¿Y si hubiera una forma de escribir el código una sola vez
+parametrizando el tipo de dato con el que trabajan?</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org52b2f81">
+<h3 id="org52b2f81">Plantillas de funciones</h3>
+<ul>
+<li><p>
+La hay, mediante el uso de <i>templates</i> o <i>plantillas</i> de
+funciones, mira:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">As&#237; declaramos una plantilla de una funci&#243;n.</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">La funci&#243;n todav&#237;a no existe.</span>
+<span style="font-weight: bold;">template</span> &lt;<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&gt;  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Podemos emplear typename en lugar de class</span>
+<span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold;">swap</span> (<span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold; font-style: italic;">a</span> , <span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold; font-style: italic;">b</span>) {
+  <span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">t</span> = a;
+    a = b;
+    b = t;
+}
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org52b2f81-split">
+
+<ul>
+<li><p>
+Para que la función exista hay que <b>instanciar</b> su plantilla, p.e.:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">s</span>, <span style="font-weight: bold; font-style: italic;">t</span>;
+<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">m</span>, <span style="font-weight: bold; font-style: italic;">n</span>;
+...
+swap (s, t);                    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">swap (int&amp;, int&amp;)</span>
+swap (m, n);                    <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">swap (string&amp;, string&amp;)</span>
+</code></pre>
+</div></li>
+
+<li class="fragment appear">Para poder instanciar la plantilla de una función genérica tenemos
+que tener accesible el código fuente de su declaración.</li>
+
+<li class="fragment appear">Es por eso que el código de implementación de la plantilla de una
+función o una clase suele ir en ficheros de cabecera: <b>'.h'</b></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org9a11119">
+<h3 id="org9a11119">Plantillas de clases</h3>
+<ul>
+<li class="fragment appear">De forma similar a como hemos hecho para funciones podemos
+hacerlo para clases.</li>
+
+<li class="fragment appear"><p>
+Si hacemos genérica la clase <code>Node</code> empleada en <code>Tree</code>:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">template</span> &lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&gt;
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Node</span> {               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">El tipo de los elementos es T</span>
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">Node</span> (<span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">e</span>);
+    ...
+  <span style="font-weight: bold;">private</span>:
+    <span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">_key</span>;
+    <span style="font-weight: bold; text-decoration: underline;">Tree</span> <span style="font-weight: bold; font-style: italic;">lefts</span>, <span style="font-weight: bold; font-style: italic;">rights</span>;
+};
+</code></pre>
+</div></li>
+
+<li class="fragment appear"><p>
+La instanciamos así:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold; text-decoration: underline;">Node</span>&lt;<span style="font-weight: bold; text-decoration: underline;">char</span>&gt; <span style="font-weight: bold; font-style: italic;">nc</span>;                  <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">nc variable de tipo Node de caracter</span>
+<span style="font-weight: bold; text-decoration: underline;">Node</span>&lt;Droid&gt; <span style="font-weight: bold; font-style: italic;">nd</span>;                 <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">nd variable de tipo Node de Droid</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org9a11119-split">
+
+<ul>
+<li>¿ Y si <i>Tree</i> también es genérica ?</li>
+<li class="fragment appear"><p>
+Entonces la clase <i>Node</i> anterior quedaría así:
+</p>
+<div class="org-src-container">
+
+<pre  class="fragment (appear)"   ><code trim><span style="font-weight: bold;">template</span> &lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&gt;
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Node</span> {               <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">El tipo de los elementos es T</span>
+  <span style="font-weight: bold;">public</span>:
+    <span style="font-weight: bold;">Node</span> (<span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">e</span>);
+    ...
+  <span style="font-weight: bold;">private</span>:
+    <span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">_key</span>;
+    <span style="font-weight: bold; text-decoration: underline;">Tree</span>&lt;<span style="font-weight: bold; text-decoration: underline;">T</span>&gt; <span style="font-weight: bold; font-style: italic;">lefts</span>, <span style="font-weight: bold; font-style: italic;">rights</span>;      <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&#191;Declaraci&#243;n o instanciaci&#243;n?</span>
+};
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org77fefaa">
+<h3 id="org77fefaa">Parámetros de un <i>template</i></h3>
+<ul>
+<li class="fragment appear">La mayoría de lenguajes que tienen genericidad sólo permiten usar
+como argumentos de la plantilla <b>tipos</b>.</li>
+
+<li class="fragment appear"><p>
+<b>C++</b> permite usar <i>otras cosas</i>, p.e. enteros o cadenas.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">template</span> &lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">N</span>&gt; <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Array</span> {
+  <span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">elements</span>[N];
+  ...
+};
+<span style="font-weight: bold; text-decoration: underline;">Array</span>&lt;<span style="font-weight: bold; text-decoration: underline;">char</span>,12&gt; <span style="font-weight: bold; font-style: italic;">ca</span>;              <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Array de 12 caracteres</span>
+<span style="font-weight: bold; text-decoration: underline;">Array</span>&lt;Droid, 512&gt; <span style="font-weight: bold; font-style: italic;">da</span>;           <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Array de 512 droides</span>
+</code></pre>
+</div></li>
+
+</ul>
+
+</section>
+<section id="slide-org77fefaa-split">
+
+<ul>
+<li><p>
+Se permiten valores por defecto:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">template</span> &lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span> = <span style="font-weight: bold; text-decoration: underline;">int</span>, <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">N</span> = 100&gt; <span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Array</span> {
+  <span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">elements</span>[N];
+  ...
+};
+<span style="font-weight: bold; text-decoration: underline;">Array</span>&lt;&gt; <span style="font-weight: bold; font-style: italic;">ca</span>;                     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Array&lt;int, 100&gt;</span>
+<span style="font-weight: bold; text-decoration: underline;">Array</span>&lt;Droid&gt; <span style="font-weight: bold; font-style: italic;">da</span>;                <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Array&lt;Droid, 100&gt;</span>
+<span style="font-weight: bold; text-decoration: underline;">Array</span>&lt;<span style="font-weight: bold; text-decoration: underline;">Array</span>&lt;<span style="font-weight: bold; text-decoration: underline;">char</span>, 120&gt;&gt; <span style="font-weight: bold; font-style: italic;">aa</span>;     <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Matriz de 100x120 caracteres</span>
+</code></pre>
+</div>
+
+<p>
+En C++ previo al estándar de 2011 los ángulos de cierre dobles
+(\(>>\)) de un template deben estar separados, no pueden ir juntos:
+<b>\(> .. >\)</b>.
+</p></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org6625269">
+<h3 id="org6625269">Un ejemplo más completo</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">-- The C++ programming language, 4th. ed.</span>
+<span style="font-weight: bold; font-style: italic;">////////////////////////</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Contenido del '.h' //</span>
+<span style="font-weight: bold; font-style: italic;">////////////////////////</span>
+<span style="font-weight: bold;">template</span>&lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&gt;
+<span style="font-weight: bold;">struct</span> <span style="font-weight: bold; text-decoration: underline;">Link</span> {
+  <span style="font-weight: bold; text-decoration: underline;">Link</span>* <span style="font-weight: bold; font-style: italic;">pre</span>;
+  <span style="font-weight: bold; text-decoration: underline;">Link</span>* <span style="font-weight: bold; font-style: italic;">suc</span>;
+  <span style="font-weight: bold; text-decoration: underline;">T</span> <span style="font-weight: bold; font-style: italic;">val</span>;
+};
+
+<span style="font-weight: bold;">template</span>&lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&gt;
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">List</span> {
+  <span style="font-weight: bold; text-decoration: underline;">Link</span>&lt;<span style="font-weight: bold; text-decoration: underline;">T</span>&gt;* <span style="font-weight: bold; font-style: italic;">head</span>;
+<span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">List</span>() : head(<span style="font-weight: bold; text-decoration: underline;">nullptr</span>) { }
+  <span style="font-weight: bold;">List</span>(<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&amp; <span style="font-weight: bold; font-style: italic;">t</span>) : head (<span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Link</span>&lt;<span style="font-weight: bold; text-decoration: underline;">T</span>&gt;{0,0,t} ) { }
+  ...
+  <span style="font-weight: bold; text-decoration: underline;">void</span> print_all() <span style="font-weight: bold;">const</span>;
+};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org6625269-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim>
+<span style="font-weight: bold; font-style: italic;">/////////////////////////</span>
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Contenido del '.cc' //</span>
+<span style="font-weight: bold; font-style: italic;">/////////////////////////</span>
+
+<span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Implementaci&#243;n del m&#233;todo "List&lt;T&gt;::print_all() const"</span>
+<span style="font-weight: bold;">template</span>&lt;<span style="font-weight: bold;">typename</span> <span style="font-weight: bold; text-decoration: underline;">T</span>&gt; <span style="font-weight: bold; text-decoration: underline;">void</span> <span style="font-weight: bold; text-decoration: underline;">List</span>&lt;<span style="font-weight: bold; text-decoration: underline;">T</span>&gt;::<span style="font-weight: bold;">print_all</span>() <span style="font-weight: bold;">const</span> {
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">Link</span>&lt;<span style="font-weight: bold; text-decoration: underline;">T</span>&gt;* <span style="font-weight: bold; font-style: italic;">p</span> = head; p; p = p &#8722;&gt; suc) <span style="font-weight: bold; font-style: italic;">//</span><span style="font-weight: bold; font-style: italic;">p depende de T</span>
+  cout &lt;&lt; *p;
+}
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgea9a93c">
+<h2 id="orgea9a93c">Programación genérica</h2>
+<ul>
+<li class="fragment appear">Como podrás imaginar esta característica abre las puertas a un
+nuevo modo de crear programas.</li>
+
+<li class="fragment appear">Ya no solo debes pensar en el código que escribes, sino a qué dará
+lugar cuando se instancie. <i>Requiere llevar bastante más cuidado</i>.</li>
+
+<li class="fragment appear">A principios de la década de los 90 <a href="https://en.wikipedia.org/wiki/Alexander_Stepanov">Alexander Stepanov</a> comenzó a
+desarrollar lo que por aquel entonces se denominó la biblioteca
+<a href="https://en.wikipedia.org/wiki/Standard_Template_Library">STL</a> y que hoy en día forma parte de la biblioteca estándar de
+<b>C++</b>.</li>
+
+</ul>
+
+</section>
+<section id="slide-orgea9a93c-split">
+
+<ul>
+<li>En esencia <i>STL</i> consistía en una colección de <a href="https://en.wikipedia.org/wiki/Standard_Template_Library#Containers">contenedores</a>,
+<a href="https://en.wikipedia.org/wiki/Standard_Template_Library#Iterators">iteradores</a>, <a href="https://en.wikipedia.org/wiki/Standard_Template_Library#Algorithms">algoritmos</a> y <a href="https://en.wikipedia.org/wiki/Standard_Template_Library#Functions">funciones</a> programados bajo el paradigma
+de la genericidad.</li>
+
+</ul>
+<ul>
+<li class="fragment appear">Obligó a los fabricantes de compiladores a incorporar todo lo que
+demandaba este nuevo estilo de programación. En cierto modo, <i>STL</i>
+se convirtió en el código de testeo de muchos fabricantes de
+compiladores de <b>C++</b>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdccf365">
+<h2 id="orgdccf365">La biblioteca estándar de C++</h2>
+<ul>
+<li class="fragment appear">El lenguaje <b>C++</b> no es sólo el compilador.</li>
+
+<li class="fragment appear">Es también su biblioteca estándar, gran parte de la cual está,
+escrita usando genericidad (<i>STL</i>).</li>
+
+<li class="fragment appear">En ella nos encontramos, junto a otros componentes, con una serie
+de clases que implementan <i>TADS</i> que representan <i>contenedores</i>
+(listas, pilas, colas, etc&#x2026;).</li>
+
+</ul>
+
+</section>
+<section id="slide-orgdccf365-split">
+
+<ul>
+<li><p>
+Para usar cualquier componente de esta biblioteca debemos incluir
+un archivo de cabecera que contiene el código que lo implementa. A
+continuación (si es un elemento genérico) debemos proceder a
+instanciarlo, p.e:
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;list&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;queue&gt;</span>
+
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">list</span>&lt;<span style="font-weight: bold; text-decoration: underline;">int</span>&gt; <span style="font-weight: bold; font-style: italic;">il</span>;              <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Lista de enteros</span>
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">list</span>&lt;Droid&gt; <span style="font-weight: bold; font-style: italic;">dl</span>;            <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Lista de droides</span>
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">list</span>&lt;<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">queue</span>&lt;<span style="font-weight: bold; text-decoration: underline;">char</span>&gt;&gt; <span style="font-weight: bold; font-style: italic;">ql</span>; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Lista de colas de caracteres</span>
+<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">queue</span>&lt;<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">list</span>&lt;<span style="font-weight: bold; text-decoration: underline;">char</span>&gt;&gt; <span style="font-weight: bold; font-style: italic;">lq</span>; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Cola de listas de caracteres</span>
+</code></pre>
+</div></li>
+
+<li>Dispones de más información sobre esta biblioteca <a href="http://en.cppreference.com/w/cpp/header">aquí</a>.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgbfd7d05">
+<h3 id="orgbfd7d05">Ejemplo de uso de std::vector</h3>
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">Compilar con std=c++11</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;iostream&gt;</span>
+<span style="font-weight: bold;">#include</span> <span style="font-style: italic;">&lt;vector&gt;</span>
+
+<span style="font-weight: bold;">class</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> {
+ <span style="font-weight: bold;">public</span>:
+  <span style="font-weight: bold;">static</span> <span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">rn</span>;
+  <span style="font-weight: bold;">const</span> <span style="font-weight: bold;">static</span> Robot zero;
+
+  <span style="font-weight: bold;">Robot</span>(<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">n</span>, <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">bl</span> = 1.0) {
+    theName = n;
+    theBattLevel = bl;
+    rn++;
+  }
+
+  <span style="font-weight: bold;">friend</span> <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&lt;&lt;</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold; font-style: italic;">os</span>, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>&amp; <span style="font-weight: bold; font-style: italic;">r</span>);
+
+  <span style="font-weight: bold;">virtual</span> ~<span style="font-weight: bold;">Robot</span>() {}
+
+<span style="font-weight: bold;">private</span>:
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">string</span> <span style="font-weight: bold; font-style: italic;">theName</span>;
+  <span style="font-weight: bold; text-decoration: underline;">float</span> <span style="font-weight: bold; font-style: italic;">theBattLevel</span>;
+};
+</code></pre>
+</div>
+
+</section>
+<section id="slide-orgbfd7d05-split">
+
+<div class="org-src-container">
+
+<pre  class="src src-c++"   ><code trim><span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp;
+<span style="font-weight: bold;">operator</span><span style="font-weight: bold;">&lt;&lt;</span> (<span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">ostream</span>&amp; <span style="font-weight: bold; font-style: italic;">os</span>, <span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>&amp; <span style="font-weight: bold; font-style: italic;">r</span>) {
+  os &lt;&lt; <span style="font-style: italic;">"-----------------\n"</span>;
+  os &lt;&lt; <span style="font-style: italic;">"    Name: "</span> &lt;&lt; r.theName &lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  os &lt;&lt; <span style="font-style: italic;">"    BL: "</span> &lt;&lt; r.theBattLevel&lt;&lt; <span style="font-style: italic;">'\n'</span>;
+  os &lt;&lt; <span style="font-style: italic;">"-----------------\n"</span>;
+
+  <span style="font-weight: bold;">return</span> os;
+}
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>::<span style="font-weight: bold; font-style: italic;">rn</span> = 0;
+<span style="font-weight: bold;">const</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span>::<span style="font-weight: bold; font-style: italic;">zero</span> = Robot (<span style="font-style: italic;">""</span>, 0.0);
+
+<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold;">main</span>(<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">argc</span>, <span style="font-weight: bold; text-decoration: underline;">char</span> *<span style="font-weight: bold; font-style: italic;">argv</span>[])
+{
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::<span style="font-weight: bold; text-decoration: underline;">vector</span>&lt;<span style="font-weight: bold; text-decoration: underline;">Robot</span>*&gt; <span style="font-weight: bold; font-style: italic;">rv</span>;
+
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 10; i++)
+    rv.push_back (<span style="font-weight: bold;">new</span> <span style="font-weight: bold; text-decoration: underline;">Robot</span> (<span style="font-style: italic;">"robot-"</span> + <span style="font-weight: bold; text-decoration: underline;">std</span>::to_string(<span style="font-weight: bold; text-decoration: underline;">Robot</span>::rn),
+                             <span style="font-weight: bold;">static_cast</span>&lt;<span style="font-weight: bold; text-decoration: underline;">float</span>&gt;(.1*i)));
+
+
+  <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; <span style="font-style: italic;">"\nBuilt robots: "</span> &lt;&lt; <span style="font-weight: bold; text-decoration: underline;">Robot</span>::rn &lt;&lt; <span style="font-style: italic;">"\n\n"</span>;
+
+  <span style="font-weight: bold;">for</span> (<span style="font-weight: bold; text-decoration: underline;">int</span> <span style="font-weight: bold; font-style: italic;">i</span> = 0; i &lt; 10; i++)
+    <span style="font-weight: bold; text-decoration: underline;">std</span>::cout &lt;&lt; *rv[i] &lt;&lt; <span style="font-style: italic;">'\n'</span>; <span style="font-weight: bold; font-style: italic;">// </span><span style="font-weight: bold; font-style: italic;">&#191;porqu&#233; *rv[i] y no rv[i]?</span>
+
+  <span style="font-weight: bold;">return</span> 0;
+}
+
+</code></pre>
+</div>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orga141fac">
+<h2 id="orga141fac">Aclaraciones</h2>
+<ul>
+<li class="fragment appear"><b>Este contenido no es la bibliografía completa de la asignatura</b>, por lo tanto debes estudiar, aclarar y ampliar los conceptos que en ellas encuentres empleando los enlaces web y bibliografía recomendada que puedes consultar en la <a href="https://cvnet.cpd.ua.es/Guia-Docente/GuiaDocente/Index?wcodest=&amp;wcodasi=33709&amp;wlengua=es">página web de la ficha de la asignatura</a> y en la web propia de la asignatura.</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+overview: true, slideNumber: 'c/t', controls: true, controlsLayout: 'bottom-right', progress: true, history: false, overview: true, keyboard: true,
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>
