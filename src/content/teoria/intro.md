@@ -19,8 +19,8 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 ## <span class="section-num">2.</span> Temario.
 
 
-### [Tema 0: Presentación de la asignatura.](/diapositivas/teoria/01-intro.html)
-### [Tema 1: Estructura de equipos de desarrollo.](/diapositivas/teoria/02-estructura-ed.html)
+### [Tema 0: Presentación de la asignatura.](/dca-gii/diapositivas/teoria/01-intro.html)
+### [Tema 1: Estructura de equipos de desarrollo.](/dca-gii/diapositivas/teoria/02-estructura-ed.html)
  - Introducción al desarrollo _software_ colaborativo.
  - El concepto de **ortogonalidad**.
  - Estructuras principales de un equipo de desarrollo:
