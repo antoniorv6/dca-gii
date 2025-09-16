@@ -30,7 +30,7 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
     - Centralizada controlada.
 - Dictador Benevolente de por Vida (BDFL)
 
-### [Tema 2: Despliegue e instalación.](/diapositivas/teoria/03-despliegue-instalacion.html)
+### [Tema 2: Despliegue e instalación.](/dca-gii/diapositivas/teoria/03-despliegue-instalacion.html)
 
 - Fundamentos de la entrega de _software_.
     - Versión _estable_ vs Última versión.
