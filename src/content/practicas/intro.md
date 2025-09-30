@@ -15,3 +15,7 @@ order: 0
     compilador de **C++** del proyecto [GCC](https://gcc.gnu.org), para ello empleamos la versión
     que hay instalada en los laboratorios de la EPS. Para conocer la versión, escribe en la terminal de Linux lo siguiente: `g++ --version`.
 
+## Plantilla de las prácticas
+
+Las prácticas se realizarán a través de la [plantilla](https://github.com/antoniorv6/DCAGII-Game-Template) de la asignatura. La documentación de dicha plantilla está [disponible de forma pública](https://deepwiki.com/antoniorv6/DCAGII-Game-Template).
+
