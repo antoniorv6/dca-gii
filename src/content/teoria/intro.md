@@ -19,7 +19,7 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 ## <span class="section-num">2.</span> Temario.
 
 
-### [Tema 0: Presentación de la asignatura.](/dca-gii/diapositivas/teoria/01-intro.html)
+### [Tema 0: Presentación de la asignatura.](/dca-gii/teoria/l01/)
 ### [Tema 1: Estructura de equipos de desarrollo.](/dca-gii/diapositivas/teoria/02-estructura-ed.html)
  - Introducción al desarrollo _software_ colaborativo.
  - El concepto de **ortogonalidad**.
@@ -30,7 +30,7 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
     - Centralizada controlada.
 - Dictador Benevolente de por Vida (BDFL)
 
-### [Tema 2: Despliegue e instalación.](/dca-gii/diapositivas/teoria/03-despliegue-instalacion.html)
+### [Tema 2: Despliegue e instalación.](/dca-gii/teoria/l02/)
 
 - Fundamentos de la entrega de _software_.
     - Versión _estable_ vs Última versión.
@@ -44,3 +44,10 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
     - Estructura típica del versionado de _software_.
     - Ejemplos de aplicaciones reales.
     - Versionado semántico.
+
+### [Tema 3: Bugtracking](/dca-gii/teoria/l03/)
+
+- Fundamentos del _bugtracking_.
+- Etiquetado de _bugs_.
+- Ciclo de vida de un _bug_.
+- Aplicaciones de _bugtracking_.
