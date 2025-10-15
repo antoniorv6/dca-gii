@@ -51,3 +51,13 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 - Etiquetado de _bugs_.
 - Ciclo de vida de un _bug_.
 - Aplicaciones de _bugtracking_.
+
+
+### [Tema 4: Compilación de grandes proyectos](/dca-gii/teoria/l04/)
+
+- ¿Por qué no compilamos nuestros proyectos a mano todo el rato?
+- Jerarquía de construcción de programas
+- `make`
+- `ccache`
+- `ninja`
+- Nociones de _Continuous Deployment_ con GitHub Actions
