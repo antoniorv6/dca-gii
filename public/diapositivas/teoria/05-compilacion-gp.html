@@ -415,7 +415,6 @@ Desarrollo Colaborativo de Aplicaciones
 <li><a href="#/Make">Make</a></li>
 <li><a href="#/Ccache">Ccache</a></li>
 <li><a href="#/Ninja">Ninja</a></li>
-<li><a href="#/CD">CD</a></li>
 </ol>
 </div>
 </section>
@@ -851,16 +850,54 @@ Desarrollo Colaborativo de Aplicaciones
 </section>
 <section id="dependencias-de-orden-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Dependencias de orden</h2>
-<pre><code>build/%.o: %.cpp
-    g++ $(CFLAGS) -c -Iinclude $&lt; -o $@</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb18-1" class="hljs-ln-code"><a href=""></a><span class="dv">build/%.o:</span><span class="dt"> %.cpp</span></span>
+<span id="cb18-2" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c -Iinclude <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="dependencias-de-orden-5" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Dependencias de orden</h2>
-<pre><code>build/%.o: %.cpp | build
-    g++ $(CFLAGS) -c -Iinclude $&lt; -o $@
-
-build:
-    mkdir build/</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb19-1" class="hljs-ln-code"><a href=""></a><span class="dv">build/%.o:</span><span class="dt"> %.cpp | build</span></span>
+<span id="cb19-2" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c -Iinclude <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span>
+<span id="cb19-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb19-4" class="hljs-ln-code"><a href=""></a><span class="dv">build:</span></span>
+<span id="cb19-5" class="hljs-ln-code"><a href=""></a><span class="er">    </span>mkdir build/</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="funciones" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Funciones</h2>
+<p><code>make</code> tiene algunas funciones y utilidades para trabajar con cadenas de caracteres.</p>
+</section>
+<section id="funciones-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Funciones</h2>
+<p><code>make</code> tiene algunas funciones y utilidades para trabajar con cadenas de caracteres.</p>
+<p>Se definen como <code>$(func arg1,arg2,...)</code></p>
+</section>
+<section id="funciones-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Funciones</h2>
+<p><code>make</code> tiene algunas funciones y utilidades para trabajar con cadenas de caracteres.</p>
+<p>Se definen como <code>$(func arg1,arg2,...)</code></p>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Advertencia</strong></p>
+</div>
+<div class="callout-content">
+<p>Las funciones en los <em>makefiles</em> son <strong>sensibles a los espacios</strong>, ya que se tratan de utilidades con cadenas de caracteres, por lo que <code>$(func arg1,arg2)</code> no devuelve el mismo resultado que <code>$(func arg1, arg2)</code></p>
+</div>
+</div>
+</div>
+</section>
+<section id="ejemplos-de-funciones" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ejemplos de funciones</h2>
+<ul>
+<li><code>wildcard</code>: Equivalente a usar <code>*</code> y <code>?</code> en el terminal.</li>
+<li><code>info</code>: Equivalente a hacer <code>echo</code> en el terminal.</li>
+<li><code>subst</code>: Reemplazo de cadenas literal.</li>
+<li><code>patsubst</code>: Reemplazo de cadenas por patrones.</li>
+<li><code>addprefix</code>: Añade prefijos a una cadena o lista.</li>
+<li><code>shell</code>: Ejecuta un comando del terminal y devuelve el resultado a una variable.</li>
+</ul>
 </section>
 <section id="makfiles-multinivel" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Makfiles multinivel</h2>
@@ -912,37 +949,30 @@ build:
 </section>
 <section id="estrategia-monolítica-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Estrategia monolítica</h2>
-<p>Primero hay que descubrir los fuentes y generar los <code>.o</code> correspondientes</p>
+<p>Debemos descubrir los ficheros fuente y generar sus <code>.o</code> correspondientes</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb22-1" class="hljs-ln-code"><a href=""></a><span class="dt">BUILD</span>   <span class="ch">:=</span><span class="st"> build</span></span>
-<span id="cb22-2" class="hljs-ln-code"><a href=""></a><span class="dt">SRC_DIRS</span> <span class="ch">:=</span><span class="st"> src lib</span></span>
-<span id="cb22-3" class="hljs-ln-code"><a href=""></a><span class="dt">SRCS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> find </span><span class="ch">$(</span><span class="dt">SRC_DIRS</span><span class="ch">)</span><span class="st"> -name '*.cpp'</span><span class="ch">)</span></span>
-<span id="cb22-4" class="hljs-ln-code"><a href=""></a><span class="dt">OBJS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> %.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="st">/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRCS</span><span class="ch">))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-2" class="hljs-ln-code"><a href=""></a><span class="dt">SRC_DIR</span> <span class="ch">:=</span><span class="st"> src </span><span class="co">#Directorio principal</span></span>
+<span id="cb22-3" class="hljs-ln-code"><a href=""></a><span class="dt">SRCS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> find </span><span class="ch">$(</span><span class="dt">SRC_DIR</span><span class="ch">)</span><span class="st"> -type -f -name '*.cpp'</span><span class="ch">)</span></span>
+<span id="cb22-4" class="hljs-ln-code"><a href=""></a><span class="dt">OBJS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> </span><span class="ch">$(</span><span class="dt">SRC_DIR</span><span class="ch">)</span><span class="st">/%.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">OBJ_DIR</span><span class="ch">)</span><span class="st">/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRC</span><span class="ch">))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="estrategia-monolítica-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Estrategia monolítica</h2>
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb23-1" class="hljs-ln-code"><a href=""></a><span class="dv">game:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
-<span id="cb23-2" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span> </span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>También hay que guardar las carpetas para actualizar la ruta de includes</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb23-1" class="hljs-ln-code"><a href=""></a><span class="dt">BUILD</span>   <span class="ch">:=</span><span class="st"> build</span></span>
+<span id="cb23-2" class="hljs-ln-code"><a href=""></a><span class="dt">SRC_DIR</span> <span class="ch">:=</span><span class="st"> src </span><span class="co">#Directorio principal</span></span>
+<span id="cb23-3" class="hljs-ln-code"><a href=""></a><span class="dt">SRCS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> find </span><span class="ch">$(</span><span class="dt">SRC_DIR</span><span class="ch">)</span><span class="st"> -type -f -name '*.cpp'</span><span class="ch">)</span></span>
+<span id="cb23-4" class="hljs-ln-code"><a href=""></a><span class="dt">OBJS</span>     <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> </span><span class="ch">$(</span><span class="dt">SRC_DIR</span><span class="ch">)</span><span class="st">/%.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">OBJ_DIR</span><span class="ch">)</span><span class="st">/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRC</span><span class="ch">))</span></span>
+<span id="cb23-5" class="hljs-ln-code"><a href=""></a><span class="dt">INC_DIRS</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> find </span><span class="ch">$(</span><span class="dt">SRC_DIR</span><span class="ch">)</span><span class="st"> -type d</span><span class="ch">)</span></span>
+<span id="cb23-6" class="hljs-ln-code"><a href=""></a><span class="dt">INC_FLAGS</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">addprefix</span><span class="st"> -I</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">INC_DIRS</span><span class="ch">))</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="estrategia-monolítica-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Estrategia monolítica</h2>
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb24-1" class="hljs-ln-code"><a href=""></a><span class="dv">game:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
-<span id="cb24-2" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span> </span>
-<span id="cb24-3" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb24-4" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/%.o:</span><span class="dt"> %.cpp | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/%/</span></span>
-<span id="cb24-5" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c -Iinclude <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Aplicación en compilación</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb24-1" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb24-2" class="hljs-ln-code"><a href=""></a><span class="dv">$(OBJ_DIR)/%.o:</span><span class="ch">$(</span><span class="dt">SRC_DIR</span><span class="ch">)</span><span class="dt">/%.cpp:</span></span>
+<span id="cb24-3" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ -c <span class="ch">$^</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">INC_FLAGS</span><span class="ch">)</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="estrategia-monolítica-5" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title">Estrategia monolítica</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb25-1" class="hljs-ln-code"><a href=""></a><span class="dv">game:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
-<span id="cb25-2" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span> </span>
-<span id="cb25-3" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb25-4" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/%.o:</span><span class="dt"> %.cpp | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/%/</span></span>
-<span id="cb25-5" class="hljs-ln-code"><a href=""></a><span class="er">    </span>g++ <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c -Iinclude <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span>
-<span id="cb25-6" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb25-7" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/%/:</span></span>
-<span id="cb25-8" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">@</span><span class="fu">mkdir -p </span><span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="estrategia-monolítica-6" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Estrategia monolítica</h2>
 <p><strong>Ventajas</strong>:</p>
 <ul>
@@ -984,39 +1014,39 @@ build:
 <section id="estrategia-recursiva-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Estrategia recursiva</h2>
 <p>Código del <code>Makefile</code> coordinador</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb27-1" class="hljs-ln-code"><a href=""></a><span class="dt">SUBDIRS</span> <span class="ch">=</span><span class="st"> lib src</span></span>
-<span id="cb27-2" class="hljs-ln-code"><a href=""></a><span class="kw">export</span><span class="dt"> BUILD </span><span class="ch">=</span><span class="st"> build</span></span>
-<span id="cb27-3" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb27-4" class="hljs-ln-code"><a href=""></a><span class="ot">.PHONY:</span><span class="dt"> all </span><span class="ch">$(</span><span class="dt">SUBDIRS</span><span class="ch">)</span></span>
-<span id="cb27-5" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb27-6" class="hljs-ln-code"><a href=""></a><span class="dv">all:</span><span class="dt"> </span><span class="ch">$/</span><span class="dt">(SUBDIRS)</span></span>
-<span id="cb27-7" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">@</span><span class="fu">echo </span><span class="st">"Proyecto compilado correctamente"</span></span>
-<span id="cb27-8" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb27-9" class="hljs-ln-code"><a href=""></a><span class="dv">$(SUBDIRS):</span></span>
-<span id="cb27-10" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> -C <span class="ch">$@</span> all --no-print-directory</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb26-1" class="hljs-ln-code"><a href=""></a><span class="dt">SUBDIRS</span> <span class="ch">=</span><span class="st"> lib src</span></span>
+<span id="cb26-2" class="hljs-ln-code"><a href=""></a><span class="kw">export</span><span class="dt"> BUILD </span><span class="ch">=</span><span class="st"> build</span></span>
+<span id="cb26-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb26-4" class="hljs-ln-code"><a href=""></a><span class="ot">.PHONY:</span><span class="dt"> all </span><span class="ch">$(</span><span class="dt">SUBDIRS</span><span class="ch">)</span></span>
+<span id="cb26-5" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb26-6" class="hljs-ln-code"><a href=""></a><span class="dv">all:</span><span class="dt"> </span><span class="ch">$/</span><span class="dt">(SUBDIRS)</span></span>
+<span id="cb26-7" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">@</span><span class="fu">echo </span><span class="st">"Proyecto compilado correctamente"</span></span>
+<span id="cb26-8" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb26-9" class="hljs-ln-code"><a href=""></a><span class="dv">$(SUBDIRS):</span></span>
+<span id="cb26-10" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> -C <span class="ch">$@</span> all --no-print-directory</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="estrategia-recursiva-5" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Estrategia recursiva</h2>
 <p>Código del <code>Makefile</code> de <code>src</code> (por ejemplo)</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb28-1" class="hljs-ln-code"><a href=""></a><span class="dt">BIN</span>     <span class="ch">=</span><span class="st"> game</span></span>
-<span id="cb28-2" class="hljs-ln-code"><a href=""></a><span class="dt">SRCS</span>    <span class="ch">=</span><span class="st"> %.cpp</span></span>
-<span id="cb28-3" class="hljs-ln-code"><a href=""></a><span class="dt">OBJS</span>    <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> %.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="st">/src/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRCS</span><span class="ch">))</span></span>
-<span id="cb28-4" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-5" class="hljs-ln-code"><a href=""></a><span class="ot">.PHONY:</span><span class="dt"> all</span></span>
-<span id="cb28-6" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-7" class="hljs-ln-code"><a href=""></a><span class="dv">all:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">BIN</span><span class="ch">)</span></span>
-<span id="cb28-8" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-9" class="hljs-ln-code"><a href=""></a><span class="dv">$(BIN):</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">LIBSTATIC</span><span class="ch">)</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
-<span id="cb28-10" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">LIBSTATIC</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span></span>
-<span id="cb28-11" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-12" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/src/%.o:</span><span class="dt"> %.c | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/src/</span></span>
-<span id="cb28-13" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span>
-<span id="cb28-14" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-15" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/src/:</span></span>
-<span id="cb28-16" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">@</span><span class="fu">mkdir </span><span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb27-1" class="hljs-ln-code"><a href=""></a><span class="dt">BIN</span>     <span class="ch">=</span><span class="st"> game</span></span>
+<span id="cb27-2" class="hljs-ln-code"><a href=""></a><span class="dt">SRCS</span>    <span class="ch">=</span><span class="st"> %.cpp</span></span>
+<span id="cb27-3" class="hljs-ln-code"><a href=""></a><span class="dt">OBJS</span>    <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">patsubst</span><span class="st"> %.cpp</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="st">/src/%.o</span><span class="kw">,</span><span class="ch">$(</span><span class="dt">SRCS</span><span class="ch">))</span></span>
+<span id="cb27-4" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb27-5" class="hljs-ln-code"><a href=""></a><span class="ot">.PHONY:</span><span class="dt"> all</span></span>
+<span id="cb27-6" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb27-7" class="hljs-ln-code"><a href=""></a><span class="dv">all:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">BIN</span><span class="ch">)</span></span>
+<span id="cb27-8" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb27-9" class="hljs-ln-code"><a href=""></a><span class="dv">$(BIN):</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">LIBSTATIC</span><span class="ch">)</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span></span>
+<span id="cb27-10" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">OBJS</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">LIBSTATIC</span><span class="ch">)</span> -o <span class="ch">$@</span> <span class="ch">$(</span><span class="dt">LDFLAGS</span><span class="ch">)</span></span>
+<span id="cb27-11" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb27-12" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/src/%.o:</span><span class="dt"> %.c | </span><span class="ch">$(</span><span class="dt">BUILD</span><span class="ch">)</span><span class="dt">/src/</span></span>
+<span id="cb27-13" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">$(</span><span class="dt">CC</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">CFLAGS</span><span class="ch">)</span> -c <span class="ch">$&lt;</span> -o <span class="ch">$@</span></span>
+<span id="cb27-14" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb27-15" class="hljs-ln-code"><a href=""></a><span class="dv">$(BUILD)/src/:</span></span>
+<span id="cb27-16" class="hljs-ln-code"><a href=""></a><span class="er">    </span><span class="ch">@</span><span class="fu">mkdir </span><span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="estrategia-monolítica-7" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title">Estrategia monolítica</h2>
+<section id="estrategia-recursiva-6" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Estrategia recursiva</h2>
 <p><strong>Ventajas</strong>:</p>
 <ul>
 <li><code>Makefile</code> más sencillo y mayor limpieza visual.</li>
@@ -1028,7 +1058,7 @@ build:
 <h2 data-id="quarto-animate-title">¿La recursividad es buena?</h2>
 <p>Tema polémico en la propia comunidad de C++:</p>
 <ul>
-<li>Peter Miller: <em>Recursive Make Considered Harmful</em>. Los <code>make</code> recursivos fragmentan el grafo de dependencias y eso lleva a builds incoherentes, largos tiempos de espera o necesidad de hacer make clean con frecuencia.</li>
+<li>Peter Miller: <em>Recursive Make Considered Harmful</em>. Los <code>make</code> recursivos fragmentan el árbol de dependencias y eso lleva a builds incoherentes, largos tiempos de espera o necesidad de hacer make clean con frecuencia.</li>
 </ul>
 </section>
 <section id="la-recursividad-es-buena-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
@@ -1055,7 +1085,7 @@ build:
 <h2 data-id="quarto-animate-title">¿La recursividad es buena?</h2>
 <p>Tema polémico en la propia comunidad de C++:</p>
 <div class="badge">
-<p>Sistemas de build como CMake, Meson, Bazel, y otros escritos funcionalmente (Shake) han ganado popularidad porque abordan estos problemas: permiten gestionar dependencias completas sin renunciar a modularidad y escalabilidad.</p>
+<p>Los sistemas de proyectos autoconfigurables como CMake, Meson o Premake han ganado popularidad porque abordan estos problemas: permiten gestionar dependencias completas sin renunciar a modularidad y escalabilidad.</p>
 </div>
 </section>
 <section id="ejecución-paralela" class="slide level2 center">
@@ -1066,6 +1096,12 @@ build:
 <li class="fragment"><p>Para ello debes emplear la opción <code>-j</code> seguida del numero de trabajos en paralelo a lanzar, por ejemplo: <code>make -j2</code></p></li>
 <li class="fragment"><p>Lanzar trabajos en paralelo suele descubrir fallos a la hora de especificar las dependencias, no es lo mismo satisfacerlas de forma secuencial que en paralelo.</p></li>
 </ul>
+</div>
+</section>
+<section id="section" class="slide level2 center">
+<h2></h2>
+<div class="badge center" style="margin-top: 1em; text-align: center">
+<p>¿La herramienta <code>make</code> es exclusiva de <code>C</code> y <code>C++</code>?</p>
 </div>
 </section></section>
 <section>
@@ -1105,7 +1141,7 @@ build:
 <h2 data-id="quarto-animate-title">Ccache</h2>
 <p><em>Compiler Cache</em> (<code>ccache</code>) es una herramienta que nos permite realizar esto.</p>
 <p>Se utiliza como una <strong>herramienta complementaria al compilador</strong>.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb29-1" class="hljs-ln-code"><a href=""></a>ccache g++ -o app src.cpp</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb28-1" class="hljs-ln-code"><a href=""></a>ccache g++ -o app src.cpp</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="características" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Características</h2>
@@ -1121,22 +1157,22 @@ build:
 <section id="uso-de-ccache" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Uso de <code>ccache</code></h2>
 <p>Se puede usar como <strong>prefijo</strong>.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb30-1" class="hljs-ln-code"><a href=""></a>ccache g++ -o app src.cpp</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb29-1" class="hljs-ln-code"><a href=""></a>ccache g++ -o app src.cpp</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="uso-de-ccache-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Uso de <code>ccache</code></h2>
 <p>Se puede usar como <strong>prefijo</strong>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb31-1"><a href=""></a>ccache g++ -o app src.cpp</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb30-1"><a href=""></a>ccache g+ -c -o app src.cpp</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>O <em>suplantando</em> al compilador</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb32-1"><a href=""></a>cp ccache /usr/local/bin/</span>
-<span id="cb32-2"><a href=""></a>ln -s ccache /usr/local/bin/gcc</span>
-<span id="cb32-3"><a href=""></a>ln -s ccache /usr/local/bin/g++</span>
-<span id="cb32-4"><a href=""></a>ln -s ccache /usr/local/bin/cc</span>
-<span id="cb32-5"><a href=""></a>ln -s ccache /usr/local/bin/c++</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource shell number-lines code-with-copy"><code class="sourceCode"><span id="cb31-1"><a href=""></a>cp ccache /usr/local/bin/</span>
+<span id="cb31-2"><a href=""></a>ln -s ccache /usr/local/bin/gcc</span>
+<span id="cb31-3"><a href=""></a>ln -s ccache /usr/local/bin/g++</span>
+<span id="cb31-4"><a href=""></a>ln -s ccache /usr/local/bin/cc</span>
+<span id="cb31-5"><a href=""></a>ln -s ccache /usr/local/bin/c++</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="cómo-funciona-ccache" class="slide level2 center" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Cómo funciona <code>ccache</code></h2>
-<p><code>cache</code> calcula un <strong>hash</strong> para identificar <strong>información única</strong> en la compilación</p>
+<section id="cómo-funciona-ccache" class="slide level2 center" data-visibility="uncounted">
+<h2>Cómo funciona <code>ccache</code></h2>
+<p><code>ccache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
 <div>
 <ul>
 <li class="fragment">Contenido del fichero fuente <strong>en compilación</strong>.</li>
@@ -1147,26 +1183,84 @@ build:
 </section>
 <section id="cómo-funciona-ccache-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Cómo funciona <code>ccache</code></h2>
-<p><code>cache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
-<div>
+<p><code>ccache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
 <ul>
-<li class="fragment">Contenido del fichero fuente <strong>en compilación</strong>.</li>
-<li class="fragment">Parámetros del compilador.</li>
-<li class="fragment">Versión del compilador.</li>
+<li>Contenido del fichero fuente <strong>en compilación</strong>.</li>
+<li>Parámetros del compilador.</li>
+<li>Versión del compilador.</li>
 </ul>
-</div>
 <p>Utiliza el algoritmo <code>MD4</code> para codificar dicho <em>hash</em>.</p>
 </section>
 <section id="cómo-funciona-ccache-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Cómo funciona <code>ccache</code></h2>
-<p><code>cache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
-<p>Si encuentra un <em>hash</em> idéntico en su registro: devuelve el resultado sin compilar.</p>
+<p><code>ccache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
+<p>Si encuentra un <em>hash</em> idéntico en su registro (<em>hit</em>): devuelve el resultado sin compilar.</p>
 </section>
 <section id="cómo-funciona-ccache-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Cómo funciona <code>ccache</code></h2>
-<p><code>cache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
+<p><code>ccache</code> calcula un <strong><em>hash</em></strong> para identificar <strong>información única</strong> en la compilación</p>
 <p>Si encuentra un <em>hash</em> idéntico en su registro: devuelve el resultado sin compilar.</p>
-<p>Si no encuentra nada: compila y guarda el resultado.</p>
+<p>Si no encuentra nada (<em>miss</em>): compila y guarda el resultado.</p>
+</section>
+<section id="modos-de-ccache" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Modos de ccache</h2>
+<p><code>ccache</code> soporta tres modos:</p>
+<ul>
+<li>Directo: El hash se calcula desde el propio fichero.</li>
+<li>Preprocesador: El hash se calcula después de pasar por el preprocesador.</li>
+<li>Dependencias: No se usa nunca el preprocesador.</li>
+</ul>
+</section>
+<section id="modos-de-ccache-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Modos de ccache</h2>
+<p><code>ccache</code> soporta tres modos:</p>
+<ul>
+<li>Directo: Rápido, pero más sensible a cambios (dependencias).</li>
+<li>Preprocesador: Robusto, pero más lento.</li>
+<li>Dependencias: Híbrido, pero más exigente en compilación (<em>manifest de dependencias</em>).</li>
+</ul>
+</section>
+<section id="inspeccionando-la-caché" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p><code>ccache</code> acumula sus estadísticas internamente.</p>
+<p>Para visualizarlas, llamamos a <code>ccache -s</code>.</p>
+</section>
+<section id="inspeccionando-la-caché-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p>¿Qué nos encontramos?</p>
+</section>
+<section id="inspeccionando-la-caché-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p>¿Qué nos encontramos?</p>
+<p><em>Hits</em>: Aciertos en la caché.</p>
+</section>
+<section id="inspeccionando-la-caché-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p>¿Qué nos encontramos?</p>
+<p><em>Hits</em>: Aciertos en la caché.</p>
+<ul>
+<li><em>Direct</em>: <em>Hashes</em> encontrados en crudo.</li>
+<li><em>Preprocessed</em>: <em>Hashes</em> encontrados tras pasar por el preprocesador.</li>
+</ul>
+</section>
+<section id="inspeccionando-la-caché-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p>¿Qué nos encontramos?</p>
+<p><em>Miss</em>: Aciertos en la caché.</p>
+<ul>
+<li><em>Direct</em>: No encontrado en el modo directo.</li>
+<li><em>Preprocessed</em>: No encontrado en modo preprocesador.</li>
+</ul>
+</section>
+<section id="inspeccionando-la-caché-5" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p>La caché es acumulativa, por lo que se nos va a guardar <strong>todo el historial</strong> de compilaciones con <code>ccache</code>.</p>
+</section>
+<section id="inspeccionando-la-caché-6" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Inspeccionando la caché</h2>
+<p>La caché es acumulativa, por lo que se nos va a guardar <strong>todo el historial</strong> de compilaciones con <code>ccache</code>.</p>
+<p>Para reiniciar la caché, ejecutamos:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb32-1" class="hljs-ln-code"><a href=""></a>ccache --zero-stats</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section></section>
 <section>
 <section id="Ninja" class="title-slide slide level1 center" data-stack-name="Ninja">
@@ -1189,7 +1283,7 @@ build:
 <h2 data-id="quarto-animate-title">¿Qué es Ninja?</h2>
 <p>Ninja es un sistemema de construcción y compilación enfocado en la <strong>velocidad</strong>.</p>
 <ul>
-<li>Minimaliesta: tiene menos funciones y mayor rendimiento.</li>
+<li>Minimalista: tiene menos funciones y mayor rendimiento.</li>
 <li><em>Do less, but do it quick</em>.</li>
 <li>No reemplaza a <code>make</code>, pero se usa <strong>cada vez más</strong> con <em>Build Systems</em> como CMake, Meson, etc.</li>
 </ul>
@@ -1349,205 +1443,23 @@ build:
 <span id="cb43-5" class="hljs-ln-code"><a href=""></a></span>
 <span id="cb43-6" class="hljs-ln-code"><a href=""></a><span class="dv">build math.o:</span><span class="dt"> cc math.c</span></span>
 <span id="cb43-7" class="hljs-ln-code"><a href=""></a><span class="dv">build all:</span><span class="dt"> phony libmath.o</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section></section>
-<section>
-<section id="CI" class="title-slide slide level1 center" data-stack-name="CD">
-<h1><em>CD</em> con GitHub Actions</h1>
-
 </section>
-<section id="recordando-qué-es-cd" class="slide level2 center" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Recordando qué es CD</h2>
-<p>El CD es una práctica de automatización del despliegue de la aplicación tras producir una nueva versión.</p>
+<section id="merece-la-pena-implementar-ninja-a-mano" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">¿Merece la pena implementar Ninja a mano?</h2>
+<p>Según su documentación…</p>
+<blockquote>
+<p>Make’s language was designed to be written by humans. Many projects find make alone adequate for their build problems. In contrast, Ninja has almost no features; just those necessary to get builds correct while punting most complexity to generation of the ninja input files.</p>
+</blockquote>
 </section>
-<section id="recordando-qué-es-cd-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title">Recordando qué es CD</h2>
-<p>El CD es una práctica de automatización del despliegue de la aplicación tras producir una nueva versión.</p>
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Nota</strong></p>
-</div>
-<div class="callout-content">
-<p>Recuerda que en el Tema 2 vimos las diferentes formas en las que gestionamos el versionado de un proyecto <em>software</em> a través de las distintas estrategias de integración con versionado de <em>software</em>. Esto siempre ejecutará el <strong>CD</strong> de nuestro sistema.</p>
-</div>
-</div>
-</div>
+<section id="merece-la-pena-implementar-ninja-a-mano-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">¿Merece la pena implementar Ninja a mano?</h2>
+<p>Según su documentación…</p>
+<blockquote>
+<p>Ninja by itself is unlikely to be useful for most projects.</p>
+</blockquote>
 </section>
-<section id="github-actions" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title">GitHub Actions</h2>
-<p>Ya que disponemos de <code>PRO</code> en GitHub, podemos aprovechar las <strong>GitHub Actions</strong> para integrar CD en nuestro flujo de trabajo.</p>
-<div style="font-size: 0.9em;">
-<ul>
-<li class="fragment">Integración nativa con GitHub (sin configuración adicional).</li>
-<li class="fragment">Muy flexible y personalizable con YAML.</li>
-<li class="fragment">Gran ecosistema de acciones públicas reutilizables.</li>
-<li class="fragment">Permite realizar todo el proceso de CI/CD con facilidad.</li>
-</ul>
-</div>
-</section>
-<section id="workflows" class="slide level2 justify center">
-<h2>Workflows</h2>
-<p>En GitHub Actions definimos una serie de <span class="hl">workflows</span> que son los responsables de definir un conjunto de acciones automatizadas para realizar un proceso.</p>
-<div class="badge text-center" style="margin-top: 1.5em;">
-<p>Nuestros workflows se definen en la carpeta <code>.github/workflows/</code> de nuestro proyecto.</p>
-</div>
-</section>
-<section id="section" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb44-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilación con Make</span></span>
-<span id="cb44-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb44-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">]</span></span>
-<span id="cb44-4" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb44-5" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb44-6" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">test</span><span class="kw">:</span></span>
-<span id="cb44-7" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb44-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb44-9" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
-<span id="cb44-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Instalar las tools necesarias</span></span>
-<span id="cb44-11" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> sudo apt update &amp;&amp; sudo apt install -y build-essential</span></span>
-<span id="cb44-12" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilar el proyecto</span></span>
-<span id="cb44-13" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> make</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="section-1" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div class="badge" style="margin-bottom: 1em">
-<div class="columns">
-<div class="column" style="width:15%;">
-<p><code>Jobs:</code></p>
-</div><div class="column" style="width:85%;">
-<p>Grupo de fases que se ejecutan en una misma máquina y con un objetivo concreto.</p>
-</div></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>github/workflows/push_validation.yaml</strong></pre>
-</div>
-<div class="sourceCode" id="cb45" data-filename="github/workflows/push_validation.yaml" data-code-line-numbers="5|6"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb45-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilación con Make</span></span>
-<span id="cb45-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb45-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">]</span></span>
-<span id="cb45-4" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb45-5" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb45-6" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">test</span><span class="kw">:</span></span>
-<span id="cb45-7" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb45-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb45-9" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
-<span id="cb45-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Instalar las tools necesarias</span></span>
-<span id="cb45-11" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> sudo apt update &amp;&amp; sudo apt install -y build-essential</span></span>
-<span id="cb45-12" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilar el proyecto</span></span>
-<span id="cb45-13" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> make</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="section-2" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div class="badge" style="margin-bottom: 1em">
-<div class="columns">
-<div class="column" style="width:15%;">
-<p><code>Steps:</code></p>
-</div><div class="column" style="width:85%;">
-<p>Conjunto de acciones, como correr un test o instalar una dependencia.</p>
-</div></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>github/workflows/push_validation.yaml</strong></pre>
-</div>
-<div class="sourceCode" id="cb46" data-filename="github/workflows/push_validation.yaml" data-code-line-numbers="8|9-13"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb46-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilación con Make</span></span>
-<span id="cb46-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb46-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">]</span></span>
-<span id="cb46-4" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb46-5" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb46-6" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">test</span><span class="kw">:</span></span>
-<span id="cb46-7" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb46-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb46-9" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
-<span id="cb46-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Instalar las tools necesarias</span></span>
-<span id="cb46-11" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> sudo apt update &amp;&amp; sudo apt install -y build-essential</span></span>
-<span id="cb46-12" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilar el proyecto</span></span>
-<span id="cb46-13" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> make</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="section-3" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div class="badge" style="margin-bottom: 1em">
-<div class="columns">
-<div class="column" style="width:15%;">
-<p><code>Action:</code></p>
-</div><div class="column" style="width:85%;">
-<p>Paso reutilizable publicado por la comunidad o creado a medida.</p>
-</div></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>github/workflows/push_validation.yaml</strong></pre>
-</div>
-<div class="sourceCode" id="cb47" data-filename="github/workflows/push_validation.yaml" data-code-line-numbers="9|10-11"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb47-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilación con Make</span></span>
-<span id="cb47-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb47-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">]</span></span>
-<span id="cb47-4" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb47-5" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb47-6" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">test</span><span class="kw">:</span></span>
-<span id="cb47-7" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb47-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb47-9" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
-<span id="cb47-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Instalar las tools necesarias</span></span>
-<span id="cb47-11" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> sudo apt update &amp;&amp; sudo apt install -y build-essential</span></span>
-<span id="cb47-12" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilar el proyecto</span></span>
-<span id="cb47-13" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> make</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="section-4" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div class="badge" style="margin-bottom: 1em">
-<div class="columns">
-<div class="column" style="width:20%;">
-<p><code>Triggers:</code></p>
-</div><div class="column" style="width:80%;">
-<p>Indica cuando debe ejecutarse este flujo de trabajo.</p>
-</div></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>github/workflows/push_validation.yaml</strong></pre>
-</div>
-<div class="sourceCode" id="cb48" data-filename="github/workflows/push_validation.yaml" data-code-line-numbers="3"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb48-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilación con Make</span></span>
-<span id="cb48-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb48-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">]</span></span>
-<span id="cb48-4" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb48-5" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb48-6" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">test</span><span class="kw">:</span></span>
-<span id="cb48-7" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb48-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb48-9" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
-<span id="cb48-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Instalar las tools necesarias</span></span>
-<span id="cb48-11" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> sudo apt update &amp;&amp; sudo apt install -y build-essential</span></span>
-<span id="cb48-12" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilar el proyecto</span></span>
-<span id="cb48-13" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> make</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="section-5" class="slide level2 justify center" data-visibility="uncounted">
-<h2></h2>
-<div style="margin-bottom: 1em">
-<p>Los <code>triggers</code> son <em>el núcleo</em> de un buen CI/CD. Nos dan un control detallado <u>de cuando y cómo</u> debe hacerse el CI.</p>
-</div>
-<div class="sourceCode" id="cb49"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb49-1"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb49-2"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb49-3"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span><span class="co">     # Cuando se haga un push a main</span></span>
-<span id="cb49-4"><a href=""></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
-<span id="cb49-5"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span><span class="co">     # Cuando se haga una pull request a main</span></span>
-<span id="cb49-6"><a href=""></a><span class="at">  </span><span class="fu">schedule</span><span class="kw">:</span></span>
-<span id="cb49-7"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">cron</span><span class="kw">:</span><span class="at"> </span><span class="st">'0 0 * * 0'</span><span class="co">  # Cada domingo</span></span>
-<span id="cb49-8"><a href=""></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span><span class="co">     # Ejecución manual desde la interfaz</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="cd-con-github-actions" class="slide level2 center" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
-<p>GitHub Actions permite generar <strong>artefactos</strong> durante el proceso de ejecución.</p>
-</section>
-<section id="cd-con-github-actions-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
-<p>GitHub Actions permite generar <strong>artefactos</strong> durante el proceso de ejecución. Es posible recuperarlos y publicar <strong><em>releases</em></strong> automáticas de nuestro <em>software</em>.</p>
+<section id="merece-la-pena-implementar-ninja-a-mano-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">¿Merece la pena implementar Ninja a mano?</h2>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1557,75 +1469,7 @@ build:
 <p><strong>Advertencia</strong></p>
 </div>
 <div class="callout-content">
-<p>Cuidado, no solo nos limitamos a crear <em>releases</em>, también podemos desplegar nuestro <em>software</em> en servidores, etc.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="cd-con-github-actions-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
-<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb50-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Release App</span></span>
-<span id="cb50-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb50-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb50-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb50-5" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">branches</span><span class="kw">:</span></span>
-<span id="cb50-6" class="hljs-ln-code"><a href=""></a><span class="at">            </span><span class="kw">-</span><span class="at"> master</span></span>
-<span id="cb50-7" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb50-8" class="hljs-ln-code"><a href=""></a><span class="at">            </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*'</span></span>
-<span id="cb50-9" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb50-10" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build</span><span class="kw">:</span></span>
-<span id="cb50-11" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb50-12" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb50-13" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
-<span id="cb50-14" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Instalar las tools necesarias</span></span>
-<span id="cb50-15" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> sudo apt update &amp;&amp; sudo apt install -y build-essential</span></span>
-<span id="cb50-16" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Compilar el proyecto</span></span>
-<span id="cb50-17" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> make</span></span>
-<span id="cb50-18" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Crear la release</span></span>
-<span id="cb50-19" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/create-release@v1</span></span>
-<span id="cb50-20" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb50-21" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">GITHUB_TOKEN</span><span class="kw">:</span><span class="at"> ${{ secrets.GITHUB_TOKEN }}</span></span>
-<span id="cb50-22" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb50-23" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">tag_name</span><span class="kw">:</span><span class="at"> ${{ github.ref }}</span></span>
-<span id="cb50-24" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">release_name</span><span class="kw">:</span><span class="at"> Release ${{ github.ref }}</span></span>
-<span id="cb50-25" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">draft</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb50-26" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">prerelease</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb50-27" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb50-28" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Subir la Release</span></span>
-<span id="cb50-29" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/upload-release-asset@v1</span></span>
-<span id="cb50-30" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb50-31" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">GITHUB_TOKEN</span><span class="kw">:</span><span class="at"> ${{ secrets.GITHUB_TOKEN }}</span></span>
-<span id="cb50-32" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb50-33" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">upload_url</span><span class="kw">:</span><span class="at"> ${{ steps.create_release.outputs.upload_url }}</span></span>
-<span id="cb50-34" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">asset_path</span><span class="kw">:</span><span class="at"> ./app</span></span>
-<span id="cb50-35" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">asset_name</span><span class="kw">:</span><span class="at"> app</span></span>
-<span id="cb50-36" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">asset_content_type</span><span class="kw">:</span><span class="at"> application/octet-stream</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="cd-con-github-actions-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
-<h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
-<div class="callout callout-warning callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Advertencia</strong></p>
-</div>
-<div class="callout-content">
-<p>Este código solamente se ejecuta si hacemos un <strong>push</strong> a master con una etiqueta.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-tip callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Tip</strong></p>
-</div>
-<div class="callout-content">
-<p>Recuerda que, para poner una etiqueta, tienes el comando de <code>git tag</code>.</p>
+<p>Esto no significa que <strong>Ninja sea inútil</strong>. Significa que, <em>per se</em>, esta herramienta es extraño utilizarla por sí sola. Normalmente, se usa en conjunción con <em>build systems</em> como CMake.</p>
 </div>
 </div>
 </div>
