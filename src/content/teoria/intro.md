@@ -60,4 +60,10 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 - `make`
 - `ccache`
 - `ninja`
-- Nociones de _Continuous Deployment_ con GitHub Actions
+
+### [Tema 5: Sistemas de paquetes](/dca-gii/teoria/l05/)
+
+- Teoría de empaquetado de aplicaciones
+- Construyendo empaquetados con `tar`
+- Empaquetado e instalación de aplicaciones en `.deb`
+- Empaquetado automático con GitHub Actions (Iniciando _CD_).
