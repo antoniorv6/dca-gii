@@ -778,9 +778,16 @@ proyecto.tar (50 MB)  ← Mismo tamaño!</code></pre>
 </div>
 </div>
 </section>
-<section id="cómo-nos-gustaría-instalar-un-paquete" class="slide level2 center">
-<h2>Cómo nos gustaría instalar un paquete</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href=""></a><span class="fu">sudo</span> apt install <span class="op">&lt;</span>paquete<span class="op">&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="cómo-se-debería-instalar-un-paquete" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Cómo se debería instalar un paquete</h2>
+<blockquote>
+<p>“Un buen paquete es invisible: Se instala sin preguntas, Funciona sin configuración, Y se desinstala sin dejar rastro.”</p>
+</blockquote>
+</section>
+<section id="cómo-nos-gustaría-instalar-un-paquete" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Cómo nos gustaría instalar un paquete</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb8-1" class="hljs-ln-code"><a href=""></a><span class="fu">sudo</span> apt install <span class="op">&lt;</span>paquete<span class="op">&gt;</span></span>
+<span id="cb8-2" class="hljs-ln-code"><a href=""></a><span class="fu">sudo</span> apt remove <span class="op">&lt;</span>paquete<span class="op">&gt;</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="la-solución-gestores-de-paquetes" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">La solución: Gestores de paquetes</h2>
@@ -929,20 +936,21 @@ proyecto.tar (50 MB)  ← Mismo tamaño!</code></pre>
 </section>
 <section id="anatomía-de-debian-2" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
-<pre><code>Source: flappybirddca
-Section: games
-Priority: optional
-Maintainer: antoniorv6 &lt;antoniorv6@correazo.es&gt;
-Build-Depends: debhelper-compat (= 13), g++, libgl1-mesa-dev, libx11-dev
-Standards-Version: 4.6.0
-Homepage: https://github.com/antoniorv6/flappy-bird-dca
-Rules-Requires-Root: no
-
-Package: flappybirddca
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Flappy Bird DCA
-  En realidad es un Flappy Bird roto, pero vamos a hacer como que funciona.</code></pre>
+<p>El fichero <code>control</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href=""></a><span class="fu">Source</span><span class="kw">:</span><span class="at"> flappybirddca</span></span>
+<span id="cb11-2"><a href=""></a><span class="fu">Section</span><span class="kw">:</span><span class="at"> games</span></span>
+<span id="cb11-3"><a href=""></a><span class="fu">Priority</span><span class="kw">:</span><span class="at"> optional</span></span>
+<span id="cb11-4"><a href=""></a><span class="fu">Maintainer</span><span class="kw">:</span><span class="at"> antoniorv6 &lt;antoniorv6@correazo.es&gt;</span></span>
+<span id="cb11-5"><a href=""></a><span class="fu">Build-Depends</span><span class="kw">:</span><span class="at"> debhelper-compat (= 13), g++, libgl1-mesa-dev, libx11-dev</span></span>
+<span id="cb11-6"><a href=""></a><span class="fu">Standards-Version</span><span class="kw">:</span><span class="at"> </span><span class="fl">4.6.0</span></span>
+<span id="cb11-7"><a href=""></a><span class="fu">Homepage</span><span class="kw">:</span><span class="at"> https://github.com/antoniorv6/flappy-bird-dca</span></span>
+<span id="cb11-8"><a href=""></a><span class="fu">Rules-Requires-Root</span><span class="kw">:</span><span class="at"> </span><span class="ch">no</span></span>
+<span id="cb11-9"><a href=""></a></span>
+<span id="cb11-10"><a href=""></a><span class="fu">Package</span><span class="kw">:</span><span class="at"> flappybirddca</span></span>
+<span id="cb11-11"><a href=""></a><span class="fu">Architecture</span><span class="kw">:</span><span class="at"> any</span></span>
+<span id="cb11-12"><a href=""></a><span class="fu">Depends</span><span class="kw">:</span><span class="at"> ${shlibs:Depends}, ${misc:Depends}</span></span>
+<span id="cb11-13"><a href=""></a><span class="fu">Description</span><span class="kw">:</span><span class="at"> Flappy Bird DCA</span></span>
+<span id="cb11-14"><a href=""></a><span class="at">  En realidad es un Flappy Bird roto, pero vamos a hacer como que funciona.</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="anatomía-de-debian-3" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
@@ -964,12 +972,24 @@ Description: Flappy Bird DCA
 </section>
 <section id="anatomía-de-debian-4" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
-<p><code>debian/rules</code> es el <code>Makefile</code> de nuestro paquete. Por defecto, contiene:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource makefile number-lines code-with-copy"><code class="sourceCode makefile"><span id="cb12-1"><a href=""></a><span class="co">#!/usr/bin/make -f</span></span>
-<span id="cb12-2"><a href=""></a></span>
-<span id="cb12-3"><a href=""></a><span class="co"># Versión mínima usando debhelper</span></span>
-<span id="cb12-4"><a href=""></a><span class="dv">%:</span></span>
-<span id="cb12-5"><a href=""></a><span class="er">    </span>dh <span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12" data-code-line-numbers="3"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href=""></a><span class="fu">Package</span><span class="kw">:</span><span class="at"> flappybirddca</span></span>
+<span id="cb12-2"><a href=""></a><span class="fu">Architecture</span><span class="kw">:</span><span class="at"> any</span></span>
+<span id="cb12-3"><a href=""></a><span class="fu">Depends</span><span class="kw">:</span><span class="at"> ${shlibs:Depends}, ${misc:Depends}</span></span>
+<span id="cb12-4"><a href=""></a><span class="fu">Description</span><span class="kw">:</span><span class="at"> Flappy Bird DCA</span></span>
+<span id="cb12-5"><a href=""></a><span class="at">  En realidad es un Flappy Bird roto, pero vamos a hacer como que funciona.</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>¿Qué significan estas variables en las dependencias?</p>
+</div>
+</div>
+</div>
 </section>
 <section id="anatomía-de-debian-5" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
@@ -978,13 +998,22 @@ Description: Flappy Bird DCA
 <span id="cb13-2"><a href=""></a></span>
 <span id="cb13-3"><a href=""></a><span class="co"># Versión mínima usando debhelper</span></span>
 <span id="cb13-4"><a href=""></a><span class="dv">%:</span></span>
-<span id="cb13-5"><a href=""></a><span class="er">    </span>dh <span class="ch">$@</span></span>
-<span id="cb13-6"><a href=""></a></span>
-<span id="cb13-7"><a href=""></a><span class="dv">override_dh_auto_install:</span></span>
-<span id="cb13-8"><a href=""></a><span class="er">  </span><span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> DESTDIR=<span class="ch">$$</span>(pwd)/debian/flappybirddca PREFIX=/usr APP_NAME=flappybirddca install</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Es posible sobreescribir procesos automáticos de <code>dh</code> para ejecutar nuestros <em>scripts</em> o reglas del <code>Makefile</code>.</p>
+<span id="cb13-5"><a href=""></a><span class="er">    </span>dh <span class="ch">$@</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="anatomía-de-debian-6" class="slide level2 center">
+<h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
+<p><code>debian/rules</code> es el <code>Makefile</code> de nuestro paquete. Por defecto, contiene:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource makefile number-lines code-with-copy"><code class="sourceCode makefile"><span id="cb14-1"><a href=""></a><span class="co">#!/usr/bin/make -f</span></span>
+<span id="cb14-2"><a href=""></a></span>
+<span id="cb14-3"><a href=""></a><span class="co"># Versión mínima usando debhelper</span></span>
+<span id="cb14-4"><a href=""></a><span class="dv">%:</span></span>
+<span id="cb14-5"><a href=""></a><span class="er">    </span>dh <span class="ch">$@</span></span>
+<span id="cb14-6"><a href=""></a></span>
+<span id="cb14-7"><a href=""></a><span class="dv">override_dh_auto_install:</span></span>
+<span id="cb14-8"><a href=""></a><span class="er">  </span><span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> DESTDIR=<span class="ch">$$</span>(pwd)/debian/flappybirddca PREFIX=/usr APP_NAME=flappybirddca install</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Es posible sobreescribir procesos automáticos de <code>dh</code> para ejecutar nuestros <em>scripts</em> o reglas del <code>Makefile</code>.</p>
+</section>
+<section id="anatomía-de-debian-7" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
 <p><strong>debhelper</strong> (<code>dh</code>) automatiza:</p>
 <div>
@@ -997,7 +1026,7 @@ Description: Flappy Bird DCA
 </ul>
 </div>
 </section>
-<section id="anatomía-de-debian-7" class="slide level2 center">
+<section id="anatomía-de-debian-8" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
 <p>Ficheros adicionales:</p>
 <ul>
@@ -1006,7 +1035,7 @@ Description: Flappy Bird DCA
 <li><code>prerm</code>: Script que ejecuta código ántes de la eliminación del paquete.</li>
 </ul>
 </section>
-<section id="anatomía-de-debian-8" class="slide level2 center">
+<section id="anatomía-de-debian-9" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
 <p>Ficheros adicionales:</p>
 <ul>
@@ -1014,11 +1043,11 @@ Description: Flappy Bird DCA
 <li><code>copyright</code>: Fichero de licencia de la aplicación.</li>
 </ul>
 </section>
-<section id="anatomía-de-debian-9" class="slide level2 center">
+<section id="anatomía-de-debian-10" class="slide level2 center">
 <h2>Anatomía de <code data-auto-animate="true" data-visibility="uncounted">debian/</code></h2>
 <p><code>debhelper</code> tiene <em>scripts</em> para incrementar la versión de los paquetes y actualizarlos en el <code>changelog</code></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href=""></a><span class="ex">dch</span> <span class="at">-i</span>  <span class="co"># Incrementa versión y abre editor</span></span>
-<span id="cb14-2"><a href=""></a><span class="ex">dch</span> <span class="st">"Fix memory leak"</span>  <span class="co"># Añade entrada</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href=""></a><span class="ex">dch</span> <span class="at">-i</span>  <span class="co"># Incrementa versión y abre editor</span></span>
+<span id="cb15-2"><a href=""></a><span class="ex">dch</span> <span class="st">"Fix memory leak"</span>  <span class="co"># Añade entrada</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="de-código-fuente-a-paquete" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
@@ -1105,12 +1134,12 @@ Description: Flappy Bird DCA
 </section>
 <section id="de-código-fuente-a-paquete-8" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb15-1" class="hljs-ln-code"><a href=""></a><span class="dt">PREFIX</span> <span class="ch">?=</span><span class="st"> /usr</span></span>
-<span id="cb15-2" class="hljs-ln-code"><a href=""></a><span class="dt">DESTDIR</span> <span class="ch">?=</span></span>
-<span id="cb15-3" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb15-4" class="hljs-ln-code"><a href=""></a><span class="dv">install:</span></span>
-<span id="cb15-5" class="hljs-ln-code"><a href=""></a><span class="er">    </span>install -D -m 0755 hello <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">PREFIX</span><span class="ch">)</span>/bin/hello</span>
-<span id="cb15-6" class="hljs-ln-code"><a href=""></a>    install -D -m 0644 hello.1 <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">PREFIX</span><span class="ch">)</span>/share/man/man1/hello.1</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb16-1" class="hljs-ln-code"><a href=""></a><span class="dt">PREFIX</span> <span class="ch">?=</span><span class="st"> /usr</span></span>
+<span id="cb16-2" class="hljs-ln-code"><a href=""></a><span class="dt">DESTDIR</span> <span class="ch">?=</span></span>
+<span id="cb16-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb16-4" class="hljs-ln-code"><a href=""></a><span class="dv">install:</span></span>
+<span id="cb16-5" class="hljs-ln-code"><a href=""></a><span class="er">    </span>install -D -m 0755 hello <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">PREFIX</span><span class="ch">)</span>/bin/hello</span>
+<span id="cb16-6" class="hljs-ln-code"><a href=""></a>    install -D -m 0644 hello.1 <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">PREFIX</span><span class="ch">)</span>/share/man/man1/hello.1</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="de-código-fuente-a-paquete-9" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
@@ -1190,17 +1219,17 @@ Description: Flappy Bird DCA
 <section id="de-código-fuente-a-paquete-14" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
 <p>Ejemplo de <code>Makefile</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb16-1" class="hljs-ln-code"><a href=""></a><span class="dt">APP_NAME</span> <span class="ch">:=</span><span class="st"> game</span></span>
-<span id="cb16-2" class="hljs-ln-code"><a href=""></a><span class="dt">PREFIX</span> <span class="ch">?=</span><span class="st"> /usr/local</span></span>
-<span id="cb16-3" class="hljs-ln-code"><a href=""></a><span class="dt">BINDIR</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">PREFIX</span><span class="ch">)</span><span class="st">/bin</span></span>
-<span id="cb16-4" class="hljs-ln-code"><a href=""></a><span class="dt">LIBDIR</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">PREFIX</span><span class="ch">)</span><span class="st">/lib/</span><span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
-<span id="cb16-5" class="hljs-ln-code"><a href=""></a><span class="dt">DATADIR</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">PREFIX</span><span class="ch">)</span><span class="st">/share/</span><span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
-<span id="cb16-6" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb16-7" class="hljs-ln-code"><a href=""></a><span class="dv">install:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">BIN_DIR</span><span class="ch">)</span><span class="dt">/</span><span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
-<span id="cb16-8" class="hljs-ln-code"><a href=""></a><span class="er">    </span>install -d <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">LIBDIR</span><span class="ch">)</span></span>
-<span id="cb16-9" class="hljs-ln-code"><a href=""></a>    install -m 0755 <span class="ch">$(</span><span class="dt">BIN_DIR</span><span class="ch">)</span>/<span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">BINDIR</span><span class="ch">)</span>/<span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
-<span id="cb16-10" class="hljs-ln-code"><a href=""></a>    install -d <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">DATADIR</span><span class="ch">)</span>/assets</span>
-<span id="cb16-11" class="hljs-ln-code"><a href=""></a>  cp -r <span class="ch">$(</span><span class="dt">ASSETS_DIR</span><span class="ch">)</span>/* <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">DATADIR</span><span class="ch">)</span>/assets/</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource makefile number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode makefile hljs"><span id="cb17-1" class="hljs-ln-code"><a href=""></a><span class="dt">APP_NAME</span> <span class="ch">:=</span><span class="st"> game</span></span>
+<span id="cb17-2" class="hljs-ln-code"><a href=""></a><span class="dt">PREFIX</span> <span class="ch">?=</span><span class="st"> /usr/local</span></span>
+<span id="cb17-3" class="hljs-ln-code"><a href=""></a><span class="dt">BINDIR</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">PREFIX</span><span class="ch">)</span><span class="st">/bin</span></span>
+<span id="cb17-4" class="hljs-ln-code"><a href=""></a><span class="dt">LIBDIR</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">PREFIX</span><span class="ch">)</span><span class="st">/lib/</span><span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
+<span id="cb17-5" class="hljs-ln-code"><a href=""></a><span class="dt">DATADIR</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">PREFIX</span><span class="ch">)</span><span class="st">/share/</span><span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
+<span id="cb17-6" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb17-7" class="hljs-ln-code"><a href=""></a><span class="dv">install:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">BIN_DIR</span><span class="ch">)</span><span class="dt">/</span><span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
+<span id="cb17-8" class="hljs-ln-code"><a href=""></a><span class="er">    </span>install -d <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">LIBDIR</span><span class="ch">)</span></span>
+<span id="cb17-9" class="hljs-ln-code"><a href=""></a>    install -m 0755 <span class="ch">$(</span><span class="dt">BIN_DIR</span><span class="ch">)</span>/<span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span> <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">BINDIR</span><span class="ch">)</span>/<span class="ch">$(</span><span class="dt">APP_NAME</span><span class="ch">)</span></span>
+<span id="cb17-10" class="hljs-ln-code"><a href=""></a>    install -d <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">DATADIR</span><span class="ch">)</span>/assets</span>
+<span id="cb17-11" class="hljs-ln-code"><a href=""></a>  cp -r <span class="ch">$(</span><span class="dt">ASSETS_DIR</span><span class="ch">)</span>/* <span class="ch">$(</span><span class="dt">DESTDIR</span><span class="ch">)$(</span><span class="dt">DATADIR</span><span class="ch">)</span>/assets/</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="de-código-fuente-a-paquete-15" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
@@ -1211,12 +1240,12 @@ Description: Flappy Bird DCA
 <section id="de-código-fuente-a-paquete-16" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
 <p>Para crear la carpeta <code>debian/</code> y el <code>.tgz</code> de origen, podemos usar la herramienta <code>dh_make</code></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb17-1" class="hljs-ln-code"><a href=""></a><span class="ex">dh_make</span> <span class="at">--createorig</span> <span class="at">--single</span> <span class="at">--yes</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb18-1" class="hljs-ln-code"><a href=""></a><span class="ex">dh_make</span> <span class="at">--createorig</span> <span class="at">--single</span> <span class="at">--yes</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="de-código-fuente-a-paquete-17" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
 <p>Para crear la carpeta <code>debian/</code> y el <code>.tgz</code> de origen, podemos usar la herramienta <code>dh_make</code></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb18-1" class="hljs-ln-code"><a href=""></a><span class="ex">dh_make</span> <span class="at">--createorig</span> <span class="at">--single</span> <span class="at">--yes</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb19-1" class="hljs-ln-code"><a href=""></a><span class="ex">dh_make</span> <span class="at">--createorig</span> <span class="at">--single</span> <span class="at">--yes</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1244,7 +1273,7 @@ Description: Flappy Bird DCA
 <section id="de-código-fuente-a-paquete-19" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
 <p>Una vez montada la configuración de <code>debian/</code> construimos nuestro paquete con:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb19-1" class="hljs-ln-code"><a href=""></a>dpkg-buildpackage -us -uc -b</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb20-1" class="hljs-ln-code"><a href=""></a>dpkg-buildpackage -us -uc -b</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="fragment">
 <ul>
 <li><code>-us</code>: No firmar .changes</li>
@@ -1311,12 +1340,37 @@ Description: Flappy Bird DCA
 <section id="de-código-fuente-a-paquete-24" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
 <p>Para instalar tu paquete, utiliza:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb20-1" class="hljs-ln-code"><a href=""></a>dpkg -i &lt;tu-paquete&gt;.deb</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb21-1" class="hljs-ln-code"><a href=""></a>dpkg -i &lt;tu-paquete&gt;.deb</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="de-código-fuente-a-paquete-25" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">De código fuente a paquete</h2>
 <p>Si quieres verificar que tu paquete cumple con los estándares de Debian, es conveniente que uses la herramienta de <code>lintian</code>.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb21-1" class="hljs-ln-code"><a href=""></a>lintian &lt;mi-paquete&gt;.deb</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource shell number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode hljs"><span id="cb22-1" class="hljs-ln-code"><a href=""></a>lintian &lt;mi-paquete&gt;.deb</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="section-1" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="badge">
+<p>¿Esto funciona con <code>sudo apt install</code>?</p>
+</div>
+</section>
+<section id="section-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="badge">
+<p>¿Esto funciona con <code>sudo apt install</code>?</p>
+</div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p><code>apt install</code> y <code>apt-get install</code> llaman internamente a <code>dpkg -i</code> si el paquete es un <code>.deb</code></p>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="CD" class="title-slide slide level1 center" data-stack-name="CD">
@@ -1363,23 +1417,23 @@ Description: Flappy Bird DCA
 <p>Nuestros workflows se definen en la carpeta <code>.github/workflows/</code> de nuestro proyecto.</p>
 </div>
 </section>
-<section id="section-1" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
+<section id="section-3" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb22-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
-<span id="cb22-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb22-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb22-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb22-5" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*.*.*'</span></span>
-<span id="cb22-6" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb22-7" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build-deb</span><span class="kw">:</span></span>
-<span id="cb22-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb22-9" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb22-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian package with make dist</span></span>
-<span id="cb22-11" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb22-12" class="hljs-ln-code"><a href=""></a>          make dist</span>
-<span id="cb22-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb23-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
+<span id="cb23-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb23-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb23-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb23-5" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*.*.*'</span></span>
+<span id="cb23-6" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb23-7" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build-deb</span><span class="kw">:</span></span>
+<span id="cb23-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb23-9" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb23-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian package with make dist</span></span>
+<span id="cb23-11" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb23-12" class="hljs-ln-code"><a href=""></a>          make dist</span>
+<span id="cb23-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="section-2" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
+<section id="section-4" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="badge" style="margin-bottom: 1em">
 <div class="columns">
@@ -1393,36 +1447,7 @@ Description: Flappy Bird DCA
 <div class="code-with-filename-file">
 <pre><strong>github/workflows/push_validation.yaml</strong></pre>
 </div>
-<div class="sourceCode" id="cb23" data-filename="github/workflows/push_validation.yaml" data-code-line-numbers="6|7|8"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb23-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
-<span id="cb23-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb23-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb23-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb23-5" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*.*.*'</span></span>
-<span id="cb23-6" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb23-7" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build-deb</span><span class="kw">:</span></span>
-<span id="cb23-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb23-9" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb23-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian package with make dist</span></span>
-<span id="cb23-11" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb23-12" class="hljs-ln-code"><a href=""></a>          make dist</span>
-<span id="cb23-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="section-3" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div class="badge" style="margin-bottom: 1em">
-<div class="columns">
-<div class="column" style="width:15%;">
-<p><code>Steps:</code></p>
-</div><div class="column" style="width:85%;">
-<p>Conjunto de acciones, como correr un test o instalar una dependencia.</p>
-</div></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>github/workflows/build-dist.yaml</strong></pre>
-</div>
-<div class="sourceCode" id="cb24" data-filename="github/workflows/build-dist.yaml" data-code-line-numbers="9"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb24-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
+<div class="sourceCode" id="cb24" data-filename="github/workflows/push_validation.yaml" data-code-line-numbers="6|7|8"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb24-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
 <span id="cb24-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
 <span id="cb24-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
 <span id="cb24-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
@@ -1437,21 +1462,21 @@ Description: Flappy Bird DCA
 <span id="cb24-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-4" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
+<section id="section-5" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="badge" style="margin-bottom: 1em">
 <div class="columns">
 <div class="column" style="width:15%;">
-<p><code>Action:</code></p>
+<p><code>Steps:</code></p>
 </div><div class="column" style="width:85%;">
-<p>Paso reutilizable publicado por la comunidad o creado a medida.</p>
+<p>Conjunto de acciones, como correr un test o instalar una dependencia.</p>
 </div></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>github/workflows/build-dist.yaml</strong></pre>
 </div>
-<div class="sourceCode" id="cb25" data-filename="github/workflows/build-dist.yaml" data-code-line-numbers="10-13"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb25-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
+<div class="sourceCode" id="cb25" data-filename="github/workflows/build-dist.yaml" data-code-line-numbers="9"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb25-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
 <span id="cb25-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
 <span id="cb25-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
 <span id="cb25-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
@@ -1466,21 +1491,21 @@ Description: Flappy Bird DCA
 <span id="cb25-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-5" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
+<section id="section-6" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="badge" style="margin-bottom: 1em">
 <div class="columns">
-<div class="column" style="width:20%;">
-<p><code>Triggers:</code></p>
-</div><div class="column" style="width:80%;">
-<p>Indica cuando debe ejecutarse este flujo de trabajo.</p>
+<div class="column" style="width:15%;">
+<p><code>Action:</code></p>
+</div><div class="column" style="width:85%;">
+<p>Paso reutilizable publicado por la comunidad o creado a medida.</p>
 </div></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>github/workflows/build-dist.yaml</strong></pre>
 </div>
-<div class="sourceCode" id="cb26" data-filename="github/workflows/build-dist.yaml" data-code-line-numbers="2"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb26-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
+<div class="sourceCode" id="cb26" data-filename="github/workflows/build-dist.yaml" data-code-line-numbers="10-13"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb26-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
 <span id="cb26-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
 <span id="cb26-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
 <span id="cb26-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
@@ -1495,19 +1520,48 @@ Description: Flappy Bird DCA
 <span id="cb26-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-6" class="slide level2 justify center" data-visibility="uncounted">
+<section id="section-7" class="slide level2 center" data-visibility="uncounted" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="badge" style="margin-bottom: 1em">
+<div class="columns">
+<div class="column" style="width:20%;">
+<p><code>Triggers:</code></p>
+</div><div class="column" style="width:80%;">
+<p>Indica cuando debe ejecutarse este flujo de trabajo.</p>
+</div></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>github/workflows/build-dist.yaml</strong></pre>
+</div>
+<div class="sourceCode" id="cb27" data-filename="github/workflows/build-dist.yaml" data-code-line-numbers="2"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb27-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
+<span id="cb27-2" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb27-3" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb27-4" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb27-5" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*.*.*'</span></span>
+<span id="cb27-6" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb27-7" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build-deb</span><span class="kw">:</span></span>
+<span id="cb27-8" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb27-9" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb27-10" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian package with make dist</span></span>
+<span id="cb27-11" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb27-12" class="hljs-ln-code"><a href=""></a>          make dist</span>
+<span id="cb27-13" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-8" class="slide level2 justify center" data-visibility="uncounted">
 <h2></h2>
 <div style="margin-bottom: 1em">
 <p>Los <code>triggers</code> son <em>el núcleo</em> de un buen CI/CD. Nos dan un control detallado <u>de cuando y cómo</u> debe hacerse la ejecución.</p>
 </div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb27-1"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb27-2"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb27-3"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span><span class="co">     # Cuando se haga un push a main</span></span>
-<span id="cb27-4"><a href=""></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
-<span id="cb27-5"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span><span class="co">     # Cuando se haga una pull request a main</span></span>
-<span id="cb27-6"><a href=""></a><span class="at">  </span><span class="fu">schedule</span><span class="kw">:</span></span>
-<span id="cb27-7"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">cron</span><span class="kw">:</span><span class="at"> </span><span class="st">'0 0 * * 0'</span><span class="co">  # Cada domingo</span></span>
-<span id="cb27-8"><a href=""></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span><span class="co">     # Ejecución manual desde la interfaz</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb28-1"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb28-2"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb28-3"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span><span class="co">     # Cuando se haga un push a main</span></span>
+<span id="cb28-4"><a href=""></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
+<span id="cb28-5"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span><span class="co">     # Cuando se haga una pull request a main</span></span>
+<span id="cb28-6"><a href=""></a><span class="at">  </span><span class="fu">schedule</span><span class="kw">:</span></span>
+<span id="cb28-7"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">cron</span><span class="kw">:</span><span class="at"> </span><span class="st">'0 0 * * 0'</span><span class="co">  # Cada domingo</span></span>
+<span id="cb28-8"><a href=""></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span><span class="co">     # Ejecución manual desde la interfaz</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="cd-con-github-actions" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
@@ -1520,46 +1574,46 @@ Description: Flappy Bird DCA
 </section>
 <section id="cd-con-github-actions-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb28-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
-<span id="cb28-2" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb28-4" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span></span>
-<span id="cb28-5" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb28-6" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb28-7" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*.*.*'</span><span class="co">  # Se activa con etiquetas como v1.0.0, v2.1.3, etc.</span></span>
-<span id="cb28-8" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-9" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb28-10" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build-deb</span><span class="kw">:</span></span>
-<span id="cb28-11" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb28-12" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
-<span id="cb28-13" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb28-14" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Checkout code</span></span>
-<span id="cb28-15" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
-<span id="cb28-16" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb28-17" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span><span class="co">  # Necesario para obtener todo el historial y las etiquetas</span></span>
-<span id="cb28-18" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-19" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install build dependencies</span></span>
-<span id="cb28-20" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb28-21" class="hljs-ln-code"><a href=""></a>          sudo apt-get update</span>
-<span id="cb28-22" class="hljs-ln-code"><a href=""></a>          sudo apt-get install -y build-essential debhelper ccache libx11-dev libgl1-mesa-dev xorg-dev</span>
-<span id="cb28-23" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-24" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Get version from tag</span></span>
-<span id="cb28-25" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> get_version</span></span>
-<span id="cb28-26" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb28-27" class="hljs-ln-code"><a href=""></a>          VERSION=${GITHUB_REF#refs/tags/v}</span>
-<span id="cb28-28" class="hljs-ln-code"><a href=""></a>          echo "version=$VERSION" &gt;&gt; $GITHUB_OUTPUT</span>
-<span id="cb28-29" class="hljs-ln-code"><a href=""></a>          echo "Building version: $VERSION"</span>
-<span id="cb28-30" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-31" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian package with make dist</span></span>
-<span id="cb28-32" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb28-33" class="hljs-ln-code"><a href=""></a>          make dist</span>
-<span id="cb28-34" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span>
-<span id="cb28-35" class="hljs-ln-code"><a href=""></a></span>
-<span id="cb28-36" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Upload artifact</span></span>
-<span id="cb28-37" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/upload-artifact@v4</span></span>
-<span id="cb28-38" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb28-39" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> debian-package</span></span>
-<span id="cb28-40" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"dist/*.deb"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb29-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian Package</span></span>
+<span id="cb29-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb29-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb29-4" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span></span>
+<span id="cb29-5" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb29-6" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb29-7" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">'v*.*.*'</span><span class="co">  # Se activa con etiquetas como v1.0.0, v2.1.3, etc.</span></span>
+<span id="cb29-8" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb29-9" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb29-10" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">build-deb</span><span class="kw">:</span></span>
+<span id="cb29-11" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb29-12" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
+<span id="cb29-13" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb29-14" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Checkout code</span></span>
+<span id="cb29-15" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
+<span id="cb29-16" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb29-17" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span><span class="co">  # Necesario para obtener todo el historial y las etiquetas</span></span>
+<span id="cb29-18" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb29-19" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install build dependencies</span></span>
+<span id="cb29-20" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb29-21" class="hljs-ln-code"><a href=""></a>          sudo apt-get update</span>
+<span id="cb29-22" class="hljs-ln-code"><a href=""></a>          sudo apt-get install -y build-essential debhelper ccache libx11-dev libgl1-mesa-dev xorg-dev</span>
+<span id="cb29-23" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb29-24" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Get version from tag</span></span>
+<span id="cb29-25" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">id</span><span class="kw">:</span><span class="at"> get_version</span></span>
+<span id="cb29-26" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb29-27" class="hljs-ln-code"><a href=""></a>          VERSION=${GITHUB_REF#refs/tags/v}</span>
+<span id="cb29-28" class="hljs-ln-code"><a href=""></a>          echo "version=$VERSION" &gt;&gt; $GITHUB_OUTPUT</span>
+<span id="cb29-29" class="hljs-ln-code"><a href=""></a>          echo "Building version: $VERSION"</span>
+<span id="cb29-30" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb29-31" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build Debian package with make dist</span></span>
+<span id="cb29-32" class="hljs-ln-code"><a href=""></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb29-33" class="hljs-ln-code"><a href=""></a>          make dist</span>
+<span id="cb29-34" class="hljs-ln-code"><a href=""></a>          echo "Build completed!"</span>
+<span id="cb29-35" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb29-36" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Upload artifact</span></span>
+<span id="cb29-37" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/upload-artifact@v4</span></span>
+<span id="cb29-38" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb29-39" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">name</span><span class="kw">:</span><span class="at"> debian-package</span></span>
+<span id="cb29-40" class="hljs-ln-code"><a href=""></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> </span><span class="st">"dist/*.deb"</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="cd-con-github-actions-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title"><em>CD</em> con GitHub Actions</h2>
@@ -1588,6 +1642,18 @@ Description: Flappy Bird DCA
 <p>Recuerda que, para poner una etiqueta, tienes el comando de <code>git tag</code>. O, cuando creas una <em>release</em> añadir la nueva etiqueta.</p>
 </div>
 </div>
+</div>
+</section>
+<section id="flujo-recomendado-de-versionado" class="slide level2 center">
+<h2>Flujo recomendado de versionado</h2>
+<div>
+<ol type="1">
+<li class="fragment">Desarrollar nueva feature</li>
+<li class="fragment">Actualizar <code>debian/changelog</code>: <code>dch -i</code></li>
+<li class="fragment">Construir paquete</li>
+<li class="fragment">Probar exhaustivamente</li>
+<li class="fragment">Etiquetar en git</li>
+</ol>
 </div>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
