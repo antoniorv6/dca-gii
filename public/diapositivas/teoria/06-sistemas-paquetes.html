@@ -415,6 +415,7 @@ Desarrollo Colaborativo de Aplicaciones
 <li><a href="#/TAR">TAR</a></li>
 <li><a href="#/Debian">Debian</a></li>
 <li><a href="#/CD">CD</a></li>
+<li><a href="#/Modern">Sistemas modernos</a></li>
 </ol>
 </div>
 </section>
@@ -1371,6 +1372,64 @@ proyecto.tar (50 MB)  ← Mismo tamaño!</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="más-allá-del-.deb" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Más allá del .deb</h2>
+<p>Hasta ahora, hemos visto cómo gestionar los paquetes <code>.deb</code> como instalables en distros Linux.</p>
+<div class="fragment">
+<p>¿Pero eso cubre todas las distros de Linux?</p>
+</div>
+</section>
+<section id="más-allá-del-.deb-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Más allá del .deb</h2>
+<p>En sistemas derivados de <strong>Red Hat</strong>, como <strong>Fedora</strong> u <strong>openSUSE</strong> usan un formato de archivos diferente: el <code>RPM</code>.</p>
+<div class="fragment">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Advertencia</strong></p>
+</div>
+<div class="callout-content">
+<p>No vamos a ver en la asignatura cómo crear un paquete <code>RPM</code>, ya que existen herramientas de conversión para evitar producir varias ediciones de un paquete. Si, embargo, ten en cuenta que producir un paquete puede ser, en ocasiones, un proceso con coste <strong>exponencial</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="alien" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Alien</h2>
+<p><code>alien</code> es una herramienta de terminal que nos permite convertir ficheros <code>tgz</code>, <code>deb</code> y <code>rpm</code> entre ellos.</p>
+</section>
+<section id="alien-1" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Alien</h2>
+<p><code>alien</code> es una herramienta de terminal que nos permite convertir ficheros <code>tgz</code>, <code>deb</code> y <code>rpm</code> entre ellos.</p>
+<div>
+<ul>
+<li class="fragment">Usa permisos de superusuario.</li>
+<li class="fragment">Recibe un paquete como parámetro (<code>.tgz</code>, <code>.deb</code> o <code>.rpm</code>).</li>
+<li class="fragment">Recibe un argumento: <code>-t</code>, <code>-r</code> y <code>-d</code>.</li>
+<li class="fragment">Este argumento es el <strong>objetivo</strong> del comando.</li>
+</ul>
+</div>
+</section>
+<section id="alien-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Alien</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>También se puede ejecutar con la opción de <code>-c</code> para que <code>alien</code> trate de convertir los <em>scripts</em> de instalación.</p>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="CD" class="title-slide slide level1 center" data-stack-name="CD">
@@ -1654,6 +1713,180 @@ proyecto.tar (50 MB)  ← Mismo tamaño!</code></pre>
 <li class="fragment">Probar exhaustivamente</li>
 <li class="fragment">Etiquetar en git</li>
 </ol>
+</div>
+</section></section>
+<section>
+<section id="Modern" class="title-slide slide level1 center" data-stack-name="Sistemas modernos">
+<h1>Sistemas modernos de paquetería</h1>
+
+</section>
+<section id="ventajas-de-.deb-y-.rpm" class="slide level2 center">
+<h2>Ventajas de .deb y .rpm</h2>
+<div>
+<ol type="1">
+<li class="fragment"><strong>Eficiencia de espacio</strong>: Las bibliotecas se comparten entre aplicaciones</li>
+<li class="fragment"><strong>Seguridad (relativa)</strong>: Mantenidos y probados por la distribución</li>
+<li class="fragment"><strong>Sistema de dependencias</strong>: Instalación automática de requisitos</li>
+<li class="fragment"><strong>Integración perfecta</strong>: Siguen los estándares del sistema</li>
+</ol>
+</div>
+</section>
+<section id="problema-1-seguridad-comprometida" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Problema #1: Seguridad comprometida</h2>
+<p><strong>Instalación con privilegios de superusuario</strong></p>
+<div>
+<ul>
+<li class="fragment">Los paquetes se instalan con todos los permisos del sistema</li>
+<li class="fragment">Acceso total durante la instalación</li>
+<li class="fragment">Los paquetes de terceros pueden contener malware</li>
+<li class="fragment">No hay sandbox ni aislamiento</li>
+</ul>
+</div>
+</section>
+<section id="problema-1-seguridad-comprometida-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Problema #1: Seguridad comprometida</h2>
+<div class="callout callout-caution callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Precaución</strong></p>
+</div>
+<div class="callout-content">
+<p>Un paquete malicioso tiene control total sobre tu sistema durante la instalación</p>
+</div>
+</div>
+</div>
+</section>
+<section id="problema-2-el-infierno-de-dependencias" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Problema #2: El infierno de dependencias</h2>
+<p><strong>El problema de las bibliotecas compartidas</strong></p>
+<ul>
+<li>Solo UNA versión de cada biblioteca en el sistema</li>
+<li>Todas las aplicaciones deben usar la misma versión</li>
+<li>Conflictos entre versiones antiguas y nuevas</li>
+</ul>
+</section>
+<section id="problema-2-el-infierno-de-dependencias-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Problema #2: El infierno de dependencias</h2>
+<p><strong>Consecuencias:</strong></p>
+<ul>
+<li>Instalación de paquetes antiguos puede romper el sistema</li>
+<li>Actualizar una biblioteca puede hacer que otras apps dejen de funcionar</li>
+<li>“Dependency hell” = sistema roto</li>
+</ul>
+</section>
+<section id="problema-3-13000-paquetes" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Problema #3: 13000 paquetes</h2>
+<p><strong>Complejidad de mantenimiento:</strong></p>
+<ul>
+<li>Crear paquetes para cada arquitectura (x86, ARM, 32/64 bits)</li>
+<li>Empaquetar para cada versión de cada distribución</li>
+<li>Resultado: <strong>decenas de paquetes</strong> para una sola aplicación</li>
+</ul>
+</section>
+<section id="problema-3-13000-paquetes-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Problema #3: 13000 paquetes</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Las distribuciones, por lo general, empaquetan ellas mismas el software, no los desarrolladores originales.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="section-9" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="badge">
+<p>Estos problemas han motivado a la comunidad de desarrollo a crear <strong>nuevos sistemas de paquetes</strong> capaces de aplacarlos.</p>
+</div>
+</section>
+<section id="flatpak-la-solución-moderna" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Flatpak: la solución moderna</h2>
+<p><strong>Filosofía:</strong> Empaqueta la aplicación + dependencias <strong>en un solo bundle</strong></p>
+</section>
+<section id="flatpak-la-solución-moderna-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Flatpak: la solución moderna</h2>
+<p><strong>Características principales:</strong></p>
+<ul>
+<li>Usa <strong>runtimes</strong> compartidos (ej: KDE runtime, GNOME runtime)</li>
+<li>Solo para aplicaciones gráficas</li>
+<li>Repositorio principal: <strong>Flathub</strong></li>
+<li>Instalable con GNOME Software, Discover, o línea de comandos</li>
+</ul>
+</section>
+<section id="ventajas-de-flatpak" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ventajas de Flatpak</h2>
+<div>
+<ol type="1">
+<li class="fragment"><strong>Más seguro</strong>:
+<ul>
+<li class="fragment">Instalación sin privilegios de administrador (<em>sandbox</em>).</li>
+</ul></li>
+<li class="fragment"><strong>Universal</strong>:
+<ul>
+<li class="fragment">Un paquete funciona en todas las distribuciones.</li>
+</ul></li>
+<li class="fragment"><strong>Actualizaciones independientes</strong>:
+<ul>
+<li class="fragment">No dependes de tu distro para actualizaciones.</li>
+</ul></li>
+<li class="fragment"><strong>Sin infierno de dependencias</strong>:
+<ul>
+<li class="fragment">Apps antiguas no rompen tu sistema.</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="ventajas-de-flatpak-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Ventajas de Flatpak</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p>Por desgracia, Flatpak es más lento de empaquetar y, por lo general, <strong>los paquetes consumen mucho más espacio en disco</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="snap-la-alternativa-de-canonical" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Snap: La alternativa de Canonical</h2>
+<p><strong>Similar a Flatpak, pero con diferencias clave:</strong></p>
+<div>
+<ul>
+<li class="fragment"><strong>Auto-actualización</strong> automática</li>
+<li class="fragment"><strong>Containerización</strong> completa</li>
+<li class="fragment">Soporte para CLI y herramientas de servidor</li>
+<li class="fragment">Canales de actualización (stable, beta, edge)</li>
+</ul>
+</div>
+</section>
+<section id="snap-la-alternativa-de-canonical-1" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Snap: La alternativa de Canonical</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p>Por desgracia, <em>snap</em> solo se puede usar a través de un servidor propietario: la <em>Snap Store</em> y tiene problemas con la personalización. Por otro lado, también es lento para arrancar.</p>
+</div>
+</div>
 </div>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
