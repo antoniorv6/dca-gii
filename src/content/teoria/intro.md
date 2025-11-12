@@ -67,3 +67,10 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 - Construyendo empaquetados con `tar`
 - Empaquetado e instalación de aplicaciones en `.deb`
 - Empaquetado automático con GitHub Actions (Iniciando _CD_).
+
+### [Tema 6: Configuración y adaptación automática de proyectos](/dca-gii/teoria/l06/)
+
+- La problemática de mantener varios configuradores de proyectos
+- Teoría básica sobre los _Meta-Build Systems_
+- CMake y CPack
+- Introducción a otras soluciones: Meson y Premake
