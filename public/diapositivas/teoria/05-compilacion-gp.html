@@ -504,7 +504,7 @@ Desarrollo Colaborativo de Aplicaciones
 <section id="capas-y-ecosistema-de-compilación-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Capas y ecosistema de compilación</h2>
 <p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
-<p><strong>Capa 1: <em>Backends</em> de compilación</strong></p>
+<p><strong>Capa 1: <em>Build Systems</em></strong></p>
 <ul>
 <li>Motores de reglas para compilar un proyecto.</li>
 <li><strong>Compilación incremental</strong>.</li>
@@ -525,9 +525,9 @@ Desarrollo Colaborativo de Aplicaciones
 <section id="capas-y-ecosistema-de-compilación-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Capas y ecosistema de compilación</h2>
 <p>Existe una <strong>jerarquía</strong> de capas para la compilación y la producción de proyectos <em>software</em>.</p>
-<p><strong>Capa 2: <em>Build Systems</em> (Tema 6)</strong></p>
+<p><strong>Capa 2: <em>Meta-Build Systems</em> (Tema 6)</strong></p>
 <ul>
-<li>Generadores de ficheros para <em>backends</em>.</li>
+<li>Generadores de ficheros para <em>Build Systems</em>.</li>
 <li>Multiplataforma
 <ul>
 <li>Son capaces de generar ficheros para compilar en varios Sistemas Operativos</li>
@@ -542,11 +542,11 @@ Desarrollo Colaborativo de Aplicaciones
 </section>
 <section id="conceptos-fundamentales-de-make" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Conceptos fundamentales de <code>make</code></h2>
-<p><strong>Make</strong> es un <strong><em>backend</em> de compilación</strong></p>
+<p><strong>Make</strong> es un <strong><em>Build System</em></strong></p>
 </section>
 <section id="conceptos-fundamentales-de-make-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
 <h2 data-id="quarto-animate-title">Conceptos fundamentales de <code>make</code></h2>
-<p><strong>Make</strong> es un <strong><em>backend</em> de compilación</strong></p>
+<p><strong>Make</strong> es un <strong><em>Build System</em></strong></p>
 <ul>
 <li>Convierte los ficheros fuente en <strong>cualquier objetivo que propongas</strong>.</li>
 <li>Sabe qué comandos se deben ejecutar y en <strong>qué orden</strong>.</li>
@@ -1285,7 +1285,7 @@ Desarrollo Colaborativo de Aplicaciones
 <ul>
 <li>Minimalista: tiene menos funciones y mayor rendimiento.</li>
 <li><em>Do less, but do it quick</em>.</li>
-<li>No reemplaza a <code>make</code>, pero se usa <strong>cada vez más</strong> con <em>Build Systems</em> como CMake, Meson, etc.</li>
+<li>No reemplaza a <code>make</code>, pero se usa <strong>cada vez más</strong> con <em>Meta-Build Systems</em> como CMake, Meson, etc.</li>
 </ul>
 </section>
 <section id="ninja-básico" class="slide level2 center" data-auto-animate="true">
@@ -1469,7 +1469,7 @@ Desarrollo Colaborativo de Aplicaciones
 <p><strong>Advertencia</strong></p>
 </div>
 <div class="callout-content">
-<p>Esto no significa que <strong>Ninja sea inútil</strong>. Significa que, <em>per se</em>, esta herramienta es extraño utilizarla por sí sola. Normalmente, se usa en conjunción con <em>build systems</em> como CMake.</p>
+<p>Esto no significa que <strong>Ninja sea inútil</strong>. Significa que, <em>per se</em>, esta herramienta es extraño utilizarla por sí sola. Normalmente, se usa en conjunción con <em>Meta-Build Systems</em> como CMake.</p>
 </div>
 </div>
 </div>
