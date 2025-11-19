@@ -983,7 +983,7 @@ Desarrollo Colaborativo de Aplicaciones
 </section>
 <section id="introducción-a-cmake" class="slide level2 center" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Introducción a CMake</h2>
-<p><strong>CMake</strong> (_Cross-Platform: Make)</p>
+<p><strong>CMake</strong> (<em>Cross-Platform Make</em>)</p>
 <div>
 <ul>
 <li class="fragment">Sistema más popular actualmente</li>
@@ -1033,6 +1033,560 @@ Desarrollo Colaborativo de Aplicaciones
 <li class="fragment"><strong>Listas como strings:</strong> Separadas por <code>;</code></li>
 </ul>
 </div>
+</section>
+<section id="variables-en-cmake" class="slide level2 center">
+<h2>Variables en CMake</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb7-1"><a href=""></a><span class="co"># Definir variable</span></span>
+<span id="cb7-2"><a href=""></a><span class="kw">set</span>(MI_VAR <span class="st">"valor"</span>)</span>
+<span id="cb7-3"><a href=""></a><span class="kw">set</span>(LISTA <span class="st">"uno;dos;tres"</span>)  <span class="co"># Lista</span></span>
+<span id="cb7-4"><a href=""></a></span>
+<span id="cb7-5"><a href=""></a><span class="co"># Usar variable</span></span>
+<span id="cb7-6"><a href=""></a><span class="kw">message</span>(<span class="st">"</span><span class="dv">${MI_VAR}</span><span class="st">"</span>)</span>
+<span id="cb7-7"><a href=""></a></span>
+<span id="cb7-8"><a href=""></a><span class="co"># Variables de cache (persistentes)</span></span>
+<span id="cb7-9"><a href=""></a><span class="kw">set</span>(OPTION <span class="st">"default"</span> <span class="ot">CACHE</span> <span class="ot">STRING</span> <span class="st">"Descripción"</span>)</span>
+<span id="cb7-10"><a href=""></a></span>
+<span id="cb7-11"><a href=""></a><span class="co"># Variables de entorno</span></span>
+<span id="cb7-12"><a href=""></a><span class="kw">set</span>(<span class="fl">ENV{PATH}</span> <span class="st">"/nueva/ruta:</span><span class="fl">$ENV{PATH}</span><span class="st">"</span>)</span>
+<span id="cb7-13"><a href=""></a></span>
+<span id="cb7-14"><a href=""></a><span class="co"># Variables del sistema</span></span>
+<span id="cb7-15"><a href=""></a><span class="er">${CMAKE_SYSTEM_NAME}      # Linux, Windows, Darwin</span></span>
+<span id="cb7-16"><a href=""></a><span class="er">${CMAKE_CXX_COMPILER_ID}  # GNU, Clang, MSVC</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="scope-de-variables" class="slide level2 center">
+<h2>Scope de variables</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb8-1"><a href=""></a><span class="kw">set</span>(VAR <span class="st">"global"</span>)</span>
+<span id="cb8-2"><a href=""></a></span>
+<span id="cb8-3"><a href=""></a><span class="kw">function</span>(mi_funcion)</span>
+<span id="cb8-4"><a href=""></a>    <span class="kw">set</span>(VAR <span class="st">"local"</span>)      <span class="co"># Solo dentro de función</span></span>
+<span id="cb8-5"><a href=""></a>    <span class="kw">set</span>(VAR <span class="st">"parent"</span> <span class="ot">PARENT_SCOPE</span>)  <span class="co"># Modifica scope padre</span></span>
+<span id="cb8-6"><a href=""></a><span class="kw">endfunction</span>()</span>
+<span id="cb8-7"><a href=""></a></span>
+<span id="cb8-8"><a href=""></a><span class="co"># Directorios</span></span>
+<span id="cb8-9"><a href=""></a><span class="co"># CMakeLists.txt en src/ tiene su propio scope</span></span>
+<span id="cb8-10"><a href=""></a><span class="kw">add_subdirectory</span>(src)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estructura-básica-cmakelists.txt" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Estructura Básica: CMakeLists.txt</h2>
+<p><strong>Archivo mínimo:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb9-1" class="hljs-ln-code"><a href=""></a><span class="kw">cmake_minimum_required</span>(<span class="ot">VERSION</span> <span class="dt">3.15</span>)</span>
+<span id="cb9-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb9-3" class="hljs-ln-code"><a href=""></a><span class="kw">project</span>(MiProyecto </span>
+<span id="cb9-4" class="hljs-ln-code"><a href=""></a>    <span class="ot">VERSION</span> <span class="dt">1.0</span></span>
+<span id="cb9-5" class="hljs-ln-code"><a href=""></a>    <span class="ot">DESCRIPTION</span> <span class="st">"Mi aplicación"</span></span>
+<span id="cb9-6" class="hljs-ln-code"><a href=""></a>    <span class="ot">LANGUAGES</span> <span class="ot">CXX</span></span>
+<span id="cb9-7" class="hljs-ln-code"><a href=""></a>)</span>
+<span id="cb9-8" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb9-9" class="hljs-ln-code"><a href=""></a><span class="kw">add_executable</span>(<span class="bn">miapp</span> main.cpp)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="estructura-básica-cmakelists.txt-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Estructura Básica: CMakeLists.txt</h2>
+<p><strong>Disección:</strong></p>
+<ul>
+<li><code>cmake_minimum_required</code>: Versión mínima de CMake</li>
+<li><code>project()</code>: Define proyecto, establece variables</li>
+<li><code>add_executable()</code>: Crea target ejecutable</li>
+</ul>
+</section>
+<section id="el-comando-project" class="slide level2 center">
+<h2>El comando <code>project</code></h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb10-1"><a href=""></a><span class="kw">project</span>(MiApp</span>
+<span id="cb10-2"><a href=""></a>    <span class="ot">VERSION</span> <span class="dt">2.1.3</span></span>
+<span id="cb10-3"><a href=""></a>    <span class="ot">DESCRIPTION</span> <span class="st">"Aplicación de ejemplo"</span></span>
+<span id="cb10-4"><a href=""></a>    <span class="ot">HOMEPAGE_URL</span> <span class="st">"https://ejemplo.com"</span></span>
+<span id="cb10-5"><a href=""></a>    <span class="ot">LANGUAGES</span> <span class="ot">CXX</span> <span class="ot">C</span></span>
+<span id="cb10-6"><a href=""></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Variables definidas automáticamente:</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb11-1"><a href=""></a><span class="er">${PROJECT_NAME}                # MiApp</span></span>
+<span id="cb11-2"><a href=""></a><span class="er">${PROJECT_VERSION}             # 2.1.3</span></span>
+<span id="cb11-3"><a href=""></a><span class="er">${PROJECT_VERSION_MAJOR}       # 2</span></span>
+<span id="cb11-4"><a href=""></a><span class="er">${PROJECT_VERSION_MINOR}       # 1</span></span>
+<span id="cb11-5"><a href=""></a><span class="er">${PROJECT_VERSION_PATCH}       # 3</span></span>
+<span id="cb11-6"><a href=""></a><span class="er">${PROJECT_SOURCE_DIR}          # /ruta/al/proyecto</span></span>
+<span id="cb11-7"><a href=""></a><span class="er">${PROJECT_BINARY_DIR}          # /ruta/al/build</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="targets-tipos-y-creación" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Targets: tipos y creación</h2>
+<ul>
+<li>Ejecutables: <code>add_executable(programa main.cpp utils.cpp)</code></li>
+<li>Librerías estáticas: <code>add_library(milib STATIC lib.cpp helper.cpp)</code></li>
+<li>Librerías dinámicas: <code>add_library(milib_shared SHARED lib.cpp)</code></li>
+<li>Librerías <em>header only</em>: <code>add_library(headeronly INTERFACE)</code></li>
+<li>Targets personalizados.</li>
+</ul>
+</section>
+<section id="targets-tipos-y-creación-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Targets: tipos y creación</h2>
+<div class="badge">
+<p>Todas las funciones de creación de targets reciben una lista de ficheros fuente necesarios para crearlo. La estructura es siempre <code>ARG_1 = nombre</code> y <code>ARG_2 = fuentes</code>. De esta forma, CMake monitoriza <strong>qué ficheros pueden sufrir cambios para recompilar</strong>.</p>
+</div>
+</section>
+<section id="targets-tipos-y-creación-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Targets: tipos y creación</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>Puedes generar esto de dos formas. O bien como se explica aquí o con la función <code>target_sources()</code>, por si quieres dividir la forma en la que defines los ficheros fuente para target.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="targets-tipos-y-creación-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Targets: tipos y creación</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>No es necesario que indiques los .h o .hpp</strong>, CMake los detecta automáticamente como dependencias modificables.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="target-properties" class="slide level2 center">
+<h2>Target properties</h2>
+<p><strong>Propiedades definen el comportamiento del target</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb12-1"><a href=""></a><span class="co"># Ver propiedad</span></span>
+<span id="cb12-2"><a href=""></a><span class="kw">get_target_property</span>(TIPO milib <span class="ot">TYPE</span>)</span>
+<span id="cb12-3"><a href=""></a></span>
+<span id="cb12-4"><a href=""></a><span class="co"># Establecer propiedad</span></span>
+<span id="cb12-5"><a href=""></a><span class="kw">set_target_properties</span>(<span class="bn">milib</span> <span class="ot">PROPERTIES</span></span>
+<span id="cb12-6"><a href=""></a>    <span class="ot">CXX_STANDARD</span> 17</span>
+<span id="cb12-7"><a href=""></a>    <span class="ot">CXX_STANDARD_REQUIRED</span> <span class="ot">ON</span></span>
+<span id="cb12-8"><a href=""></a>    <span class="ot">POSITION_INDEPENDENT_CODE</span> <span class="ot">ON</span></span>
+<span id="cb12-9"><a href=""></a>    <span class="ot">VERSION</span> <span class="dt">1.2.3</span></span>
+<span id="cb12-10"><a href=""></a>    <span class="ot">SOVERSION</span> 1</span>
+<span id="cb12-11"><a href=""></a>)</span>
+<span id="cb12-12"><a href=""></a></span>
+<span id="cb12-13"><a href=""></a><span class="co"># Propiedades comunes</span></span>
+<span id="cb12-14"><a href=""></a><span class="fu">OUTPUT_NAME           # Nombre del archivo generado</span></span>
+<span id="cb12-15"><a href=""></a><span class="fu">ARCHIVE_OUTPUT_DIRECTORY  # Directorio para .a</span></span>
+<span id="cb12-16"><a href=""></a><span class="fu">LIBRARY_OUTPUT_DIRECTORY  # Directorio para .so</span></span>
+<span id="cb12-17"><a href=""></a><span class="fu">RUNTIME_OUTPUT_DIRECTORY  # Directorio para ejecutables</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="target_include_directories" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">target_include_directories()</h2>
+<p><strong>Actualizar los <em>include dirs</em> de compilación</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb13-1" class="hljs-ln-code"><a href=""></a><span class="kw">target_include_directories</span>(<span class="bn">milib</span></span>
+<span id="cb13-2" class="hljs-ln-code"><a href=""></a>    <span class="ot">PUBLIC</span>                    <span class="co"># Para milib y sus consumidores</span></span>
+<span id="cb13-3" class="hljs-ln-code"><a href=""></a>        include/              <span class="co"># Headers públicos</span></span>
+<span id="cb13-4" class="hljs-ln-code"><a href=""></a>    <span class="ot">PRIVATE</span>                   <span class="co"># Solo para milib</span></span>
+<span id="cb13-5" class="hljs-ln-code"><a href=""></a>        src/internal/         <span class="co"># Headers internos</span></span>
+<span id="cb13-6" class="hljs-ln-code"><a href=""></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="target_include_directories-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">target_include_directories()</h2>
+<p><strong>Actualizar los <em>include dirs</em> de compilación</strong></p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>Esto es el equivalente de añadir manualmente -I ${INCLUDE_DIRS} en un <code>Makefile</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="target_link_libraries" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">target_link_libraries()</h2>
+<p><strong>Enlazar con otras bibliotecas:</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb14-1" class="hljs-ln-code"><a href=""></a><span class="co"># Enlace moderno (recomendado)</span></span>
+<span id="cb14-2" class="hljs-ln-code"><a href=""></a><span class="kw">target_link_libraries</span>(<span class="bn">miapp</span></span>
+<span id="cb14-3" class="hljs-ln-code"><a href=""></a>    <span class="ot">PRIVATE</span></span>
+<span id="cb14-4" class="hljs-ln-code"><a href=""></a>        milib              <span class="co"># Target interno</span></span>
+<span id="cb14-5" class="hljs-ln-code"><a href=""></a>        <span class="bn">Threads::Threads</span>   <span class="co"># Target importado</span></span>
+<span id="cb14-6" class="hljs-ln-code"><a href=""></a>    <span class="ot">PUBLIC</span></span>
+<span id="cb14-7" class="hljs-ln-code"><a href=""></a>        <span class="bn">Boost::filesystem</span>  <span class="co"># Propagará a consumidores</span></span>
+<span id="cb14-8" class="hljs-ln-code"><a href=""></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="target_link_libraries-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">target_link_libraries()</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>Esto es el equivalente de añadir manualmente -l<tu_libreria> en un <code>Makefile</code>.</tu_libreria></p>
+</div>
+</div>
+</div>
+</section>
+<section id="target_link_libraries-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">target_link_libraries()</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>Esto es el equivalente de añadir manualmente -l<tu_libreria> en un <code>Makefile</code>.</tu_libreria></p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Advertencia</strong></p>
+</div>
+<div class="callout-content">
+<p>Recuerda que también tienes que actualizar los <em>lib paths</em> si incluyes librerías externas en tu proyecto. Para eso, deberás llamar a <code>target_link_directories()</code>, la cual tiene un comportamiento idéntico a la homónima vista anteriormente.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="organización-multi-directorio" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Organización multi-directorio</h2>
+<p>En el caso de contar con múltiples directorios, deberemos emplear una <strong>estrategia de división</strong>.</p>
+</section>
+<section id="organización-multi-directorio-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Organización multi-directorio</h2>
+<ul>
+<li>Decidir qué parte de nuestro <em>software</em> forma el núcleo de un <em>target</em>.</li>
+<li>Pensar si alguna parte del programa constituye una <strong>librería</strong>.</li>
+</ul>
+<blockquote>
+<p>Ejemplo: En videjouegos, el motor es una librería que luego la aplicación (el ejecutable) consume. De esta forma, éste es exportable a otros proyectos.</p>
+</blockquote>
+</section>
+<section id="organización-multi-directorio-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Organización multi-directorio</h2>
+<p>El directorio <strong>raíz</strong> contendrá un fichero <code>CMakeLists.txt</code>.</p>
+</section>
+<section id="organización-multi-directorio-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Organización multi-directorio</h2>
+<p>El directorio <strong>raíz</strong> contendrá un fichero <code>CMakeLists.txt</code>.</p>
+<p>Ahí, se llamará a la función <code>add_subdirectory()</code> para que <code>CMake</code> busque el <code>CMakeLists.txt</code> del directorio objetivo.</p>
+</section>
+<section id="organización-multi-directorio-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Organización multi-directorio</h2>
+<p>El directorio <strong>raíz</strong> contendrá un fichero <code>CMakeLists.txt</code>.</p>
+<p>Ahí, se llamará a la función <code>add_subdirectory()</code> para que <code>CMake</code> busque el <code>CMakeLists.txt</code> del directorio objetivo.</p>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p>Esto no es una llamada recursiva, recuerda que <code>CMake</code>, a diferencia de <code>make</code> va a <strong>generar los ficheros de compilación</strong>, pero no va a compilar ningún proyecto. Este tipo de dependencias luego se resolverán en el DAG generado para crear dichos ficheros. <strong>CMake generará <code>Makefiles</code> monolíticos.</strong></p>
+</div>
+</div>
+</div>
+</section>
+<section id="organización-multi-directorio-5" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Organización multi-directorio</h2>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>root/CMakeLists.txt</strong></pre>
+</div>
+<div class="sourceCode" id="cb15" data-filename="root/CMakeLists.txt"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb15-1"><a href=""></a><span class="er">...</span></span>
+<span id="cb15-2"><a href=""></a><span class="kw">add_subdirectory</span>(core)</span>
+<span id="cb15-3"><a href=""></a><span class="er">...</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>root/core/CMakeLists.txt</strong></pre>
+</div>
+<div class="sourceCode" id="cb16" data-filename="root/core/CMakeLists.txt"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb16-1"><a href=""></a><span class="er">...</span></span>
+<span id="cb16-2"><a href=""></a><span class="kw">add_library</span>(<span class="bn">core</span>)</span>
+<span id="cb16-3"><a href=""></a><span class="er">...</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fetchcontent-dependencias-automáticas" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">FetchContent: dependencias automáticas</h2>
+<p>Add-on de CMake para buscar automáticamente las dependencias del proyecto.</p>
+</section>
+<section id="fetchcontent-dependencias-automáticas-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">FetchContent: dependencias automáticas</h2>
+<p>Add-on de CMake para buscar automáticamente las dependencias del proyecto.</p>
+<p>Si una dependencia no se encuentra, podemos ordenar que se descargue y añada al proyecto (de forma <strong>local</strong>).</p>
+</section>
+<section id="fetchcontent-dependencias-automáticas-2" class="slide level2 center">
+<h2>FetchContent: dependencias automáticas</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource cmake number-lines code-with-copy"><code class="sourceCode cmake"><span id="cb17-1"><a href=""></a><span class="kw">include</span>(<span class="im">FetchContent</span>)</span>
+<span id="cb17-2"><a href=""></a></span>
+<span id="cb17-3"><a href=""></a><span class="kw">find_package</span>(raylib)</span>
+<span id="cb17-4"><a href=""></a></span>
+<span id="cb17-5"><a href=""></a><span class="cf">if</span> (<span class="ot">NOT</span> <span class="dv">raylib_FOUND</span>)</span>
+<span id="cb17-6"><a href=""></a></span>
+<span id="cb17-7"><a href=""></a>    <span class="er">...</span></span>
+<span id="cb17-8"><a href=""></a></span>
+<span id="cb17-9"><a href=""></a>    <span class="fu">FetchContent_Declare</span>(</span>
+<span id="cb17-10"><a href=""></a>        raylib</span>
+<span id="cb17-11"><a href=""></a>        <span class="ot">GIT_REPOSITORY</span> https://github.com/raysan/raylib</span>
+<span id="cb17-12"><a href=""></a>        <span class="ot">GIT_TAG</span> <span class="dt">5.0</span></span>
+<span id="cb17-13"><a href=""></a>    )</span>
+<span id="cb17-14"><a href=""></a></span>
+<span id="cb17-15"><a href=""></a>    <span class="fu">FetchContent_MakeAvailable</span>(raylib)</span>
+<span id="cb17-16"><a href=""></a><span class="cf">endif</span>()</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Ventaja:</strong> No requiere instalación previa de dependencias</p>
+</section>
+<section id="comandos-básicos-de-cmake" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Comandos básicos de CMake</h2>
+<p>Para generar la configuración de tu proyecto, debes ejecutar:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb18-1" class="hljs-ln-code"><a href=""></a><span class="fu">cmake .</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="comandos-básicos-de-cmake-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Comandos básicos de CMake</h2>
+<p>Para generar la configuración de tu proyecto, debes ejecutar:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb19-1" class="hljs-ln-code"><a href=""></a><span class="fu">cmake</span> .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Advertencia</strong></p>
+</div>
+<div class="callout-content">
+<p>Esta es la forma de hacer un <em>in-source build</em>, la cual verás que es muy sucia. Lo recomendable es <strong>siempre hacer <em>out-of-source builds</em></strong>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="comandos-básicos-de-cmake-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Comandos básicos de CMake</h2>
+<p>Para generar una <em>out-of-source build</em> puedes hacerlo o manual:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href=""></a><span class="fu">mkdir</span> build</span>
+<span id="cb20-2"><a href=""></a><span class="bu">cd</span> build</span>
+<span id="cb20-3"><a href=""></a><span class="fu">cmake</span> ..</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>o automático:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href=""></a><span class="fu">cmake</span> <span class="at">-B</span> build .</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="comandos-básicos-de-cmake-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Comandos básicos de CMake</h2>
+<p>Para <strong>compilar tu proyecto</strong>. Puedes hacerlo de forma manual:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href=""></a><span class="bu">cd</span> build</span>
+<span id="cb22-2"><a href=""></a><span class="fu">make</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>o usar el <em>helper</em> de CMake:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href=""></a><span class="fu">cmake</span> <span class="at">--build</span> build</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="comandos-básicos-de-cmake-4" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Comandos básicos de CMake</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>Una ventaja de usar el <em>helper</em> de CMake es que integras la compilación en un solo comando agnóstico al Sistema Operativo</strong>. Tú escribirás lo mismo en el terminal, mientras que CMake será el encargado de detectar cómo se debe compilar y realizar los comandos neceasrios en el sistema operativo que te encuentres.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="Newest" class="title-slide slide level1 center" data-stack-name="Otros Meta-Build Systems">
+<h1>Otros <em>Meta-Build Systems</em></h1>
+
+</section>
+<section id="meson" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Meson</h2>
+<ul>
+<li>Diseñado desde cero (2013) y enfocado en la velocidad</li>
+<li>Sintaxis Python-like, muy legible</li>
+<li>Backend Ninja por defecto</li>
+<li>Separación estricta configure/build</li>
+</ul>
+</section>
+<section id="meson-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Meson</h2>
+<p><strong>Filosofía:</strong></p>
+<p>“Lo correcto por defecto”</p>
+<ul>
+<li>Reconfigura automáticamente</li>
+<li>Detección rápida de cambios</li>
+</ul>
+</section>
+<section id="meson-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Meson</h2>
+<p><strong>Diferencia clave con CMake:</strong></p>
+<ul>
+<li>Un solo backend</li>
+<li><strong>No genera proyectos IDE</strong></li>
+<li>Extremadamente rápido</li>
+<li>Menos flexible</li>
+</ul>
+</section>
+<section id="meson-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Meson</h2>
+<p><strong>Ejemplo de sintaxis:</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode python hljs"><span id="cb24-1" class="hljs-ln-code"><a href=""></a>project(<span class="st">'miapp'</span>, <span class="st">'cpp'</span>, version: <span class="st">'1.0'</span>)</span>
+<span id="cb24-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb24-3" class="hljs-ln-code"><a href=""></a>executable(<span class="st">'miapp'</span>,</span>
+<span id="cb24-4" class="hljs-ln-code"><a href=""></a>  sources: [<span class="st">'main.cpp'</span>, <span class="st">'utils.cpp'</span>],</span>
+<span id="cb24-5" class="hljs-ln-code"><a href=""></a>  dependencies: dependency(<span class="st">'boost'</span>),</span>
+<span id="cb24-6" class="hljs-ln-code"><a href=""></a>  install: true</span>
+<span id="cb24-7" class="hljs-ln-code"><a href=""></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ventajas-teóricas-de-meson" class="slide level2 center">
+<h2>Ventajas teóricas de Meson</h2>
+<div>
+<ul>
+<li class="fragment"><strong>Velocidad:</strong> 2-3x más rápido que CMake en configuración</li>
+<li class="fragment"><strong>Simplicidad:</strong> Menos opciones = menos errores</li>
+<li class="fragment"><strong>Modernidad:</strong> Sintaxis amigable, Python es conocido mundialmente</li>
+</ul>
+</div>
+</section>
+<section id="premake" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Premake</h2>
+<p><strong>Características distintivas:</strong></p>
+<ul>
+<li>Configuración en Lua (lenguaje completo)</li>
+<li>Orientado a IDEs nativos</li>
+<li>Popular en desarrollo de videojuegos</li>
+<li>Workspaces y proyectos (como soluciones VS)</li>
+</ul>
+</section>
+<section id="premake-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Premake</h2>
+<p>“Genera proyectos que los desarrolladores esperan”</p>
+<ul>
+<li>Visual Studio .sln/.vcxproj</li>
+<li>Xcode .xcodeproj</li>
+<li>Makefiles tradicionales</li>
+</ul>
+</section>
+<section id="premake-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Premake</h2>
+<p><strong>Diferencia con CMake:</strong></p>
+<ul>
+<li>Lenguaje Turing-completo (Lua)</li>
+<li>Genera archivos IDE reales, no intermedios</li>
+<li>Scripting muy flexible</li>
+</ul>
+</section>
+<section id="premake-3" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Premake</h2>
+<p><strong>Ejemplo de sintaxis:</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource lua number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode lua hljs"><span id="cb25-1" class="hljs-ln-code"><a href=""></a>workspace <span class="st">"MiJuego"</span></span>
+<span id="cb25-2" class="hljs-ln-code"><a href=""></a>   configurations <span class="op">{</span> <span class="st">"Debug"</span><span class="op">,</span> <span class="st">"Release"</span> <span class="op">}</span></span>
+<span id="cb25-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb25-4" class="hljs-ln-code"><a href=""></a>project <span class="st">"Motor"</span></span>
+<span id="cb25-5" class="hljs-ln-code"><a href=""></a>   kind <span class="st">"StaticLib"</span></span>
+<span id="cb25-6" class="hljs-ln-code"><a href=""></a>   <span class="fu">files</span> <span class="op">{</span> <span class="st">"src/engine/**.cpp"</span> <span class="op">}</span></span>
+<span id="cb25-7" class="hljs-ln-code"><a href=""></a>   </span>
+<span id="cb25-8" class="hljs-ln-code"><a href=""></a>project <span class="st">"Juego"</span></span>
+<span id="cb25-9" class="hljs-ln-code"><a href=""></a>   kind <span class="st">"WindowedApp"</span></span>
+<span id="cb25-10" class="hljs-ln-code"><a href=""></a>   <span class="fu">files</span> <span class="op">{</span> <span class="st">"src/game/**.cpp"</span> <span class="op">}</span></span>
+<span id="cb25-11" class="hljs-ln-code"><a href=""></a>   links <span class="op">{</span> <span class="st">"Motor"</span> <span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ventajas-teóricas-de-premake" class="slide level2 center">
+<h2>Ventajas teóricas de Premake</h2>
+<div>
+<ul>
+<li class="fragment"><strong>Flexibilidad:</strong> Lua permite cualquier lógica</li>
+<li class="fragment"><strong>IDE nativos:</strong> Debugging, intellisense funcionan perfectamente</li>
+<li class="fragment"><strong>Control afinado:</strong> Configuración muy específica por plataforma</li>
+<li class="fragment"><strong>Familiaridad:</strong> En la industria del videojuego se conoce Lua</li>
+</ul>
+</div>
+</section>
+<section id="el-estado-de-la-cuestión" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">El estado de la cuestión</h2>
+<p><strong>CMake:</strong></p>
+<ul>
+<li>Meta-sistema universal</li>
+<li>Máxima compatibilidad</li>
+<li>Ecosistema gigante</li>
+<li>Lenguaje verboso</li>
+</ul>
+</section>
+<section id="el-estado-de-la-cuestión-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">El estado de la cuestión</h2>
+<p><strong>Meson:</strong></p>
+<ul>
+<li>Optimizado para velocidad</li>
+<li>Sintaxis clara</li>
+</ul>
+</section>
+<section id="el-estado-de-la-cuestión-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">El estado de la cuestión</h2>
+<p><strong>Premake:</strong></p>
+<ul>
+<li>Optimizado para IDEs</li>
+<li>Libertad total (Lua)</li>
+<li>Ecosistema gamedev</li>
+<li>Sintaxis flexible</li>
+</ul>
+</section>
+<section id="cuándo-usar-cada-uno" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">¿Cuándo usar cada uno?</h2>
+<p><strong>CMake:</strong></p>
+<ul>
+<li>Proyectos grandes y complejos</li>
+<li>Ecosistema C/C++ establecido</li>
+<li>Máxima portabilidad requerida</li>
+<li>Gran cantidad de dependencias externas</li>
+<li>Industria/empresas establecidas</li>
+</ul>
+</section>
+<section id="cuándo-usar-cada-uno-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncoutned">
+<h2 data-id="quarto-animate-title">¿Cuándo usar cada uno?</h2>
+<p><strong>Meson:</strong></p>
+<ul>
+<li>Independencia de IDEs (¡viva code!)</li>
+<li>Prioridad en velocidad de compilación</li>
+<li>Builds frecuentes (CI/CD intensivo)</li>
+</ul>
+</section>
+<section id="cuándo-usar-cada-uno-2" class="slide level2 center" data-auto-animate="true" data-visibility="uncoutned">
+<h2 data-id="quarto-animate-title">¿Cuándo usar cada uno?</h2>
+<p><strong>Premake:</strong></p>
+<ul>
+<li>Desarrollo de videojuegos</li>
+<li>Necesidad de usar IDEs intensivamente</li>
+<li>Configuraciones muy específicas por plataforma</li>
+<li>Scripting complejo necesario</li>
+</ul>
+</section>
+<section id="tendencias" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Tendencias</h2>
+<p><strong>Adopción actual (estimada):</strong></p>
+<ul>
+<li>CMake: ~70% proyectos C/C++</li>
+<li>Meson: ~10-15% (creciendo)</li>
+<li>Premake: ~5-10% (estable, gamedev)</li>
+<li>Otros: ~5-10%</li>
+</ul>
+</section>
+<section id="tendencias-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncoutned">
+<h2 data-id="quarto-animate-title">Tendencias</h2>
+<p><strong>Tendencias:</strong></p>
+<ul>
+<li>CMake sigue siendo estándar de facto</li>
+<li>Meson ganando terreno en proyectos actuales</li>
+<li>Premake nicho en gamedev, aunque se está virando a CMake</li>
+</ul>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 <p>Desarrollo Colaborativo de Aplicaciones</p>
