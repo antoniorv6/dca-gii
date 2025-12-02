@@ -74,3 +74,9 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 - Teoría básica sobre los _Meta-Build Systems_
 - CMake y CPack
 - Introducción a otras soluciones: Meson y Premake
+
+### [Tema 7: Generación y paso de tests](/dca-gii/teoria/l07/)
+
+- _Testing_ y por qué es importante para el desarrollo de _software_.
+- Boost.Test y CTest.
+- _Continuous Integration_ con GitHub Actions.

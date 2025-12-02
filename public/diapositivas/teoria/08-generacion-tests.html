@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<script src="08-generacion-tests_files/libs/clipboard/clipboard.min.js"></script>
+<script src="08-generacion-tests_files/libs/quarto-html/tabby.min.js"></script>
+<script src="08-generacion-tests_files/libs/quarto-html/popper.min.js"></script>
+<script src="08-generacion-tests_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="08-generacion-tests_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="08-generacion-tests_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="08-generacion-tests_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="08-generacion-tests_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.57">
+
+  <meta name="author" content="Desarrollo Colaborativo de Aplicaciones">
+  <title>Generación y paso de tests</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="08-generacion-tests_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="08-generacion-tests_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="08-generacion-tests_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="../styles/styles.css">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/reveal-attribution/attribution.css" rel="stylesheet">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/simplemenu/simplemenu.css" rel="stylesheet">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/verticator/verticator.css" rel="stylesheet">
+  <link href="08-generacion-tests_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="../scripts/html5sortable.min.js"></script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-state="hide-menubar" class="quarto-title-block center">
+  <h1 class="title">Generación y paso de tests</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Desarrollo Colaborativo de Aplicaciones 
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2 center">
+
+<div class="menu section-ordered-list">
+<ol type="1">
+<li><a href="#/Introduccion">Introducción</a></li>
+<li><a href="#/Testing">Testing</a></li>
+<li><a href="#/Boost">Boost.Test y CTest</a></li>
+<li><a href="#/CI">CI</a></li>
+</ol>
+</div>
+</section>
+<section>
+<section id="Introduccion" class="title-slide slide level1 center" data-stack-name="Introducción">
+<h1>Introduccion</h1>
+
+</section>
+<section id="contexto" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Contexto</h2>
+<div>
+<ul>
+<li class="fragment">Producimos código contínuamente.</li>
+<li class="fragment">Nuestro <em>software</em> (idealmente) se actualiza constantemente.</li>
+<li class="fragment">El <em>software</em> no solo lo tocamos nosotros, hay más participantes.</li>
+</ul>
+</div>
+</section>
+<section id="contexto-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Contexto</h2>
+<p><strong>¿Qué es lo más posible que aparezca?</strong></p>
+<div class="fragment">
+<div class="badge">
+<p>Tal y como observamos en el Tema 3, los <em>bugs</em> es algo que, seguramente, prolifere en ese ciclo de constante desarrollo de nuestros programas.</p>
+</div>
+</div>
+</section>
+<section id="conviene-detectar-bugs-en-producción" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">¿Conviene detectar <em>bugs</em> en producción?</h2>
+<div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../images/t8/meme_1.jpg" class="quarto-figure quarto-figure-center" style="width:100.0%" data-text-align="center"></p>
+</figure>
+</div>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../images/t8/meme_2.jpg" class="quarto-figure quarto-figure-center" style="width:100.0%" data-text-align="center"></p>
+</figure>
+</div>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../images/t8/meme_3.jpg" class="quarto-figure quarto-figure-center" style="width:100.0%" data-text-align="center"></p>
+</figure>
+</div>
+</div></section>
+<section id="conviene-detectar-bugs-en-producción-1" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">¿Conviene detectar <em>bugs</em> en producción?</h2>
+<div class="badge">
+<p>Por lo general, es conveniente evitar encontrar <em>bugs</em> en producción. <strong>No es inevitable</strong>, pero debemos garantizar, de alguna forma, que los cambios producidos en el <em>software</em> no introduzcan ni nuevos ni más problemas de los que ya hay.</p>
+</div>
+</section>
+<section id="la-relevancia-del-testing" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">La relevancia del <em>testing</em></h2>
+<p>En desarrollo de <em>software</em> es <strong>imprescindible</strong> contar con un mecanismo de seguridad para <strong>detectar</strong> y <strong>prevenir</strong> fallos en las actualizaciones del programa.</p>
+<div class="fragment">
+<p>A ese mecanismo se le conoce como las pruebas o <strong><em>testing</em></strong>.</p>
+</div>
+</section>
+<section id="la-relevancia-del-testing-1" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">La relevancia del <em>testing</em></h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>Hoy en día, con el auge del <em>vibe-coding</em>, los <em>tests</em> han ganado muchísima relevancia. <strong>Son el mecanismo de control fundamental</strong> para detectar <em>bugs</em> derivados de las <strong>alucinaciones</strong> de los modelos de lenguaje.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="Testing" class="title-slide slide level1 center" data-stack-name="Testing">
+<h1>Testing</h1>
+
+</section>
+<section id="hablemos-de-testing" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Hablemos de <em>testing</em></h2>
+<div>
+<ul>
+<li class="fragment">El <em>testing</em> es el mecanismo por el cual realizaremos pruebas automáticas en los casos donde nuestro programa <strong>puede fallar</strong>.</li>
+<li class="fragment">Fundamento principal del <em>Continuous Integration</em>.</li>
+</ul>
+</div>
+</section>
+<section id="hablemos-de-testing-1" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Hablemos de <em>testing</em></h2>
+<div class="column" style="width:50%;">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p>El propósito de los <em>test</em> es que el <em>software</em> falle, no demostrar la ausencia de bugs en el programa.</p>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../images/t8/meme_4.png" class="quarto-figure quarto-figure-center" style="width:100.0%" data-text-align="center"></p>
+</figure>
+</div>
+</div></section>
+<section id="hablemos-de-testing-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Hablemos de <em>testing</em></h2>
+<div class="badge">
+<p>Comprobar un programa consiste en ver si su comportamiento es correcto para cualquier posible entrada que pueda tener. <strong>Dado que esto es imposible</strong>, debemos comprobarlo para todas aquellas entradas que tengan una <strong>probabilidad razonable de hacer que falle</strong>.</p>
+</div>
+</section>
+<section id="tipos-de-test" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Tipos de <em>test</em></h2>
+<p><strong>BlackBox testing</strong></p>
+<div>
+<ul>
+<li class="fragment">Se implementan sin mirar el código a <em>testear</em>.</li>
+<li class="fragment">Se basan en las especificaciones funcionales del <em>software</em>.</li>
+<li class="fragment">Son robustos respecto a cambios en la implementación del código a testear.</li>
+<li class="fragment">Fundamenta el <em>Test-Driven-Development</em>(TDD).</li>
+</ul>
+</div>
+</section>
+<section id="tipos-de-test-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Tipos de <em>test</em></h2>
+<p><strong>WhiteBox testing</strong></p>
+<div>
+<ul>
+<li class="fragment">Se tiene acceso al código a testear.</li>
+<li class="fragment">Complementan a los anteriores y son más fáciles de crear que aquellos.</li>
+<li class="fragment">Al tener acceso al código debemos fijarnos al construir los tests en las sentencias <code>if-then-else</code>, bucles, <code>try-catch</code> presentes en el código a testear.</li>
+</ul>
+</div>
+</section>
+<section id="granularidad-de-test" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Granularidad de <em>test</em></h2>
+<h3 id="test-unitarios">Test unitarios</h3>
+<p>Prueban una <strong>unidad de código</strong> aislada.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb1-1"><a href=""></a><span class="dt">int</span> sum<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href=""></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb1-3"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb2-1"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_sum<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>sum<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">)</span> <span class="op">==</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb2-3"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>sum<span class="op">(-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb2-4"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="granularidad-de-test-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Granularidad de <em>test</em></h2>
+<h3 id="tests-de-integración">Tests de integración</h3>
+<p>Prueban la <strong>interacción entre múltiples componentes</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb3-1" class="hljs-ln-code"><a href=""></a><span class="kw">class</span> Database <span class="op">{</span> <span class="co">/* ... */</span> <span class="op">};</span></span>
+<span id="cb3-2" class="hljs-ln-code"><a href=""></a><span class="kw">class</span> UserService <span class="op">{</span></span>
+<span id="cb3-3" class="hljs-ln-code"><a href=""></a>    Database<span class="op">&amp;</span> db<span class="op">;</span></span>
+<span id="cb3-4" class="hljs-ln-code"><a href=""></a><span class="kw">public</span><span class="op">:</span></span>
+<span id="cb3-5" class="hljs-ln-code"><a href=""></a>    <span class="dt">void</span> saveUser<span class="op">(</span><span class="at">const</span> User<span class="op">&amp;</span> user<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-6" class="hljs-ln-code"><a href=""></a>        db<span class="op">.</span>insert<span class="op">(</span>user<span class="op">);</span></span>
+<span id="cb3-7" class="hljs-ln-code"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb3-8" class="hljs-ln-code"><a href=""></a><span class="op">};</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="granularidad-de-test-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Granularidad de <em>test</em></h2>
+<h3 id="tests-de-integración-1">Tests de integración</h3>
+<p>Prueban la <strong>interacción entre múltiples componentes</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb4-1" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_user_service_integration<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-2" class="hljs-ln-code"><a href=""></a>    Database db<span class="op">;</span></span>
+<span id="cb4-3" class="hljs-ln-code"><a href=""></a>    UserService service<span class="op">(</span>db<span class="op">);</span></span>
+<span id="cb4-4" class="hljs-ln-code"><a href=""></a>    User user<span class="op">{</span><span class="st">"John"</span><span class="op">,</span> <span class="st">"john@example.com"</span><span class="op">};</span></span>
+<span id="cb4-5" class="hljs-ln-code"><a href=""></a>    </span>
+<span id="cb4-6" class="hljs-ln-code"><a href=""></a>    service<span class="op">.</span>saveUser<span class="op">(</span>user<span class="op">);</span></span>
+<span id="cb4-7" class="hljs-ln-code"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>db<span class="op">.</span>userExists<span class="op">(</span><span class="st">"John"</span><span class="op">));</span></span>
+<span id="cb4-8" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="granularidad-de-test-3" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Granularidad de <em>test</em></h2>
+<h3 id="otros-test">Otros test</h3>
+<ul>
+<li>Agotamiento de recursos.</li>
+<li>Rendimiento.</li>
+<li>Usabilidad y accesibilidad.</li>
+</ul>
+</section>
+<section id="cómo-testear" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Cómo testear</h2>
+<p>Un buen test sigue, por lo general, el principio <strong>FIRST</strong>.</p>
+<div>
+<ul>
+<li class="fragment"><strong>F</strong>ast: Rápidos de ejecutar</li>
+<li class="fragment"><strong>I</strong>ndependent: No dependen de otros tests</li>
+<li class="fragment"><strong>R</strong>epeatable: Mismo resultado siempre</li>
+<li class="fragment"><strong>S</strong>elf-validating: Pasan o fallan claramente</li>
+<li class="fragment"><strong>T</strong>imely: Se escriben junto con el código</li>
+</ul>
+</div>
+</section>
+<section id="cómo-testear-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Cómo testear</h2>
+<p>Para ello, cuando diseñemos <em>tests</em>, los enmarcaremos en:</p>
+<ul>
+<li><strong>Tests de regresión</strong>: El nuevo código no debe estropear lo que ya funcionaba.</li>
+<li><strong>Tests de datos</strong>: Probar con la información que entra.</li>
+<li><strong>Tests de UI</strong>: Probar en el interfaz de usuario.</li>
+<li><strong>Tests de <em>tests</em></strong>: ¿Quién dijo que los tests que haces tú están bien hechos?</li>
+</ul>
+</section>
+<section id="anatomía-de-un-test" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Anatomía de un test</h2>
+<p>Un test bien estructurado sigue el patrón <strong>AAA</strong>:</p>
+<div>
+<ul>
+<li class="fragment"><strong>Arrange</strong>: Preparar el entorno de <em>testing</em>.</li>
+<li class="fragment"><strong>Act</strong>: Ejecutar el <em>test</em>.</li>
+<li class="fragment"><strong>Assert</strong>: Verificar el resultado de la ejecución.</li>
+</ul>
+</div>
+</section>
+<section id="anatomía-de-un-test-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Anatomía de un test</h2>
+<p>Los <em>test</em> no se encuentran de forma aislada, normalmente se <strong>agrupan</strong> en un <strong>conjunto</strong>.</p>
+<div class="fragment">
+<div class="badge">
+<p>Ese conjunto se denomina <strong><em>suite</em> de <em>tests</em></strong>.</p>
+</div>
+</div>
+</section>
+<section id="anatomía-de-un-test-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Anatomía de un test</h2>
+<p><strong>¿Cómo diseño una <em>suite</em> de <em>tests</em>?</strong></p>
+<div class="fragment">
+<p>Normalmente, se trata de <strong>modularizar</strong> las funcionalidades del <em>software</em>. Para cada macro-funcionalidad, tenemos una suite de tests definida</p>
+</div>
+</section>
+<section id="anatomía-de-un-test-3" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Anatomía de un test</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Normalmente, las <em>suites</em> de tests se modularizan según la estructura del mismo proyecto. Algunas estructuras, como la <em>screaming architecture</em> están pensadas para facilitar la identificación y de <em>suites</em> de <em>test</em>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="test-drivers" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Test <em>drivers</em></h2>
+<p>Hoy en día los procesos de testeo están <strong>automatizados</strong>.</p>
+<div class="fragment">
+<p>Los <em><strong>test drivers</strong></em> se encargan de realizar de todo este proceso. Relegando al programador a <strong>implementar las <em>tests suites</em></strong></p>
+</div>
+</section>
+<section id="test-drivers-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Test <em>drivers</em></h2>
+<p>Los test <em>drivers</em>:</p>
+<div>
+<ul>
+<li class="fragment">Preparan el entorno para invocar el programa o la unidad a testear.</li>
+<li class="fragment">Incovan el programa o unidad a testear junto a unos datos de entrada.</li>
+<li class="fragment">Guardan los resultados de la ejecución.</li>
+<li class="fragment">Comprueban la validez de los resultados.</li>
+<li class="fragment">Preparan informes automáticos.</li>
+</ul>
+</div>
+</section>
+<section id="test-drivers-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Test <em>drivers</em></h2>
+<p>Actualmente, existen múltiples herramientas para hacer <em>testing</em>:</p>
+<div class="column" style="width:33%;">
+<p><strong>C++</strong></p>
+<ul>
+<li>xUnit.</li>
+<li><strong>Boost.Test</strong>.</li>
+<li>GLib Test.</li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong><em>Frameworks</em> Web</strong></p>
+<ul>
+<li>Jest.</li>
+<li>Mocha.</li>
+<li>Vitest.</li>
+</ul>
+</div><div class="column" style="width:33%;">
+<p><strong>Java</strong></p>
+<ul>
+<li>JUnit.</li>
+<li>TestNG.</li>
+<li>JBehave.</li>
+</ul>
+</div></section></section>
+<section>
+<section id="Boost" class="title-slide slide level1 center" data-stack-name="Boost.Test y CTest">
+<h1>Boost.Test y CTest</h1>
+
+</section>
+<section id="boost.test-framework" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Boost.Test <em>framework</em></h2>
+<p>Boost.Test es el <strong>estándar <em>de facto</em></strong> para hacer <em>testing</em> en aplicaciones de <strong>C++</strong>.</p>
+<div class="fragment">
+<div class="column" style="width:50%;">
+<p><strong>Ventajas:</strong></p>
+<ul>
+<li>Parte de Boost</li>
+<li>Muy maduro y estable</li>
+<li>Excelente documentación</li>
+<li>Flexible en <em>assertions</em>.</li>
+<li>Output detallado</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Características:</strong></p>
+<ul>
+<li>Header-only o compilado</li>
+<li>Múltiples niveles de log</li>
+<li>Filtrado de tests</li>
+<li>Timeout automático</li>
+</ul>
+</div></div>
+</section>
+<section id="boost.test-framework-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Boost.Test <em>framework</em></h2>
+<p>Boost.Test se puede utilizar de tres formas:</p>
+<div>
+<ul>
+<li class="fragment">Como librería <em>header-only</em>.</li>
+<li class="fragment">Como librería de <strong>enlace estático</strong>.</li>
+<li class="fragment">Como librería de <strong>enlace dinámico</strong>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Normalmente, se prefiere utilizar la librería con enlace estático o dinámico, ya que es más rápida en ejecución que la librería <em>header-only</em>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="estructura-básica-de-un-test" class="slide level2 center">
+<h2>Estructura básica de un test</h2>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>test/simple_test.cpp</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="test/simple_test.cpp"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb5-1"><a href=""></a><span class="pp">#define BOOST_TEST_MODULE </span>My<span class="pp"> </span>Test<span class="pp"> </span>Suite</span>
+<span id="cb5-2"><a href=""></a><span class="pp">#include </span><span class="im">&lt;boost/test/included/unit_test.hpp&gt;</span></span>
+<span id="cb5-3"><a href=""></a></span>
+<span id="cb5-4"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>my_first_test<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-5"><a href=""></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb5-6"><a href=""></a>    <span class="dt">int</span> y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb5-7"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">+</span> y <span class="op">==</span> <span class="dv">8</span><span class="op">);</span></span>
+<span id="cb5-8"><a href=""></a><span class="op">}</span></span>
+<span id="cb5-9"><a href=""></a></span>
+<span id="cb5-10"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>my_second_test<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-11"><a href=""></a>    <span class="bu">std::</span>string str <span class="op">=</span> <span class="st">"Hello"</span><span class="op">;</span></span>
+<span id="cb5-12"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>str<span class="op">.</span>length<span class="op">()</span> <span class="op">==</span> <span class="dv">5</span><span class="op">,</span> </span>
+<span id="cb5-13"><a href=""></a>               <span class="st">"String length should be 5"</span><span class="op">);</span></span>
+<span id="cb5-14"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="macros-principales-de-boost.test" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Macros principales de Boost.Test</h2>
+<p>Existen tres grandes macros en Boost.Test:</p>
+<div>
+<ul>
+<li class="fragment"><code>BOOST_TEST</code> para hacer <em>tests</em> habituales.</li>
+<li class="fragment"><code>BOOST_REQUIRE</code> para hacer comprobaciones críticas, la ejecución del <em>test</em> para si falla.</li>
+<li class="fragment"><code>BOOST_CHECK</code> lo mismo que <code>BOOST_TEST</code>. Es una macro antigua que se ha perpetuado.</li>
+</ul>
+</div>
+</section>
+<section id="macros-principales-de-boost.test-1" class="slide level2 center" data-auto-animate="true" data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Macros principales de Boost.Test</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Usa <code>BOOST_TEST</code> o <code>BOOST_CHECK</code> para la mayoría de casos</li>
+<li>Usa <code>BOOST_REQUIRE</code> solo cuando el fallo hace que continuar sea peligroso o sin sentido</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="comparaciones" class="slide level2 center">
+<h2>Comparaciones</h2>
+<p>Boost.Test soporta <strong>todas</strong> las comparaciones:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb6-1"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_comparaciones<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href=""></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb6-3"><a href=""></a>    </span>
+<span id="cb6-4"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">==</span> <span class="dv">5</span><span class="op">);</span>          <span class="co">// Igualdad</span></span>
+<span id="cb6-5"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">!=</span> <span class="dv">0</span><span class="op">);</span>          <span class="co">// Desigualdad</span></span>
+<span id="cb6-6"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">&gt;</span> <span class="dv">0</span><span class="op">);</span>           <span class="co">// Mayor que</span></span>
+<span id="cb6-7"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">&gt;=</span> <span class="dv">5</span><span class="op">);</span>          <span class="co">// Mayor o igual</span></span>
+<span id="cb6-8"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">&lt;</span> <span class="dv">10</span><span class="op">);</span>          <span class="co">// Menor que</span></span>
+<span id="cb6-9"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>x <span class="op">&lt;=</span> <span class="dv">5</span><span class="op">);</span>          <span class="co">// Menor o igual</span></span>
+<span id="cb6-10"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>Funciona igual con las <strong>cadenas</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="números-de-punto-flotante" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Números de punto flotante</h2>
+<p>Con <code>float</code> y <code>double</code> <strong>NO puedes usar == directamente</strong>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb7-1" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_malo<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-2" class="hljs-ln-code"><a href=""></a>    <span class="dt">double</span> resultado <span class="op">=</span> <span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span><span class="op">;</span></span>
+<span id="cb7-3" class="hljs-ln-code"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>resultado <span class="op">==</span> <span class="fl">0.3</span><span class="op">);</span></span>
+<span id="cb7-4" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>¿Por qué?</strong> <code>0.1 + 0.2</code> en binario no es exactamente <code>0.3</code>.</p>
+</section>
+<section id="números-de-punto-flotante-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Números de punto flotante</h2>
+<p>Usa la <strong>tolerancia</strong> para comparar floats:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb8-1" class="hljs-ln-code"><a href=""></a><span class="pp">#include </span><span class="im">&lt;boost/test/tools/floating_point_comparison.hpp&gt;</span></span>
+<span id="cb8-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb8-3" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_con_tolerancia<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-4" class="hljs-ln-code"><a href=""></a>    <span class="dt">double</span> resultado <span class="op">=</span> <span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span><span class="op">;</span></span>
+<span id="cb8-5" class="hljs-ln-code"><a href=""></a>    </span>
+<span id="cb8-6" class="hljs-ln-code"><a href=""></a>    <span class="co">// Comparación con tolerancia (0.0001)</span></span>
+<span id="cb8-7" class="hljs-ln-code"><a href=""></a>    <span class="ex">BOOST_</span>CHECK_CLOSE<span class="op">(</span>resultado<span class="op">,</span> <span class="fl">0.3</span><span class="op">,</span> <span class="fl">0.0001</span><span class="op">));</span></span>
+<span id="cb8-8" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="excepciones" class="slide level2 center">
+<h2>Excepciones</h2>
+<p>A veces <strong>quieres que tu código lance una excepción</strong>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource cpp number-lines code-with-copy"><code class="sourceCode cpp"><span id="cb9-1"><a href=""></a><span class="dt">double</span> dividir<span class="op">(</span><span class="dt">double</span> a<span class="op">,</span> <span class="dt">double</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-2"><a href=""></a>    <span class="cf">if</span> <span class="op">(</span>b <span class="op">==</span> <span class="fl">0.0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-3"><a href=""></a>        <span class="cf">throw</span> <span class="bu">std::</span>invalid_argument<span class="op">(</span><span class="st">"División por cero"</span><span class="op">);</span></span>
+<span id="cb9-4"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb9-5"><a href=""></a>    <span class="cf">return</span> a <span class="op">/</span> b<span class="op">;</span></span>
+<span id="cb9-6"><a href=""></a><span class="op">}</span></span>
+<span id="cb9-7"><a href=""></a></span>
+<span id="cb9-8"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_excepciones<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-9"><a href=""></a>    <span class="co">// Verificar que SÍ lanza excepción</span></span>
+<span id="cb9-10"><a href=""></a>    <span class="ex">BOOST_</span>CHECK_THROW<span class="op">(</span></span>
+<span id="cb9-11"><a href=""></a>        dividir<span class="op">(</span><span class="fl">1.0</span><span class="op">,</span> <span class="fl">0.0</span><span class="op">),</span></span>
+<span id="cb9-12"><a href=""></a>        <span class="bu">std::</span>invalid_argument</span>
+<span id="cb9-13"><a href=""></a>    <span class="op">);</span></span>
+<span id="cb9-14"><a href=""></a><span class="op">}</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="fixtures" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Fixtures</h2>
+<p>Configuración compartida entre múltiples tests:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb10-1" class="hljs-ln-code"><a href=""></a><span class="kw">struct</span> CalculatorFixture <span class="op">{</span></span>
+<span id="cb10-2" class="hljs-ln-code"><a href=""></a>    Calculator calc<span class="op">;</span></span>
+<span id="cb10-3" class="hljs-ln-code"><a href=""></a>    </span>
+<span id="cb10-4" class="hljs-ln-code"><a href=""></a>    CalculatorFixture<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb10-5" class="hljs-ln-code"><a href=""></a>        <span class="co">// Setup: se ejecuta antes de cada test</span></span>
+<span id="cb10-6" class="hljs-ln-code"><a href=""></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Setting up calculator</span><span class="sc">\n</span><span class="st">"</span><span class="op">;</span></span>
+<span id="cb10-7" class="hljs-ln-code"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb10-8" class="hljs-ln-code"><a href=""></a>    </span>
+<span id="cb10-9" class="hljs-ln-code"><a href=""></a>    <span class="op">~</span>CalculatorFixture<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb10-10" class="hljs-ln-code"><a href=""></a>        <span class="co">// Teardown: se ejecuta después de cada test</span></span>
+<span id="cb10-11" class="hljs-ln-code"><a href=""></a>        <span class="bu">std::</span>cout <span class="op">&lt;&lt;</span> <span class="st">"Cleaning up calculator</span><span class="sc">\n</span><span class="st">"</span><span class="op">;</span></span>
+<span id="cb10-12" class="hljs-ln-code"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb10-13" class="hljs-ln-code"><a href=""></a><span class="op">};</span></span>
+<span id="cb10-14" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb10-15" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>FIXTURE_TEST_SUITE<span class="op">(</span>calculator_tests<span class="op">,</span> CalculatorFixture<span class="op">)</span></span>
+<span id="cb10-16" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb10-17" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_CASE<span class="op">(</span>test_addition<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-18" class="hljs-ln-code"><a href=""></a>    <span class="ex">BOOST_</span>TEST<span class="op">(</span>calc<span class="op">.</span>add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">)</span> <span class="op">==</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb10-19" class="hljs-ln-code"><a href=""></a><span class="op">}</span></span>
+<span id="cb10-20" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb10-21" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_SUITE_END<span class="op">()</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="cómo-lanzamos-los-tests" class="slide level2 center">
+<h2>¿Cómo lanzamos los <em>tests</em>?</h2>
+<p>Los tests son <strong>ejecutables</strong>, por lo que deberemos <strong>compilarlos</strong> como un programa más de <code>c++</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href=""></a><span class="ex">g++</span> <span class="at">-std</span><span class="op">=</span>c++17 calculator_test.cpp <span class="at">-o</span> calculator_test</span>
+<span id="cb11-2"><a href=""></a></span>
+<span id="cb11-3"><a href=""></a><span class="ex">./calculator_test</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="test-suites" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Test Suites</h2>
+<p>La librería tiene una forma muy elegante de organizar los tests a través de <strong>test_suites</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource cpp number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cpp hljs"><span id="cb12-1" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb12-2" class="hljs-ln-code"><a href=""></a><span class="pp">#define BOOST_TEST_MODULE </span>Math<span class="pp"> </span>Tests</span>
+<span id="cb12-3" class="hljs-ln-code"><a href=""></a><span class="pp">#include </span><span class="im">&lt;boost/test/included/unit_test.hpp&gt;</span></span>
+<span id="cb12-4" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb12-5" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_SUITE<span class="op">(</span>BasicOperations<span class="op">)</span></span>
+<span id="cb12-6" class="hljs-ln-code"><a href=""></a><span class="op">...</span></span>
+<span id="cb12-7" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_SUITE_END<span class="op">()</span></span>
+<span id="cb12-8" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb12-9" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_SUITE<span class="op">(</span>AdvancedOperations<span class="op">)</span></span>
+<span id="cb12-10" class="hljs-ln-code"><a href=""></a><span class="op">...</span></span>
+<span id="cb12-11" class="hljs-ln-code"><a href=""></a><span class="ex">BOOST_</span>AUTO_TEST_SUITE_END<span class="op">()</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="test-suites-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Test Suites</h2>
+<p>Puedes ejecutar <strong>solo algunos tests</strong> basándote en la jerarquía de tus <em>suites</em>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb13-1" class="hljs-ln-code"><a href=""></a><span class="co"># Ejecutar toda la suite "BasicOperations"</span></span>
+<span id="cb13-2" class="hljs-ln-code"><a href=""></a><span class="ex">./my_test</span> <span class="at">--run_test</span><span class="op">=</span>BasicOperations</span>
+<span id="cb13-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb13-4" class="hljs-ln-code"><a href=""></a><span class="co"># Ejecutar un test específico</span></span>
+<span id="cb13-5" class="hljs-ln-code"><a href=""></a><span class="ex">./my_test</span> <span class="at">--run_test</span><span class="op">=</span>BasicOperations/test_addition</span>
+<span id="cb13-6" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb13-7" class="hljs-ln-code"><a href=""></a><span class="co"># Ver lista de tests disponibles</span></span>
+<span id="cb13-8" class="hljs-ln-code"><a href=""></a><span class="ex">./my_test</span> <span class="at">--list_content</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="test-suites-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Test Suites</h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Puedes conocer todas las <em>suites</em> de un módulo a través del argumento <code>--list-content</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="ctest" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">CTest</h2>
+<p>CMake es más que un <em>Meta-Build-System</em>, es un <strong>centro de control</strong> para todo el proyecto.</p>
+<div class="fragment">
+<p>Eso incluye también la ejecución de <em>tests</em>.</p>
+</div>
+</section>
+<section id="ctest-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">CTest</h2>
+<p><strong>CTest</strong> es el módulo de control y gestión de tests de <code>CMake</code>.</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>CTest viene ya <strong>incluido</strong> con CMake. No necesitas instalar nada extra.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="ctest-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">CTest</h2>
+<p><strong>Funciones principales:</strong></p>
+<div>
+<ul>
+<li class="fragment">Descubre tests automáticamente</li>
+<li class="fragment">Los ejecuta en orden o paralelo</li>
+<li class="fragment">Reporta resultados de forma clara</li>
+<li class="fragment">Integra <em>dashboards</em> (CDash)</li>
+<li class="fragment">Perfecto para CI/CD</li>
+</ul>
+</div>
+</section>
+<section id="estructura-de-un-proyecto-con-tests" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Estructura de un proyecto con tests</h2>
+<pre><code>my_project/
+├── CMakeLists.txt           #CMake principal
+├── include/
+│   └── calculator.hpp
+├── src/
+│   └── main.cpp
+└── tests/
+    ├── CMakeLists.txt       #CMake de tests
+    └── calculator_test.cpp  #Tus tests</code></pre>
+<div>
+<ul>
+<li class="fragment"><strong>CMakeLists.txt raíz</strong>: Configura el proyecto y habilita testing</li>
+<li class="fragment"><strong>tests/CMakeLists.txt</strong>: Define los tests específicos</li>
+</ul>
+</div>
+</section>
+<section id="configurando-ctest" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Configurando CTest</h2>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>CMakeLists.txt</strong></pre>
+</div>
+<div class="sourceCode" id="cb15" data-filename="CMakeLists.txt"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb15-1" class="hljs-ln-code"><a href=""></a><span class="kw">cmake_minimum_required</span>(<span class="ot">VERSION</span> <span class="dt">3.15</span>)</span>
+<span id="cb15-2" class="hljs-ln-code"><a href=""></a><span class="kw">project</span>(MyProject <span class="ot">VERSION</span> <span class="dt">1.0</span> <span class="ot">LANGUAGES</span> <span class="ot">CXX</span>)</span>
+<span id="cb15-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb15-4" class="hljs-ln-code"><a href=""></a><span class="er">...</span></span>
+<span id="cb15-5" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb15-6" class="hljs-ln-code"><a href=""></a><span class="kw">enable_testing</span>()</span>
+<span id="cb15-7" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb15-8" class="hljs-ln-code"><a href=""></a><span class="co"># Añadir subdirectorio de tests</span></span>
+<span id="cb15-9" class="hljs-ln-code"><a href=""></a><span class="kw">add_subdirectory</span>(tests)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Importante</strong></p>
+</div>
+<div class="callout-content">
+<p><strong><code>enable_testing()</code></strong> es crucial. Sin esta línea, CTest no funcionará.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="configurando-ctest-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Configurando CTest</h2>
+<p>Para configurar adecuadamente CTest se deben seguir los siguientes pasos.</p>
+<div>
+<ol type="1">
+<li class="fragment">Crear un ejecutable con los test.</li>
+<li class="fragment">Registrar el ejecutable con la función <code>add_test()</code>.</li>
+</ol>
+</div>
+</section>
+<section id="configurando-ctest-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Configurando CTest</h2>
+<p>Para configurar adecuadamente CTest se deben seguir los siguientes pasos.</p>
+<ol type="1">
+<li>Crear un ejecutable con los test.</li>
+<li>Registrar el ejecutable con la función <code>add_test()</code>.</li>
+</ol>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Debes tener en cuenta que, en realidad, estás compilando un programa aparte (ejecutable) que va a usar tu código para testear. Lo único nuevo es que vas a centralzar el <em>testing</em> a través de CTest.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="configurando-ctest-3" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Configurando CTest</h2>
+<p><strong>¿Qué hace <code>add_test()</code>?</strong></p>
+<ul>
+<li>Le dice a CTest “este <em>target</em> es un test”</li>
+<li>CTest lo ejecutará cuando hagas <code>ctest</code></li>
+<li>Captura su código de salida (0 = éxito, ≠0 = fallo)</li>
+</ul>
+</section>
+<section id="configurando-ctest-4" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Configurando CTest</h2>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>tests/CMakeLists.txt</strong></pre>
+</div>
+<div class="sourceCode" id="cb16" data-filename="tests/CMakeLists.txt"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb16-1" class="hljs-ln-code"><a href=""></a><span class="kw">find_package</span>(<span class="im">Boost</span> <span class="dt">1.71</span> <span class="ot">REQUIRED</span> <span class="ot">COMPONENTS</span> unit_test_framework)</span>
+<span id="cb16-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb16-3" class="hljs-ln-code"><a href=""></a><span class="kw">add_executable</span>(<span class="bn">calculator_test</span> calculator_test.cpp)</span>
+<span id="cb16-4" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb16-5" class="hljs-ln-code"><a href=""></a><span class="kw">target_link_libraries</span>(<span class="bn">calculator_test</span> </span>
+<span id="cb16-6" class="hljs-ln-code"><a href=""></a>    <span class="ot">PRIVATE</span> </span>
+<span id="cb16-7" class="hljs-ln-code"><a href=""></a>    <span class="bn">Boost::unit_test_framework</span></span>
+<span id="cb16-8" class="hljs-ln-code"><a href=""></a>)</span>
+<span id="cb16-9" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb16-10" class="hljs-ln-code"><a href=""></a><span class="kw">target_include_directories</span>(<span class="bn">calculator_test</span> </span>
+<span id="cb16-11" class="hljs-ln-code"><a href=""></a>    <span class="ot">PRIVATE</span> </span>
+<span id="cb16-12" class="hljs-ln-code"><a href=""></a>    <span class="dv">${CMAKE_SOURCE_DIR}</span>/include</span>
+<span id="cb16-13" class="hljs-ln-code"><a href=""></a>)</span>
+<span id="cb16-14" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb16-15" class="hljs-ln-code"><a href=""></a><span class="kw">add_test</span>(<span class="ot">NAME</span> CalculatorTest <span class="ot">COMMAND</span> calculator_test)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ejecutando-tests" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ejecutando <em>tests</em></h2>
+<p>Para ejecutar los <em>tests</em> registrados, debes ejecutar en la carpeta <em>build</em>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb17-1" class="hljs-ln-code"><a href=""></a><span class="ex">ctest</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p><strong><code>ctest</code></strong> descubre y ejecuta automáticamente todos los tests que registraste con <code>add_test()</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="opciones-útiles-de-ctest" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Opciones útiles de <code>ctest</code></h2>
+<div>
+<ul>
+<li class="fragment"><code>ctest --verbose</code>: Ver todo el <em>output</em> detallado.</li>
+<li class="fragment"><code>ctest --output-on-failure</code>: Ver el <em>output</em> detallado cuando falla.</li>
+<li class="fragment"><code>ctest -R</code>: Ejecutar solo los <em>tests</em> que coinciden con un patrón.</li>
+<li class="fragment"><code>ctest -j*</code>: Ejecutar <em>tests</em> en paralelo.</li>
+<li class="fragment"><code>ctest --rerun-failed</code>: Reejecutar tests que fallaron.</li>
+</ul>
+</div>
+</section>
+<section id="propiedades-de-tests" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Propiedades de tests</h2>
+<p>Puedes configurar comportamiento de tests:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb18-1" class="hljs-ln-code"><a href=""></a><span class="kw">add_test</span>(<span class="ot">NAME</span> CalculatorTest <span class="ot">COMMAND</span> calculator_test)</span>
+<span id="cb18-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb18-3" class="hljs-ln-code"><a href=""></a><span class="co"># Configurar propiedades</span></span>
+<span id="cb18-4" class="hljs-ln-code"><a href=""></a><span class="kw">set_tests_properties</span>(CalculatorTest <span class="ot">PROPERTIES</span></span>
+<span id="cb18-5" class="hljs-ln-code"><a href=""></a>    <span class="ot">TIMEOUT</span> 10              <span class="co"># Matar si tarda &gt;10s</span></span>
+<span id="cb18-6" class="hljs-ln-code"><a href=""></a>    <span class="ot">LABELS</span> <span class="st">"unit"</span>           <span class="co"># Etiquetar como unit test</span></span>
+<span id="cb18-7" class="hljs-ln-code"><a href=""></a>    <span class="ot">WORKING_DIRECTORY</span> <span class="dv">${CMAKE_CURRENT_BINARY_DIR}</span></span>
+<span id="cb18-8" class="hljs-ln-code"><a href=""></a>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="propiedades-de-tests-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Propiedades de tests</h2>
+<p><strong>Propiedades útiles:</strong></p>
+<ul>
+<li><code>TIMEOUT</code>: Evita tests colgados</li>
+<li><code>LABELS</code>: Organizar tests por tipo</li>
+<li><code>DEPENDS</code>: Un test depende de otro</li>
+<li><code>ENVIRONMENT</code>: Variables de entorno</li>
+</ul>
+</section>
+<section id="ejecutar-por-etiquetas" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ejecutar por etiquetas</h2>
+<p>Las etiquetas organizan tus tests:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource cmake number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode cmake hljs"><span id="cb19-1" class="hljs-ln-code"><a href=""></a><span class="co"># Unit tests</span></span>
+<span id="cb19-2" class="hljs-ln-code"><a href=""></a><span class="kw">add_test</span>(<span class="ot">NAME</span> test_math <span class="ot">COMMAND</span> math_test)</span>
+<span id="cb19-3" class="hljs-ln-code"><a href=""></a><span class="kw">set_tests_properties</span>(test_math <span class="ot">PROPERTIES</span> <span class="ot">LABELS</span> <span class="st">"unit"</span>)</span>
+<span id="cb19-4" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb19-5" class="hljs-ln-code"><a href=""></a><span class="kw">add_test</span>(<span class="ot">NAME</span> test_string <span class="ot">COMMAND</span> string_test)</span>
+<span id="cb19-6" class="hljs-ln-code"><a href=""></a><span class="kw">set_tests_properties</span>(test_string <span class="ot">PROPERTIES</span> <span class="ot">LABELS</span> <span class="st">"unit"</span>)</span>
+<span id="cb19-7" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb19-8" class="hljs-ln-code"><a href=""></a><span class="co"># Integration tests</span></span>
+<span id="cb19-9" class="hljs-ln-code"><a href=""></a><span class="kw">add_test</span>(<span class="ot">NAME</span> test_database <span class="ot">COMMAND</span> db_test)</span>
+<span id="cb19-10" class="hljs-ln-code"><a href=""></a><span class="kw">set_tests_properties</span>(test_database <span class="ot">PROPERTIES</span> <span class="ot">LABELS</span> <span class="st">"integration"</span>)</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ejecutar-por-etiquetas-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Ejecutar por etiquetas</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource bash number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode bash hljs"><span id="cb20-1" class="hljs-ln-code"><a href=""></a><span class="co"># Solo unit tests</span></span>
+<span id="cb20-2" class="hljs-ln-code"><a href=""></a><span class="ex">ctest</span> <span class="at">-L</span> unit</span>
+<span id="cb20-3" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb20-4" class="hljs-ln-code"><a href=""></a><span class="co"># Solo integration tests</span></span>
+<span id="cb20-5" class="hljs-ln-code"><a href=""></a><span class="ex">ctest</span> <span class="at">-L</span> integration</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section></section>
+<section>
+<section id="CI" class="title-slide slide level1 center" data-stack-name="CI">
+<h1>CI</h1>
+
+</section>
+<section id="qué-es-ci" class="slide level2 center">
+<h2>¿Qué es CI?</h2>
+<p>La <em>Integración Continua (CI)</em> es una práctica de desarrollo que consiste en <strong>integrar cambios en el código</strong> de forma automática y frecuente.</p>
+</section>
+<section id="cómo-funciona" class="slide level2 justify center">
+<h2>¿Cómo funciona?</h2>
+<p>Se fundamenta en la ejecución de <em>tests</em> cada vez que se realiza un cambio en el código del control de versiones.</p>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Nota</strong></p>
+</div>
+<div class="callout-content">
+<p>En realidad, el CI motiva y da sentido a la aparición y al desarrollo de las <strong>estrategias de gestión de ramas</strong> que vimos durante el segundo tema.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="beneficios-de-ci" class="slide level2 center">
+<h2>Beneficios de CI</h2>
+<div>
+<ul>
+<li class="fragment">Despliegues más seguros</li>
+<li class="fragment">Incrementa la calidad del software</li>
+<li class="fragment">Previene errores de integración</li>
+<li class="fragment">Facilita la colaboración</li>
+</ul>
+</div>
+</section>
+<section id="cómo-lo-podemos-integrar" class="slide level2 center">
+<h2>¿Cómo lo podemos integrar?</h2>
+<p>Muchos de los servicios de control de versiones ofrecen integración con CI/CD.</p>
+<div style="display: flex; align-items: end; gap: 1em">
+<div width="33%">
+<p><img data-src="../images/t2/gh_actions.png"></p>
+</div>
+<div width="33%">
+<p><img data-src="../images/t2/gitlab_ci_cd.png"></p>
+</div>
+<div width="33%">
+<p><img data-src="../images/t2/bitbucket.png"></p>
+</div>
+</div>
+<p>También hay otros proveedores como <em>Jenkins</em> o <em>CircleCI</em>.</p>
+</section>
+<section id="integración-con-github-actions" class="slide level2 center" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Integración con <em>GitHub Actions</em></h2>
+<p>Al igual que en el <strong>CD</strong>, debemos de crear un <em>workflow</em> que se ejecute automáticamente cada vez que se va a subir un cambio al repositorio.</p>
+<div class="fragment">
+<p>Es decir, deberemos ajustar el <em>trigger</em> para que los <em>tests</em> se ejecuten automáticamente.</p>
+</div>
+</section>
+<section id="integración-con-github-actions-1" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Integración con <em>GitHub Actions</em></h2>
+<p><strong>¿Cuándo se debe ejecutar el CI?</strong></p>
+<p>Depende de la <strong>estrategia de gestión de ramas</strong> que hayas escogido.</p>
+</section>
+<section id="integración-con-github-actions-2" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Integración con <em>GitHub Actions</em></h2>
+<div>
+<ul>
+<li class="fragment">En <strong>Git Flow</strong>, cuando se suban cambios a la rama principal.</li>
+<li class="fragment">En <strong>GitHub Flow</strong> debe activarse para cada <em>pull request</em> que va hacia la rama principal.</li>
+<li class="fragment">En <strong>Trunk-based development</strong> es una acción opcional, que se ejecuta cada vez que se integre en una rama.</li>
+<li class="fragment">En <strong>Ship/Show/Ask</strong> se ejecuta en las acciones de <strong>Show</strong> y <strong>Ask</strong>.</li>
+</ul>
+</div>
+</section>
+<section id="integración-con-github-actions-3" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Integración con <em>GitHub Actions</em></h2>
+<p>Cuando tengamos un CI estable, conviene activar la protección de la rama principal:</p>
+<ol type="1">
+<li>Settings → Rules → Rulesets → New branch ruleset:</li>
+<li>Target branches → name pattern: <code>main</code></li>
+<li>Require status checks to pass</li>
+<li>Seleccionar el workflow de tests</li>
+<li>Require branches to be up to date</li>
+</ol>
+<p>Ahora <strong>no se puede mergear</strong> sin que pasen todos los tests.</p>
+</section>
+<section id="integración-con-github-actions-4" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Integración con <em>GitHub Actions</em></h2>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>También se puede activar la restricción de que solamente se pueda fusionar la rama principal a través de una <em>pull-request</em>, la acción mostrará su resultado al abrirse dicha <em>pull request</em>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="integración-con-github-actions-5" class="slide level2 center" data-auto-animate="true," data-visibility="uncounted">
+<h2 data-id="quarto-animate-title">Integración con <em>GitHub Actions</em></h2>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>.github/workflows/test.yml</strong></pre>
+</div>
+<div class="sourceCode" id="cb21" data-filename=".github/workflows/test.yml"><pre class="sourceCode numberSource yaml number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode yaml hljs"><span id="cb21-1" class="hljs-ln-code"><a href=""></a><span class="fu">name</span><span class="kw">:</span><span class="at"> C++ Tests</span></span>
+<span id="cb21-2" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb21-3" class="hljs-ln-code"><a href=""></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb21-4" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
+<span id="cb21-5" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> master</span><span class="kw">,</span><span class="at"> develop </span><span class="kw">]</span></span>
+<span id="cb21-6" class="hljs-ln-code"><a href=""></a></span>
+<span id="cb21-7" class="hljs-ln-code"><a href=""></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb21-8" class="hljs-ln-code"><a href=""></a><span class="at">  </span><span class="fu">test</span><span class="kw">:</span></span>
+<span id="cb21-9" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb21-10" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
+<span id="cb21-11" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb21-12" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Checkout code</span></span>
+<span id="cb21-13" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
+<span id="cb21-14" class="hljs-ln-code"><a href=""></a><span class="at">      </span></span>
+<span id="cb21-15" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install dependencies</span></span>
+<span id="cb21-16" class="hljs-ln-code"><a href=""></a><span class="fu">      run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb21-17" class="hljs-ln-code"><a href=""></a>        sudo apt-get update</span>
+<span id="cb21-18" class="hljs-ln-code"><a href=""></a>        sudo apt-get install -y cmake build-essential libboost-test-dev libx11-dev libgl1-mesa-dev xorg-dev</span>
+<span id="cb21-19" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
+<span id="cb21-20" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Configure CMake</span></span>
+<span id="cb21-21" class="hljs-ln-code"><a href=""></a><span class="fu">      run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb21-22" class="hljs-ln-code"><a href=""></a>        cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug</span>
+<span id="cb21-23" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
+<span id="cb21-24" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Build</span></span>
+<span id="cb21-25" class="hljs-ln-code"><a href=""></a><span class="fu">      run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb21-26" class="hljs-ln-code"><a href=""></a>        cmake --build build --config Debug</span>
+<span id="cb21-27" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
+<span id="cb21-28" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run tests with CTest</span></span>
+<span id="cb21-29" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="fu">working-directory</span><span class="kw">:</span><span class="at"> build</span></span>
+<span id="cb21-30" class="hljs-ln-code"><a href=""></a><span class="fu">      run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb21-31" class="hljs-ln-code"><a href=""></a>        ctest --output-on-failure --verbose</span>
+<span id="cb21-32" class="hljs-ln-code"><a href=""></a><span class="at">    </span></span>
+<span id="cb21-33" class="hljs-ln-code"><a href=""></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Upload test results</span></span>
+<span id="cb21-34" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="fu">if</span><span class="kw">:</span><span class="at"> always()</span></span>
+<span id="cb21-35" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/upload-artifact@v4</span></span>
+<span id="cb21-36" class="hljs-ln-code"><a href=""></a><span class="at">      </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb21-37" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">name</span><span class="kw">:</span><span class="at"> test-results</span></span>
+<span id="cb21-38" class="hljs-ln-code"><a href=""></a><span class="at">        </span><span class="fu">path</span><span class="kw">:</span><span class="at"> build/Testing/Temporary/LastTest.log</span></span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-auto-generated-content">
+<div class="footer footer-default">
+<p>Desarrollo Colaborativo de Aplicaciones</p>
+</div>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="08-generacion-tests_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/reveal-attribution/attribution.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/simplemenu/simplemenu.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/verticator/verticator.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="08-generacion-tests_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'simplemenu': {"menubarclass":"menubar","menuclass":"menu","activeclass":"active","activeelement":"li","flat":false,"barhtml":{"header":"<div class='menubar'><ul class='menu'></ul><div>","footer":""},"scale":0.67},
+'verticator': {"themetag":"h1","color":"","inversecolor":"","skipuncounted":true,"clickable":true,"position":"auto","offset":"3vmin","autogenerate":true,"tooltip":false,"scale":1},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealAttribution, Simplemenu, Verticator, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copiado");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copiado");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    <script src="../components/SortableCode/index.js"></script>
+    <script src="../components/CompletableCode/index.js"></script>
+    <script src="../components/MixedExercise/index.js"></script>
+    
+
+</body></html>
