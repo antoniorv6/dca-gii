@@ -81,8 +81,9 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 - Boost.Test y CTest.
 - _Continuous Integration_ con GitHub Actions.
 
-### [Tema 8: Internacionalización (I18N) y Localización (L10N)](/dca-gii/teoria/l07/)
+### [Tema 8: Internacionalización (I18N) y Localización (L10N)](/dca-gii/teoria/l08/)
 
-- _Testing_ y por qué es importante para el desarrollo de _software_.
-- Boost.Test y CTest.
-- _Continuous Integration_ con GitHub Actions.
+- La importancia de la localización en una aplicación.
+- Conceptos básicos de I18N y L10N.
+- Fundamentos de los _locales_.
+- GNU `gettext`.
