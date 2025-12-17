@@ -87,3 +87,7 @@ En esta sección se lista el temario de la asignatura con un enlace individual p
 - Conceptos básicos de I18N y L10N.
 - Fundamentos de los _locales_.
 - GNU `gettext`.
+
+### [Tema 9: Sistemas de Control de Versiones Avanzados](/dca-gii/teoria/l09/)
+
+- Repasamos `git` y vemos algunas cosas más avanzadas
